@@ -142,16 +142,16 @@ void Controller::setDeleteCharsText(const QString &newDeleteCharsText)
     emit deleteCharsTextChanged();
 }
 
-int Controller::getDeleteCharsLocationIndex() const
+int Controller::deleteCharsLocationIndex() const
 {
-    return deleteCharsLocationIndex;
+    return m_deleteCharsLocationIndex;
 }
 
 void Controller::setDeleteCharsLocationIndex(int newDeleteCharsLocationIndex)
 {
-    if (deleteCharsLocationIndex == newDeleteCharsLocationIndex)
+    if (m_deleteCharsLocationIndex == newDeleteCharsLocationIndex)
         return;
-    deleteCharsLocationIndex = newDeleteCharsLocationIndex;
+    m_deleteCharsLocationIndex = newDeleteCharsLocationIndex;
     emit deleteCharsLocationIndexChanged();
 }
 

@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
+        <file>FaceSwipeView.qml</file>
+        <file>DeriveNamesTableView.qml</file>
     </qresource>
 </RCC>

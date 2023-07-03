@@ -5,7 +5,6 @@
 #include <QObject>
 #include <QRandomGenerator>
 #include <QString>
-#include "persondata.h"
 
 class NameDerivationTable : public QAbstractTableModel {
     Q_OBJECT
@@ -20,6 +19,15 @@ public:
         MIDDLE_RIGHT = 5
     };
     Q_ENUM(DelimiterCounterOption)
+
+    enum class DeletionLocationOption {
+        LEFT = 0,
+        RIGHT = 1,
+        SIDES = 2,
+        NOT = 3,
+        ALL = 4
+    };
+    Q_ENUM(DeletionLocationOption)
 
     explicit NameDerivationTable(QObject *parent = nullptr) : QAbstractTableModel(parent) {
         m_table.append({
@@ -80,17 +88,8 @@ public:
         return roles;
     }
 
-
-
-    QString stripBaseName(QString baseName) {
-        auto stripChars = QStringLiteral(" ^°§$%&/()=`´*+~'#<>|;,.-_/*{[]}€@0123456789");
-        while (stripChars.contains(baseName.right(1))) baseName.remove(baseName.length()-1,1);
-        while (stripChars.contains(baseName.left(1))) baseName.remove(0,1);
-        return baseName;
-    }
     Q_INVOKABLE void addPerson(QString fileName, QString baseName) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
-        baseName = stripBaseName(baseName);
         m_table.append({
             "",
             "",
@@ -113,12 +112,6 @@ public:
         return result;
     }
 
-    QString leftStringAt(QString s, int pos) {
-        return s.left(pos);
-    }
-    QString rightStringAt(QString s, int pos, int cutAway) {
-       return s.right(s.length()-(pos+cutAway));
-    }
     void separateStringToPerson(QString stripped, QString *firstName, QString *familyName, QString delimiter, QList<int> occasions, DelimiterCounterOption option, bool firstNameFirst) {
         int position = -1;
         if (occasions.count() == 0
@@ -129,7 +122,7 @@ public:
             ) {
             // give up if it is impossible to separate within given requiements
         } else if (occasions.count() == 1) {
-            //easy choice, as the "SECOND..." options have been handled above already
+            //easy choice, as the "SECOND_..." options have been handled above already
             position = occasions.first();
         } else if (occasions.count() == 2) {
             if (option == NameDerivationTable::DelimiterCounterOption::FIRST_FROM_LEFT
@@ -151,9 +144,9 @@ public:
         }
 
         if (position >= 0) {
-            // we have a valid position
-            *firstName = leftStringAt(stripped, position);
-            *familyName  = rightStringAt(stripped, position, delimiter.length());
+            // we have a valid position, let's cut
+            *firstName = stripped.left(position);
+            *familyName  = stripped.right(stripped.length() - (position + delimiter.length()));
             if (!firstNameFirst) swap(*firstName, *familyName);
         } else {
             // we do not have a valid position. we give up.
@@ -162,18 +155,65 @@ public:
         }
     }
 
-    void runNameDerivation(QString delimiter, QString replaceFrom, QString replaceTo, int delimiterCounterIndex, bool firstNameFirst) {
+    QString deleteNumber(QString s, DeletionLocationOption deleteNumberLocationOption, int deleteNumberCount) {
+        if (deleteNumberCount == 0) return s;
+        // We don't handle
+        // DeletionLocationOption::ALL and DeletionLocationOption::NOT,
+        // because UI doesn't let user choose them for deleting a *number*.
+        if (deleteNumberLocationOption == DeletionLocationOption::LEFT
+            || deleteNumberLocationOption == DeletionLocationOption::SIDES) {
+           if (deleteNumberCount >= s.length()) return QString();
+           s = s.right(s.length()-deleteNumberCount);
+        }
+        if (deleteNumberLocationOption == DeletionLocationOption::RIGHT
+            || deleteNumberLocationOption == DeletionLocationOption::SIDES) {
+           if (deleteNumberCount >= s.length()) return QString();
+           s = s.left(s.length()-deleteNumberCount);
+        }
+        return s;
+    }
+
+    QString deleteChars(QString s, DeletionLocationOption deleteCharsLocationOption, QString deleteCharsText) {
+        if (deleteCharsLocationOption == DeletionLocationOption::NOT) return s;
+        if (deleteCharsLocationOption == DeletionLocationOption::RIGHT
+            ||deleteCharsLocationOption == DeletionLocationOption::SIDES) {
+           while (!s.isEmpty() && deleteCharsText.contains(s.right(1))) s.remove(s.length()-1,1);
+        }
+        if (deleteCharsLocationOption == DeletionLocationOption::LEFT
+            ||deleteCharsLocationOption == DeletionLocationOption::SIDES) {
+           while (!s.isEmpty() && deleteCharsText.contains(s.left(1))) s.remove(0,1);
+        }
+        if (deleteCharsLocationOption == DeletionLocationOption::ALL) {
+           QString t;
+           for (int i = 0; i < s.length(); i++) {
+                if (!deleteCharsText.contains(s.at(i))) t.append(s.at(i));
+           }
+           return t;
+        }
+        return s;
+    }
+
+    void runNameDerivation(DeletionLocationOption deleteNumberLocationOption,
+                           int deleteNumberCount,
+                           DeletionLocationOption deleteCharsLocationOption,
+                           QString deleteCharsText,
+                           QString replaceFrom,
+                           QString replaceTo,
+                           QString delimiter,
+                           DelimiterCounterOption delimiterCounterOption,
+                           bool firstNameFirst) {
         beginResetModel();
         for (int i = 1; i < m_table.count(); i++) {
             if (m_overrideAutomatic.at(i) || m_exclude.at(i)) continue;
             QString stripped = m_baseName.at(i);
 
-
+            stripped = deleteNumber(stripped, deleteNumberLocationOption, deleteNumberCount);
+            stripped = deleteChars(stripped, deleteCharsLocationOption, deleteCharsText);
 
 
 
             auto delimiterList = delimiterPlaces(stripped,delimiter);
-            DelimiterCounterOption delimiterCounterOption = static_cast<DelimiterCounterOption>(delimiterCounterIndex);
+//            auto delimiterCounterOption = static_cast<DelimiterCounterOption>(delimiterCounterIndex);
             separateStringToPerson(stripped,&m_table[i][0], &m_table[i][1], delimiter, delimiterList, delimiterCounterOption, firstNameFirst);
 
         }

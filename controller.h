@@ -132,15 +132,23 @@ public:
                 m_nameDerivationTable.addPerson(f.fileName(), f.baseName());
             }
         }
-        m_nameDerivationTable.runNameDerivation(m_delimiter, m_replaceFrom, m_replaceTo,
-                                                m_delimiterCounterIndex, m_firstNameFirst);
+        this->runNameDerivation();
+//        m_nameDerivationTable.runNameDerivation(m_delimiter, m_replaceFrom, m_replaceTo,
+//                                                m_delimiterCounterIndex, m_firstNameFirst);
         return true;
     }
 
     Q_INVOKABLE void runNameDerivation() {
-        qDebug()<<"runNameDerivation";
-        m_nameDerivationTable.runNameDerivation(m_delimiter, m_replaceFrom, m_replaceTo,
-                                                m_delimiterCounterIndex, m_firstNameFirst);
+        m_nameDerivationTable.runNameDerivation(static_cast<NameDerivationTable::DeletionLocationOption>(m_deleteNumberLocationIndex),
+                                                m_deleteNumberCountIndex,
+                                                static_cast<NameDerivationTable::DeletionLocationOption>(m_deleteCharsLocationIndex),
+                                                m_deleteCharsText,
+                                                m_replaceFrom,
+                                                m_replaceTo,
+                                                m_delimiter,
+                                                static_cast<NameDerivationTable::DelimiterCounterOption>(m_delimiterCounterIndex),
+                                                m_firstNameFirst
+                                                );
     }
 
     QString delimiter() const;
@@ -167,7 +175,7 @@ public:
     QString deleteCharsText() const;
     void setDeleteCharsText(const QString &newDeleteCharsText);
 
-    int getDeleteCharsLocationIndex() const;
+    int deleteCharsLocationIndex() const;
     void setDeleteCharsLocationIndex(int newDeleteCharsLocationIndex);
 
 signals:
@@ -200,11 +208,22 @@ private:
     QString m_delimiter = ", ";
     QString m_replaceFrom = "^#";
     QString m_replaceTo = "";
-    int m_delimiterCounterIndex = 4;   // specifies, which delimiter (if more than one is present) shall be used
-    int m_deleteNumberLocationIndex = 0; // specifies, where a given number of chars shall be deleted
-    int m_deleteNumberCountIndex = 0; // specifies this number of chars to be deleted
-    QString m_deleteCharsText = " $%&()=`´+~'#<>|.-_{[]}@0123456789"; // specifies, which special chars shall be deleted
-    int deleteCharsLocationIndex = 3;
+    int m_delimiterCounterIndex = static_cast<int>(NameDerivationTable::DelimiterCounterOption::MIDDLE_LEFT);
+    // specifies, which delimiter (if more than one is present) shall be used
+
+    int m_deleteNumberLocationIndex = static_cast<int>(NameDerivationTable::DeletionLocationOption::LEFT);
+    // specifies, where a given number of chars shall be deleted
+
+    int m_deleteNumberCountIndex = 0;
+    // specifies this number of chars to be deleted
+
+    int m_deleteCharsLocationIndex = static_cast<int>(NameDerivationTable::DeletionLocationOption::SIDES);
+    // specifies, where special chars shall be deleted
+
+    QString m_deleteCharsText = " $%&()=`´+~'#<>|.-_{[]}@0123456789";
+    // specifies, which special chars shall be deleted
+
+
     bool m_firstNameFirst = false;
 
 
@@ -216,7 +235,7 @@ private:
     Q_PROPERTY(int deleteNumberLocationIndex READ deleteNumberLocationIndex WRITE setDeleteNumberLocationIndex NOTIFY deleteNumberLocationIndexChanged)
     Q_PROPERTY(int deleteNumberCountIndex READ deleteNumberCountIndex WRITE setDeleteNumberCountIndex NOTIFY deleteNumberCountIndexChanged)
     Q_PROPERTY(QString deleteCharsText READ deleteCharsText WRITE setDeleteCharsText NOTIFY deleteCharsTextChanged)
-    Q_PROPERTY(int deleteCharsLocationIndex READ getDeleteCharsLocationIndex WRITE setDeleteCharsLocationIndex NOTIFY deleteCharsLocationIndexChanged)
+    Q_PROPERTY(int deleteCharsLocationIndex READ deleteCharsLocationIndex WRITE setDeleteCharsLocationIndex NOTIFY deleteCharsLocationIndexChanged)
 };
 
 #endif // CONTROLLER_H
