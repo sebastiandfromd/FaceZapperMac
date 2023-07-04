@@ -32,13 +32,11 @@ bool Controller::saveAJsonFile(QString fileName, QString filePath, QJsonObject o
 
 QString Controller::delimiter() const
 {
-    qDebug()<<"Controller::delimiter() called, value is "<<m_delimiter;
     return m_delimiter;
 }
 
 void Controller::setDelimiter(const QString &newDelimiter)
 {
-    qDebug()<<"Controller::setDelimiter(...) called, value is "<< newDelimiter <<" instead of "<<m_delimiter;
     if (m_delimiter == newDelimiter)
         return;
     m_delimiter = newDelimiter;
@@ -47,13 +45,11 @@ void Controller::setDelimiter(const QString &newDelimiter)
 
 QString Controller::replaceFrom() const
 {
-    qDebug()<<"Controller::replaceFrom() called, value is "<<m_replaceFrom;
     return m_replaceFrom;
 }
 
 void Controller::setReplaceFrom(const QString &newReplaceFrom)
 {
-    qDebug()<<"Controller::setReplaceFrom(...) called, value is "<< newReplaceFrom <<" instead of "<<m_replaceFrom;
     if (m_replaceFrom == newReplaceFrom)
         return;
     m_replaceFrom = newReplaceFrom;
@@ -62,13 +58,11 @@ void Controller::setReplaceFrom(const QString &newReplaceFrom)
 
 QString Controller::replaceTo() const
 {
-    qDebug()<<"Controller::replaceTo() called, value is "<<m_replaceTo;
     return m_replaceTo;
 }
 
 void Controller::setReplaceTo(const QString &newReplaceTo)
 {
-    qDebug()<<"Controller::setReplaceTo(...) called, value is "<< newReplaceTo <<" instead of "<<m_replaceTo;
     if (m_replaceTo == newReplaceTo)
         return;
     m_replaceTo = newReplaceTo;
@@ -77,13 +71,11 @@ void Controller::setReplaceTo(const QString &newReplaceTo)
 
 int Controller::delimiterCounterIndex() const
 {
-    qDebug()<<"Controller::delimiterCounterIndex() called, value is "<<m_delimiterCounterIndex;
     return m_delimiterCounterIndex;
 }
 
 void Controller::setDelimiterCounterIndex(int newDelimiterCounterIndex)
 {
-    qDebug()<<"Controller::setDelimiterCounterIndex(...) called, value is "<< newDelimiterCounterIndex <<" instead of "<<m_delimiterCounterIndex;
     if (m_delimiterCounterIndex == newDelimiterCounterIndex)
         return;
     m_delimiterCounterIndex = newDelimiterCounterIndex;
@@ -153,6 +145,19 @@ void Controller::setDeleteCharsLocationIndex(int newDeleteCharsLocationIndex)
         return;
     m_deleteCharsLocationIndex = newDeleteCharsLocationIndex;
     emit deleteCharsLocationIndexChanged();
+}
+
+bool Controller::isCaseSensitive() const
+{
+    return m_isCaseSensitive;
+}
+
+void Controller::setIsCaseSensitive(bool newIsCaseSensitive)
+{
+    if (m_isCaseSensitive == newIsCaseSensitive)
+        return;
+    m_isCaseSensitive = newIsCaseSensitive;
+    emit isCaseSensitiveChanged();
 }
 
 bool Controller::saveRecentFolders()

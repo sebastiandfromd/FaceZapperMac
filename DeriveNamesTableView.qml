@@ -100,7 +100,6 @@ Rectangle {
                                    }
         }
     }
-
     Rectangle {
         id: deleteAndTitleRect
         color: "white";
@@ -180,7 +179,6 @@ Rectangle {
             clip: true
         }
     }
-
     Rectangle {
         id: replaceFromTitleRect
         color: "white";
@@ -203,11 +201,10 @@ Rectangle {
             rightPadding: height/2
         }
     }
-
     Rectangle {
         id: replaceFromTextRect
         color: "wheat"
-        width: 3 * widthEighth
+        width: 2.8 * widthEighth - heightUnit
         height: heightUnit
         anchors.top: deleteNumberTitleRect.bottom
         anchors.left: replaceFromTitleRect.right
@@ -227,9 +224,33 @@ Rectangle {
         }
     }
     Rectangle {
+        id: infoReplaceFromRect
+        color: "blue"
+        height: heightUnit
+        width: height
+        anchors.top: deleteNumberTitleRect.bottom
+        anchors.left: replaceFromTextRect.right
+        Rectangle {
+            anchors.fill: parent
+            radius: width / 2
+            color: "white"
+        }
+        Text {
+            anchors.fill: parent
+            text: "i"
+            color: "blue"
+            font.bold: true
+            font.italic: true
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.pixelSize: replaceWithTitle.font.pixelSize * 1.6
+            font.weight: 19
+        }
+    }
+    Rectangle {
         id: replaceWithTitleRect
         color: "white";
-        width: 1 * widthEighth
+        width: 0.8 * widthEighth
         height: heightUnit
         anchors.top: deleteNumberTitleRect.bottom
         anchors.right: replaceWithTextRect.left
@@ -247,15 +268,13 @@ Rectangle {
             rightPadding: height/4
         }
     }
-
     Rectangle {
         id: replaceWithTextRect
         color: "wheat"
-        width: 3 * widthEighth
+        width: 2.8 * widthEighth-heightUnit
         height: heightUnit
         anchors.top: deleteNumberTitleRect.bottom
-        anchors.right: parent.right
-        anchors.rightMargin: widthMargin
+        anchors.right: infoReplaceToRect.left
         border.width: borderwidth
         border.color: bordercolor
         TextInput {
@@ -271,12 +290,58 @@ Rectangle {
             onEditingFinished: if (controller) controller.runNameDerivation()
         }
     }
-
-
+    Rectangle {
+        id: infoReplaceToRect
+        color: "blue"
+        height: heightUnit
+        width: height
+        anchors.top: deleteNumberTitleRect.bottom
+        anchors.right: caseSensitivityRect.left
+        Rectangle {
+            anchors.fill: parent
+            radius: width / 2
+            color: "white"
+        }
+        Text {
+            anchors.fill: parent
+            text: "i"
+            color: "blue"
+            font.bold: true
+            font.italic: true
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.pixelSize: replaceWithTitle.font.pixelSize * 1.6
+        }
+    }
+    Rectangle {
+        id: caseSensitivityRect
+        color: caseSensitivityMouseArea.pressed ? "red":"lightgray";
+        width: 0.6 * widthEighth
+        height: heightUnit
+        anchors.top: deleteNumberTitleRect.bottom
+        anchors.right: parent.right
+        anchors.rightMargin: widthMargin
+        border.width: borderwidth
+        border.color: bordercolor
+        Text {
+            anchors.fill: parent
+            text: controller ? (controller.isCaseSensitive ? "a≠A" : "a=A") : ""
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
+        MouseArea {
+            id: caseSensitivityMouseArea
+            anchors.fill: parent
+            onClicked: if (controller) {
+                           controller.isCaseSensitive = !controller.isCaseSensitive
+                           controller.runNameDerivation()
+                       }
+        }
+    }
     Rectangle {
         id: delimiterTitleRect
         color: "white";
-        width: 2 * widthEighth
+        width: 1.4 * widthEighth
         height: heightUnit
         anchors.top: replaceFromTitleRect.bottom
         anchors.left: parent.left
@@ -296,13 +361,11 @@ Rectangle {
             rightPadding: height/2
         }
     }
-
     Rectangle {
         id: delimiterTextRect
         color: "wheat"
-        width: 2 * widthEighth
+        width: 2.6 * widthEighth
         height: heightUnit
-
         anchors.top: replaceFromTitleRect.bottom
         anchors.left: delimiterTitleRect.right
         border.width: borderwidth
@@ -390,7 +453,6 @@ Rectangle {
             }
         }
     }
-
     Rectangle {
         id: verticalSpaceToTable
         color: "transparent"
@@ -407,8 +469,7 @@ Rectangle {
             case 0: return (width * 30/100) - nameTable.borderwidth
             case 1: return (width * 30/100) - nameTable.borderwidth
             case 2: return (width * 40/100) - nameTable.borderwidth
-
-            default: return loggedItemsTableView.column0Width;
+            default: return 0
             }
         }
         width: parent.width * 22/24

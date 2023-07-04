@@ -20,7 +20,6 @@
 class Controller : public QObject
 {
     Q_OBJECT
-//    Q_PROPERTY(QString delimiter READ delimiter WRITE setDelimiter NOTIFY delimiterChanged)
 
 public:
     explicit Controller(QObject *parent = nullptr) : QObject(parent){
@@ -96,7 +95,7 @@ public:
     Q_INVOKABLE PersonData* nextPersonData() {
 
         if (m_currentPersonDataMap.isEmpty()) {
-            qDebug()<<"m_currentPersonDataMap.isEmpty(), NULLPTR returned!";
+//            qDebug()<<"m_currentPersonDataMap.isEmpty(), NULLPTR returned!";
             return nullptr;
         }
         int r = QRandomGenerator::global()->bounded(1,m_currentPersonDataMap.count()-1);
@@ -133,8 +132,6 @@ public:
             }
         }
         this->runNameDerivation();
-//        m_nameDerivationTable.runNameDerivation(m_delimiter, m_replaceFrom, m_replaceTo,
-//                                                m_delimiterCounterIndex, m_firstNameFirst);
         return true;
     }
 
@@ -145,6 +142,7 @@ public:
                                                 m_deleteCharsText,
                                                 m_replaceFrom,
                                                 m_replaceTo,
+                                                m_isCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive,
                                                 m_delimiter,
                                                 static_cast<NameDerivationTable::DelimiterCounterOption>(m_delimiterCounterIndex),
                                                 m_firstNameFirst
@@ -178,6 +176,9 @@ public:
     int deleteCharsLocationIndex() const;
     void setDeleteCharsLocationIndex(int newDeleteCharsLocationIndex);
 
+    bool isCaseSensitive() const;
+    void setIsCaseSensitive(bool newIsCaseSensitive);
+
 signals:
 
     void delimiterChanged();
@@ -198,6 +199,8 @@ signals:
 
     void deleteCharsLocationIndexChanged();
 
+    void isCaseSensitiveChanged();
+
 private:
     QMultiMap<qint64,PersonData*> m_currentPersonDataMap;
     QVector<FolderData> m_recentDirs;
@@ -208,6 +211,8 @@ private:
     QString m_delimiter = ", ";
     QString m_replaceFrom = "^#";
     QString m_replaceTo = "";
+    bool m_isCaseSensitive = true;
+
     int m_delimiterCounterIndex = static_cast<int>(NameDerivationTable::DelimiterCounterOption::MIDDLE_LEFT);
     // specifies, which delimiter (if more than one is present) shall be used
 
@@ -223,7 +228,6 @@ private:
     QString m_deleteCharsText = " $%&()=`´+~'#<>|.-_{[]}@0123456789";
     // specifies, which special chars shall be deleted
 
-
     bool m_firstNameFirst = false;
 
 
@@ -236,6 +240,7 @@ private:
     Q_PROPERTY(int deleteNumberCountIndex READ deleteNumberCountIndex WRITE setDeleteNumberCountIndex NOTIFY deleteNumberCountIndexChanged)
     Q_PROPERTY(QString deleteCharsText READ deleteCharsText WRITE setDeleteCharsText NOTIFY deleteCharsTextChanged)
     Q_PROPERTY(int deleteCharsLocationIndex READ deleteCharsLocationIndex WRITE setDeleteCharsLocationIndex NOTIFY deleteCharsLocationIndexChanged)
+    Q_PROPERTY(bool isCaseSensitive READ isCaseSensitive WRITE setIsCaseSensitive NOTIFY isCaseSensitiveChanged)
 };
 
 #endif // CONTROLLER_H

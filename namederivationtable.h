@@ -51,13 +51,11 @@ public:
         qDebug()<< "row: "<<row;
         qDebug()<< "column: "<<column;
         qDebug()<< "table.at(row).at(column): "<<m_table.at(row).at(column);
-
         qDebug()<<m_table.at(row-1).at(column);
     }
     Q_INVOKABLE void editData(int row, int column, QString text) {
         m_table[row][column]=text;
     }
-
 
     QVariant data(const QModelIndex &index, int role) const override {
         Q_ASSERT(m_table.count() == m_overrideAutomatic.count());
@@ -100,11 +98,11 @@ public:
         m_exclude.append(false);     //QRandomGenerator::global()->bounded(0,10) == 0);
         endInsertRows();
     }
+
     QList<int> delimiterPlaces(QString s, QString delimiter) {
         QList<int> result;
         if (delimiter.isEmpty() || s.isEmpty()) return result;
         for (int i = 0; i < (s.length()+1-delimiter.length()); i++){
-//            qDebug()<<s.mid(i,delimiter.length());
             if (s.mid(i,delimiter.length()) == delimiter) {
                 result << i;
             }
@@ -193,12 +191,109 @@ public:
         return s;
     }
 
+    QString replaceFromChunk(QString s, QString from, Qt::CaseSensitivity caseSensitivity) {
+        QString result;
+        auto letters = QStringLiteral("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZäÄöÖüÜßẞÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕØÙÛÝàáâãåæçèéêëìíîïñòóôõøùúûýÿĀāĂăĄąĆćĈĉĊċČčĎďÐĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŉŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžƀƁƊƓǍǎǑǒǓǔǕǖǘǏǐǙǚǛǜǝǞǟǠǡǢǣǤǥǦǧǨǩǪǫǬǭǱǲǳǴǵǸǹǺǻǼǽǾǿȀȁȂȃȄȅȆȇȈȉȊȋȌȍȎȏȐȑȒȓȔȕȖȗȘșȚțȞȟȤȥȦȧȨȩȪȫȬȭȮȯȰȱȲȳ");
+        auto numbers = QStringLiteral("0123456789");
+        bool cs = (caseSensitivity == Qt::CaseSensitive);
+        bool special = false;
+        bool noMatch = false;
+
+        for (int i = 0; i< from.length(); i++) {
+           if (from.at(i)=='/') {
+                special = true;
+                continue;
+           } else if (special) {
+                special = false;
+                switch (from.at(i).toLatin1()) {
+                case '?': // anyChar
+                    result.append(s.first(1));
+                    s.removeFirst();
+                    break;
+                case '#': // anyNumeral
+                    if (!s.isEmpty() && numbers.contains(s.first(1))) {
+                        result.append(s.first(1));
+                        s.removeFirst();
+                    } else {
+                        noMatch = true;
+                    }
+                    ; break;
+                case '$': //anyLetter
+                    if (!s.isEmpty() && letters.contains(s.first(1))) {
+                        result.append(s.first(1));
+                        s.removeFirst();
+                    } else {
+                        noMatch = true;
+                    }
+                    ; break;
+                case '%': //anyNumber
+                    if (!s.isEmpty() && numbers.contains(s.first(1))) {
+                        result.append(s.first(1));
+                        s.removeFirst();
+                        while (!s.isEmpty() && numbers.contains(s.first(1))) {
+                            result.append(s.first(1));
+                            s.removeFirst();
+                        }
+                    } else {
+                        noMatch = true;
+                    }
+                    ; break;
+                case 'W': //anyWord
+                    if (!s.isEmpty() && letters.contains(s.first(1))) {
+                        result.append(s.first(1));
+                        s.removeFirst();
+                        while (!s.isEmpty() && letters.contains(s.first(1))) {
+                            result.append(s.first(1));
+                            s.removeFirst();
+                        }
+                    } else {
+                        noMatch = true;
+                    }
+                    ; break;
+                }
+           } else {
+                // no special character
+                if (!s.isEmpty() && (from.at(i) == s.first(1) || (!cs && (from.at(i).toUpper() == s.first(1).toUpper())))) {
+                    result.append(s.first(1));
+                    s.removeFirst();
+                } else {
+                    noMatch = true;
+                }
+           }
+           if (noMatch) break;
+        }
+
+        if (noMatch) result = QString();
+        return result;
+    }
+
+    QString replace(QString s, QString from, QString to, Qt::CaseSensitivity caseSensitivity) {
+        // special placeholder keys
+        // any char ^? (from)
+        // any numeral ^# (from)
+        // any letter ^$ (from)
+        // any number ^% (from)
+        // any letters ^W (from)
+        // "search "from" text ^& (to)
+
+        for (int i = 0; i < s.length(); i++){
+           auto searchResult = replaceFromChunk(s.right(s.length()-i),from,caseSensitivity);
+           if (!searchResult.isEmpty()) {
+                to.replace("/&",searchResult,caseSensitivity);
+                s.replace(i,searchResult.length(),to);
+                i += to.length();
+           }
+        }
+        return s;
+    }
+
     void runNameDerivation(DeletionLocationOption deleteNumberLocationOption,
                            int deleteNumberCount,
                            DeletionLocationOption deleteCharsLocationOption,
                            QString deleteCharsText,
                            QString replaceFrom,
                            QString replaceTo,
+                           Qt::CaseSensitivity caseSensitivity,
                            QString delimiter,
                            DelimiterCounterOption delimiterCounterOption,
                            bool firstNameFirst) {
@@ -209,13 +304,11 @@ public:
 
             stripped = deleteNumber(stripped, deleteNumberLocationOption, deleteNumberCount);
             stripped = deleteChars(stripped, deleteCharsLocationOption, deleteCharsText);
-
+            stripped = replace(stripped, replaceFrom, replaceTo, caseSensitivity);
 
 
             auto delimiterList = delimiterPlaces(stripped,delimiter);
-//            auto delimiterCounterOption = static_cast<DelimiterCounterOption>(delimiterCounterIndex);
             separateStringToPerson(stripped,&m_table[i][0], &m_table[i][1], delimiter, delimiterList, delimiterCounterOption, firstNameFirst);
-
         }
         endResetModel();
     }
@@ -224,8 +317,6 @@ private:
     QVector<QString> m_baseName;
     QVector<bool> m_overrideAutomatic;
     QVector<bool> m_exclude;
-
-
 };
 
 #endif // NAMEDERIVATIONTABLE_H
