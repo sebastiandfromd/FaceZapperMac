@@ -29,23 +29,9 @@ public:
     };
     Q_ENUM(DeletionLocationOption)
 
-    explicit NameDerivationTable(QObject *parent = nullptr) : QAbstractTableModel(parent) {
-        m_table.append({
-            "Vorname",
-            "Nachname",
-            "Datei",
-        });
-        m_overrideAutomatic.append(false);
-        m_exclude.append(false);
-        m_baseName.append(QString());
-    }
-    int rowCount(const QModelIndex & = QModelIndex()) const override {
-        return m_table.size();
-    }
-
-    int columnCount(const QModelIndex & = QModelIndex()) const override {
-        return m_table.at(0).size();
-    }
+    explicit NameDerivationTable(QObject *parent = nullptr);
+    int rowCount(const QModelIndex & = QModelIndex()) const override { return m_table.size(); }
+    int columnCount(const QModelIndex & = QModelIndex()) const override { return m_table.at(0).size(); }
 
     Q_INVOKABLE void clicked(int row, int column) {
         qDebug()<< "row: "<<row;
@@ -54,29 +40,13 @@ public:
         qDebug()<<m_table.at(row-1).at(column);
     }
     Q_INVOKABLE void editData(int row, int column, QString text) {
+        if (text == m_table[row][column]) return;
         m_table[row][column]=text;
+        auto index = this->index(row, column);
+        emit dataChanged(index, index);
     }
 
-    QVariant data(const QModelIndex &index, int role) const override {
-        Q_ASSERT(m_table.count() == m_overrideAutomatic.count());
-        Q_ASSERT(m_table.count() == m_exclude.count());
-        switch (role) {
-        case TableDataRole: {
-            return m_table.at(index.row()).at(index.column());
-        }
-        case HeadingRole: {
-            return index.row() == 0;
-        }
-        case OverrideAutomaticRole: {
-            return m_overrideAutomatic.at(index.row());
-        }
-        case ExcludeRole: {
-            return m_exclude.at(index.row());
-        }
-        default: break;
-        }
-        return QVariant();
-    }
+    QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override {
         QHash<int, QByteArray> roles;
         roles[TableDataRole] = "tabledata";

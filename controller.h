@@ -208,8 +208,8 @@ private:
     FolderData m_currentFolderData;
     NameDerivationTable m_nameDerivationTable;
 
-    QString m_delimiter = ", ";
-    QString m_replaceFrom = "^#";
+    QString m_delimiter = " ";
+    QString m_replaceFrom = "";
     QString m_replaceTo = "";
     bool m_isCaseSensitive = true;
 

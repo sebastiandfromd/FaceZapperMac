@@ -246,6 +246,32 @@ Rectangle {
             font.pixelSize: replaceWithTitle.font.pixelSize * 1.6
             font.weight: 19
         }
+        Dialog {
+            id: infoReplaceFromPopup
+            width: Math.min(showFolderComponentRect.width, showFolderComponentRect.height) * 0.8
+            height: width
+            anchors.centerIn: parent
+            standardButtons: Dialog.Ok
+            parent: Overlay.overlay
+            Rectangle {
+                anchors.fill: parent
+                border.width: 1
+                border.color: "darkgray"
+                color: "lightblue"
+                Text {
+                    id: infoReplaceFromText
+                    text: qsTr("Spezielle Suchzeichen: \n\n/? Beliebiges Zeichen\n/# Beliebige Ziffer\n/$ Beliebiger Buchstabe\n/% Beliebige Ziffernfolge\n/W Beliebige Buchstabenfolge")
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.WordWrap
+                }
+            }
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: infoReplaceFromPopup.open()
+        }
     }
     Rectangle {
         id: replaceWithTitleRect
@@ -311,6 +337,32 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.pixelSize: replaceWithTitle.font.pixelSize * 1.6
+        }
+        Dialog {
+            id: infoReplaceToPopup
+            width: Math.min(showFolderComponentRect.width, showFolderComponentRect.height) * 0.8
+            height: width
+            anchors.centerIn: parent
+            standardButtons: Dialog.Ok
+            parent: Overlay.overlay
+            Rectangle {
+                anchors.fill: parent
+                border.width: 1
+                border.color: "darkgray"
+                color: "lightblue"
+                Text {
+                    id: infoReplaceToText
+                    text: qsTr("Spezielles Ersetzungszeichen: \n\n/& 'Ersetze'-Suchtext")
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.WordWrap
+                }
+            }
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: infoReplaceToPopup.open()
         }
     }
     Rectangle {
