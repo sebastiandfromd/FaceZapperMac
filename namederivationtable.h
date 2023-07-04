@@ -279,9 +279,10 @@ public:
         for (int i = 0; i < s.length(); i++){
            auto searchResult = replaceFromChunk(s.right(s.length()-i),from,caseSensitivity);
            if (!searchResult.isEmpty()) {
-                to.replace("/&",searchResult,caseSensitivity);
-                s.replace(i,searchResult.length(),to);
-                i += to.length();
+                QString currentTo = to;
+                currentTo.replace("/&",searchResult,caseSensitivity);
+                s.replace(i,searchResult.length(),currentTo);
+                i += currentTo.length()-1;
            }
         }
         return s;
