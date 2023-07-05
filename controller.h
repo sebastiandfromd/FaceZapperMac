@@ -22,75 +22,9 @@ class Controller : public QObject
     Q_OBJECT
 
 public:
-    explicit Controller(QObject *parent = nullptr) : QObject(parent){
-        m_imageProvider = new FaceImageProvider();
+    explicit Controller(QObject *parent = nullptr);
 
-//        PersonData* pd1 = new PersonData();
-//        pd1->setFirstName("Harry");
-//        pd1->setFamilyName("Potter");
-//        pd1->setPicFileName("harry potter.jpg");
-//        pd1->setValue(1);
-//        m_currentPersonDataMap.insert(pd1->value(), pd1);
-
-//        PersonData* pd2 = new PersonData();
-//        pd2->setFirstName("Hermine");
-//        pd2->setFamilyName("Granger");
-//        pd2->setPicFileName("hermine granger.jpg");
-//        pd2->setValue(0);
-//        m_currentPersonDataMap.insert(pd2->value(), pd2);
-
-//        PersonData* pd3 = new PersonData();
-//        pd3->setFirstName("Ronald");
-//        pd3->setFamilyName("Weasley");
-//        pd3->setPicFileName("ronald weasley.jpg");
-//        pd3->setValue(-1);
-//        m_currentPersonDataMap.insert(pd3->value(), pd3);
-
-        FolderData f0;
-        f0.setPath("C:/Program Files (x86)/ClassInTouch/beispieldaten/bilder");
-        f0.setName("7b bilder");
-        FolderData f1;
-        f1.setPath("C:/Users/user/cit/ressources/icons");
-        f1.setName("7b Icons");
-        FolderData f2;
-        f2.setPath("C:/Users/user/cit2/classintouch-2/ClassInTouch2/resources");
-        f2.setName("8c resources");
-        FolderData f3;
-        f3.setPath("C:/Users/user");
-        f3.setName("Q2 user");
-        m_recentDirs << f0 << f1 << f2 << f3;
-
-        saveRecentFolders();
-
-        m_currentFolderData.setName(f0.name());
-        m_currentFolderData.setPath(f0.path());
-
-        scanFolderToCurrent("name", "C:/Program Files (x86)/ClassInTouch/beispieldaten/bilder");
-        saveCurrentFolderData();
-//        QMultiMapIterator<qint64, PersonData*> iter(m_currentPersonDataMap);
-//        iter.toFront();
-//        for(int i = 0; i<m_currentPersonDataMap.count(); i++) {
-//            qDebug()<<i<<": "<<iter.next().value()->picFileName();
-//        }
-//        qDebug()<<"-----------------------------------------------------------";
-    }
-
-    void init(QQmlApplicationEngine *engine) {
-        qmlRegisterType<Controller>("de.herrdiel.facezapper", 1, 0, "Controller");
-        qmlRegisterType<PersonData>("de.herrdiel.facezapper", 1, 0, "PersonData");
-        qmlRegisterType<NameDerivationTable>("de.herrdiel.facezapper", 1, 0, "NameDerivationTable");
-        qmlRegisterType<FolderData>("de.herrdiel.facezapper", 1, 0, "FolderData");
-        engine->addImageProvider(QLatin1String("faceProvider"), m_imageProvider);
-
-
-
-        auto view = new QQuickView(engine, nullptr);
-        QQmlContext *ctxt = view->rootContext();
-
-        ctxt->setContextProperty("controller", this);
-        ctxt->setContextProperty("nameDerivationTable", &m_nameDerivationTable);
-        ctxt->setContextProperty("currentFolderData",  QVariant::fromValue(m_currentFolderData));
-    }
+    void init(QQmlApplicationEngine *engine);
 
     Q_INVOKABLE PersonData* nextPersonData() {
 
@@ -107,9 +41,7 @@ public:
         return iter.value();
     }
     Q_INVOKABLE QString currentFolderPath() { return m_currentFolderData.path(); }
-    QString appDataPath() {
-        return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    }
+    QString appDataPath() { return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation); }
     bool saveRecentFolders();
     bool saveCurrentFolderData();
 
@@ -147,6 +79,18 @@ public:
                                                 static_cast<NameDerivationTable::DelimiterCounterOption>(m_delimiterCounterIndex),
                                                 m_firstNameFirst
                                                 );
+    }
+    Q_INVOKABLE void nameDerivationTableClicked(int row, int column) {
+        m_nameDerivationTable.clicked(row, column, static_cast<NameDerivationTable::DeletionLocationOption>(m_deleteNumberLocationIndex),
+                                      m_deleteNumberCountIndex,
+                                      static_cast<NameDerivationTable::DeletionLocationOption>(m_deleteCharsLocationIndex),
+                                      m_deleteCharsText,
+                                      m_replaceFrom,
+                                      m_replaceTo,
+                                      m_isCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive,
+                                      m_delimiter,
+                                      static_cast<NameDerivationTable::DelimiterCounterOption>(m_delimiterCounterIndex),
+                                      m_firstNameFirst);
     }
 
     QString delimiter() const;
@@ -232,9 +176,9 @@ private:
 
 
     Q_PROPERTY(QString delimiter READ delimiter WRITE setDelimiter NOTIFY delimiterChanged)
+    Q_PROPERTY(int delimiterCounterIndex READ delimiterCounterIndex WRITE setDelimiterCounterIndex NOTIFY delimiterCounterIndexChanged)
     Q_PROPERTY(QString replaceFrom READ replaceFrom WRITE setReplaceFrom NOTIFY replaceFromChanged)
     Q_PROPERTY(QString replaceTo READ replaceTo WRITE setReplaceTo NOTIFY replaceToChanged)
-    Q_PROPERTY(int delimiterCounterIndex READ delimiterCounterIndex WRITE setDelimiterCounterIndex NOTIFY delimiterCounterIndexChanged)
     Q_PROPERTY(bool firstNameFirst READ firstNameFirst WRITE setFirstNameFirst NOTIFY firstNameFirstChanged)
     Q_PROPERTY(int deleteNumberLocationIndex READ deleteNumberLocationIndex WRITE setDeleteNumberLocationIndex NOTIFY deleteNumberLocationIndexChanged)
     Q_PROPERTY(int deleteNumberCountIndex READ deleteNumberCountIndex WRITE setDeleteNumberCountIndex NOTIFY deleteNumberCountIndexChanged)

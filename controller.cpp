@@ -160,6 +160,76 @@ void Controller::setIsCaseSensitive(bool newIsCaseSensitive)
     emit isCaseSensitiveChanged();
 }
 
+Controller::Controller(QObject *parent) : QObject(parent){
+    m_imageProvider = new FaceImageProvider();
+
+    //        PersonData* pd1 = new PersonData();
+    //        pd1->setFirstName("Harry");
+    //        pd1->setFamilyName("Potter");
+    //        pd1->setPicFileName("harry potter.jpg");
+    //        pd1->setValue(1);
+    //        m_currentPersonDataMap.insert(pd1->value(), pd1);
+
+    //        PersonData* pd2 = new PersonData();
+    //        pd2->setFirstName("Hermine");
+    //        pd2->setFamilyName("Granger");
+    //        pd2->setPicFileName("hermine granger.jpg");
+    //        pd2->setValue(0);
+    //        m_currentPersonDataMap.insert(pd2->value(), pd2);
+
+    //        PersonData* pd3 = new PersonData();
+    //        pd3->setFirstName("Ronald");
+    //        pd3->setFamilyName("Weasley");
+    //        pd3->setPicFileName("ronald weasley.jpg");
+    //        pd3->setValue(-1);
+    //        m_currentPersonDataMap.insert(pd3->value(), pd3);
+
+    FolderData f0;
+    f0.setPath("C:/Program Files (x86)/ClassInTouch/beispieldaten/bilder");
+    f0.setName("7b bilder");
+    FolderData f1;
+    f1.setPath("C:/Users/user/cit/ressources/icons");
+    f1.setName("7b Icons");
+    FolderData f2;
+    f2.setPath("C:/Users/user/cit2/classintouch-2/ClassInTouch2/resources");
+    f2.setName("8c resources");
+    FolderData f3;
+    f3.setPath("C:/Users/user");
+    f3.setName("Q2 user");
+    m_recentDirs << f0 << f1 << f2 << f3;
+
+    saveRecentFolders();
+
+    m_currentFolderData.setName(f0.name());
+    m_currentFolderData.setPath(f0.path());
+
+    scanFolderToCurrent("name", "C:/Program Files (x86)/ClassInTouch/beispieldaten/bilder");
+    saveCurrentFolderData();
+    //        QMultiMapIterator<qint64, PersonData*> iter(m_currentPersonDataMap);
+    //        iter.toFront();
+    //        for(int i = 0; i<m_currentPersonDataMap.count(); i++) {
+    //            qDebug()<<i<<": "<<iter.next().value()->picFileName();
+    //        }
+    //        qDebug()<<"-----------------------------------------------------------";
+}
+
+void Controller::init(QQmlApplicationEngine *engine) {
+    qmlRegisterType<Controller>("de.herrdiel.facezapper", 1, 0, "Controller");
+    qmlRegisterType<PersonData>("de.herrdiel.facezapper", 1, 0, "PersonData");
+    qmlRegisterType<NameDerivationTable>("de.herrdiel.facezapper", 1, 0, "NameDerivationTable");
+    qmlRegisterType<FolderData>("de.herrdiel.facezapper", 1, 0, "FolderData");
+    engine->addImageProvider(QLatin1String("faceProvider"), m_imageProvider);
+
+
+
+    auto view = new QQuickView(engine, nullptr);
+    QQmlContext *ctxt = view->rootContext();
+
+    ctxt->setContextProperty("controller", this);
+    ctxt->setContextProperty("nameDerivationTable", &m_nameDerivationTable);
+    ctxt->setContextProperty("currentFolderData",  QVariant::fromValue(m_currentFolderData));
+}
+
 bool Controller::saveRecentFolders()
 {
     QString settingsFolder = this->appDataPath();

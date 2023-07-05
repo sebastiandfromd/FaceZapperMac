@@ -559,7 +559,7 @@ Rectangle {
                 anchors.fill: parent
                 enabled: !overrideAutomatic || (column === 2)
                 onClicked: {
-                    nameDerivationTable.clicked(row, column)
+                    if (controller) controller.nameDerivationTableClicked(row, column);
                 }
             }
         }
