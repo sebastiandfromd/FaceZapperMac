@@ -59,8 +59,7 @@ public:
 //                p->setFirstName(f.baseName());
 //                p->setPicFileName(f.fileName());
 //                m_currentPersonDataMap.insert(1,p);
-
-                m_nameDerivationTable.addPerson(f.fileName(), f.baseName());
+                m_nameDerivationTable.addRow(f.fileName(), f.baseName());
             }
         }
         this->runNameDerivation();

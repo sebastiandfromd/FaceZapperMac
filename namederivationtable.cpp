@@ -38,11 +38,10 @@ void NameDerivationTable::clicked(int row, int column, DeletionLocationOption de
     emit dataChanged(index1, index2);
 }
 
-void NameDerivationTable::editData(int row, int column, QString text) {
+void NameDerivationTable::dataEdited(int row, int column, QString text) {
     if (text == m_table[row][column]) return;
     m_table[row][column]=text;
-    auto index = this->index(row, column);
-    emit dataChanged(index, index);
+    // no "emit dataChanged(...)" necessary, as editing was done by user. would lead to binding loop detection.
 }
 
 QVariant NameDerivationTable::data(const QModelIndex &index, int role) const {
@@ -73,6 +72,19 @@ QHash<int, QByteArray> NameDerivationTable::roleNames() const {
     roles[OverrideAutomaticRole] = "overrideAutomatic";
     roles[ExcludeRole] = "exclude";
     return roles;
+}
+
+void NameDerivationTable::addRow(QString fileName, QString baseName) {
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    m_table.append({
+        "",
+        "",
+        fileName
+    });
+    m_baseName.append(baseName);
+    m_overrideAutomatic.append(false);
+    m_exclude.append(false);
+    endInsertRows();
 }
 
 QList<int> NameDerivationTable::delimiterPlaces(QString s, QString delimiter) {
@@ -241,4 +253,57 @@ QString NameDerivationTable::replaceFromChunk(QString s, QString from, Qt::CaseS
 
     if (noMatch) result = QString();
     return result;
+}
+
+QString NameDerivationTable::replace(QString s, QString from, QString to, Qt::CaseSensitivity caseSensitivity) {
+    // special placeholder keys
+    // any char ^? (from)
+    // any numeral ^# (from)
+    // any letter ^$ (from)
+    // any number ^% (from)
+    // any letters ^W (from)
+    // "search "from" text ^& (to)
+
+    for (int i = 0; i < s.length(); i++){
+        auto searchResult = replaceFromChunk(s.right(s.length()-i),from,caseSensitivity);
+        if (!searchResult.isEmpty()) {
+            QString currentTo = to;
+            currentTo.replace("/&",searchResult,caseSensitivity);
+            s.replace(i,searchResult.length(),currentTo);
+            i += currentTo.length()-1;
+        }
     }
+    return s;
+}
+
+void NameDerivationTable::deriveOneName(int i, DeletionLocationOption deleteNumberLocationOption, int deleteNumberCount, DeletionLocationOption deleteCharsLocationOption, QString deleteCharsText, QString replaceFrom, QString replaceTo, Qt::CaseSensitivity caseSensitivity, QString delimiter, DelimiterCounterOption delimiterCounterOption, bool firstNameFirst) {
+
+    if (m_overrideAutomatic.at(i) || m_exclude.at(i)) return;
+    QString stripped = m_baseName.at(i);
+
+    stripped = deleteNumberOfChars(stripped, deleteNumberLocationOption, deleteNumberCount);
+    stripped = deleteSpecialChars(stripped, deleteCharsLocationOption, deleteCharsText);
+    stripped = replace(stripped, replaceFrom, replaceTo, caseSensitivity);
+
+
+    auto delimiterList = delimiterPlaces(stripped,delimiter);
+    separateStringToNames(stripped,&m_table[i][0], &m_table[i][1], delimiter, delimiterList, delimiterCounterOption, firstNameFirst);
+
+}
+
+void NameDerivationTable::runNameDerivation(DeletionLocationOption deleteNumberLocationOption, int deleteNumberCount, DeletionLocationOption deleteCharsLocationOption, QString deleteCharsText, QString replaceFrom, QString replaceTo, Qt::CaseSensitivity caseSensitivity, QString delimiter, DelimiterCounterOption delimiterCounterOption, bool firstNameFirst) {
+    beginResetModel();
+    for (int i = 1; i < m_table.count(); i++) {
+        deriveOneName(i, deleteNumberLocationOption,
+                      deleteNumberCount,
+                      deleteCharsLocationOption,
+                      deleteCharsText,
+                      replaceFrom,
+                      replaceTo,
+                      caseSensitivity,
+                      delimiter,
+                      delimiterCounterOption,
+                      firstNameFirst);
+    }
+    endResetModel();
+}

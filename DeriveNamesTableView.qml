@@ -550,7 +550,7 @@ Rectangle {
                 anchors.centerIn: parent
                 enabled: overrideAutomatic && (column!== 2)
                 onTextChanged: {
-                    if (nameDerivationTable) nameDerivationTable.editData(row, column, text)
+                    if (nameDerivationTable) nameDerivationTable.dataEdited(row, column, text)
                 }
                 padding: 1
                 leftPadding: height/4
