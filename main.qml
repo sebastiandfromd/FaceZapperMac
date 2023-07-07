@@ -14,7 +14,6 @@ ApplicationWindow {
     DeriveNamesTableView {
         anchors.fill: parent
         id: deriveNamesTableView
-        visible: false
     }
 
     footer: Rectangle {
@@ -24,23 +23,26 @@ ApplicationWindow {
         width: swipeView.width
         implicitWidth: 50
         color: "red"
-        Button {
-//            visible: swipeView.currentItem.pageType === FaceSwipeView.PageType.FACE_PAGE
-            anchors.centerIn: parent
-            text: "Settings"
-            onClicked: {
-//                if (!swipeView.currentItem.pageType !== FaceSwipeView.PageType.SETTINGS_PAGE) swipeView.createSettingsPage()
-                swipeView.visible = !swipeView.visible
-                deriveNamesTableView.visible = !deriveNamesTableView.visible
-            }
-        }
 //        Button {
-//            visible: swipeView.currentItem.pageType === FaceSwipeView.PageType.SHOW_FOLDER_PAGE
+//            visible: swipeView.currentItem.pageType === FaceSwipeView.PageType.FACE_PAGE
 //            anchors.centerIn: parent
-//            text: "Übernehmen"
+//            text: "Settings"
 //            onClicked: {
-//                if (!swipeView.currentItem.pageType !== FaceSwipeView.PageType.SETTINGS_PAGE) swipeView.createSettingsPage()
+////                if (!swipeView.currentItem.pageType !== FaceSwipeView.PageType.SETTINGS_PAGE) swipeView.createSettingsPage()
+//                swipeView.visible = !swipeView.visible
+//                deriveNamesTableView.visible = !deriveNamesTableView.visible
 //            }
 //        }
+        Button {
+//            visible: swipeView.currentItem.pageType === FaceSwipeView.PageType.SHOW_FOLDER_PAGE
+            anchors.centerIn: parent
+            text: "Übernehmen"
+            onClicked: {
+//                if (!swipeView.currentItem.pageType !== FaceSwipeView.PageType.SETTINGS_PAGE) swipeView.createSettingsPage()
+                if (controller) controller.takeOverTableContent()
+                swipeView.createPages()
+                deriveNamesTableView.visible = false;
+            }
+        }
     }
 }

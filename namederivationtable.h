@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QRandomGenerator>
 #include <QString>
+#include <persondata.h>
 
 class NameDerivationTable : public QAbstractTableModel {
     Q_OBJECT
@@ -30,6 +31,8 @@ public:
     Q_ENUM(DeletionLocationOption)
 
     explicit NameDerivationTable(QObject *parent = nullptr);
+    void init(QString fileName);
+    void clear();
     int rowCount(const QModelIndex & = QModelIndex()) const override { return m_table.size(); }
     int columnCount(const QModelIndex & = QModelIndex()) const override { return m_table.at(0).size(); }
 
@@ -43,6 +46,7 @@ public:
                  Qt::CaseSensitivity caseSensitivity,
                  QString delimiter,
                  DelimiterCounterOption delimiterCounterOption,
+                 bool correctCase,
                  bool firstNameFirst);
 
     Q_INVOKABLE void dataEdited(int row, int column, QString text);
@@ -52,23 +56,24 @@ public:
     Q_INVOKABLE void addRow(QString fileName, QString baseName);
 
     QList<int> delimiterPlaces(QString s, QString delimiter);
-    void separateStringToNames(QString stripped, QString *firstName, QString *familyName, QString delimiter, QList<int> occasions, DelimiterCounterOption option, bool firstNameFirst);
+    void separateStringToNames(QString stripped, QString *firstName, QString *familyName, QString delimiter, QList<int> occasions, DelimiterCounterOption option, bool correctCase, bool firstNameFirst);
     QString deleteNumberOfChars(QString s, DeletionLocationOption deleteNumberLocationOption, int deleteNumberCount);
     QString deleteSpecialChars(QString s, DeletionLocationOption deleteCharsLocationOption, QString deleteCharsText);
     QString replaceFromChunk(QString s, QString from, Qt::CaseSensitivity caseSensitivity);
     QString replace(QString s, QString from, QString to, Qt::CaseSensitivity caseSensitivity);
 
     void deriveOneName(int i,
-                         DeletionLocationOption deleteNumberLocationOption,
-                         int deleteNumberCount,
-                         DeletionLocationOption deleteCharsLocationOption,
-                         QString deleteCharsText,
-                         QString replaceFrom,
-                         QString replaceTo,
-                         Qt::CaseSensitivity caseSensitivity,
-                         QString delimiter,
-                         DelimiterCounterOption delimiterCounterOption,
-                         bool firstNameFirst);
+                       DeletionLocationOption deleteNumberLocationOption,
+                       int deleteNumberCount,
+                       DeletionLocationOption deleteCharsLocationOption,
+                       QString deleteCharsText,
+                       QString replaceFrom,
+                       QString replaceTo,
+                       Qt::CaseSensitivity caseSensitivity,
+                       QString delimiter,
+                       DelimiterCounterOption delimiterCounterOption,
+                       bool correctCase,
+                       bool firstNameFirst);
 
     void runNameDerivation(DeletionLocationOption deleteNumberLocationOption,
                            int deleteNumberCount,
@@ -79,13 +84,31 @@ public:
                            Qt::CaseSensitivity caseSensitivity,
                            QString delimiter,
                            DelimiterCounterOption delimiterCounterOption,
+                           bool correctCase,
                            bool firstNameFirst);
+
+    void fillPersonDataMap(QVector<PersonData*> *personsVector) {
+        int uid = 0;
+        Q_ASSERT(personsVector->isEmpty()); // may be subject to change if we allow the adding of a folder to existing pics
+        for (int i = 0; i < m_table.count(); i++) {
+            if (m_exclude.at(i)) continue;
+            auto p = new PersonData();
+            p->setPicFileName(m_table.at(i).at(2));
+            p->setFirstName(m_table.at(i).at(0));
+            p->setFamilyName(m_table.at(i).at(1));
+            p->setUid(uid++);
+            personsVector->append(p);
+        }
+    };
+    QString groupName() const;
+    void setGroupName(const QString &newGroupName);
 
 private:
     QVector<QVector<QString>> m_table;
     QVector<QString> m_baseName;
     QVector<bool> m_overrideAutomatic;
     QVector<bool> m_exclude;
+    QString m_groupName = "";
 };
 
 #endif // NAMEDERIVATIONTABLE_H

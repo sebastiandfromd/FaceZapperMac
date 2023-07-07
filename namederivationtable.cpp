@@ -3,6 +3,11 @@
 
 
 NameDerivationTable::NameDerivationTable(QObject *parent) : QAbstractTableModel(parent) {
+    init(QString());
+}
+
+void NameDerivationTable::init(QString fileName)
+{
     m_table.append({
         "Vorname",
         "Nachname",
@@ -11,9 +16,20 @@ NameDerivationTable::NameDerivationTable(QObject *parent) : QAbstractTableModel(
     m_overrideAutomatic.append(false);
     m_exclude.append(false);
     m_baseName.append(QString());
+    m_groupName = fileName;
 }
 
-void NameDerivationTable::clicked(int row, int column, DeletionLocationOption deleteNumberLocationOption, int deleteNumberCount, DeletionLocationOption deleteCharsLocationOption, QString deleteCharsText, QString replaceFrom, QString replaceTo, Qt::CaseSensitivity caseSensitivity, QString delimiter, DelimiterCounterOption delimiterCounterOption, bool firstNameFirst) {
+void NameDerivationTable::clear()
+{
+    m_table.clear();
+    m_overrideAutomatic.clear();
+    m_baseName.clear();
+    m_exclude.clear();
+    m_groupName.clear();
+    init(QString());
+}
+
+void NameDerivationTable::clicked(int row, int column, DeletionLocationOption deleteNumberLocationOption, int deleteNumberCount, DeletionLocationOption deleteCharsLocationOption, QString deleteCharsText, QString replaceFrom, QString replaceTo, Qt::CaseSensitivity caseSensitivity, QString delimiter, DelimiterCounterOption delimiterCounterOption, bool correctCase, bool firstNameFirst) {
     Q_UNUSED(column);
     if (m_overrideAutomatic.at(row)) {
         m_overrideAutomatic[row] = false;
@@ -29,6 +45,7 @@ void NameDerivationTable::clicked(int row, int column, DeletionLocationOption de
                       caseSensitivity,
                       delimiter,
                       delimiterCounterOption,
+                      correctCase,
                       firstNameFirst);
     } else {
         m_overrideAutomatic[row] = true;
@@ -98,7 +115,7 @@ QList<int> NameDerivationTable::delimiterPlaces(QString s, QString delimiter) {
     return result;
 }
 
-void NameDerivationTable::separateStringToNames(QString stripped, QString *firstName, QString *familyName, QString delimiter, QList<int> occasions, DelimiterCounterOption option, bool firstNameFirst) {
+void NameDerivationTable::separateStringToNames(QString stripped, QString *firstName, QString *familyName, QString delimiter, QList<int> occasions, DelimiterCounterOption option, bool correctCase, bool firstNameFirst) {
     int position = -1;
     if (occasions.count() == 0
         || (occasions.count() == 1 &&
@@ -138,6 +155,10 @@ void NameDerivationTable::separateStringToNames(QString stripped, QString *first
         // we do not have a valid position. we give up.
         *firstName = stripped;
         *familyName = QString();
+    }
+    if (correctCase) {
+        if ((*firstName).length()>0) (*firstName)[0] = (*firstName)[0].toUpper();
+        if ((*familyName).length()>0) (*familyName)[0] = (*familyName)[0].toUpper();
     }
 }
 
@@ -276,7 +297,7 @@ QString NameDerivationTable::replace(QString s, QString from, QString to, Qt::Ca
     return s;
 }
 
-void NameDerivationTable::deriveOneName(int i, DeletionLocationOption deleteNumberLocationOption, int deleteNumberCount, DeletionLocationOption deleteCharsLocationOption, QString deleteCharsText, QString replaceFrom, QString replaceTo, Qt::CaseSensitivity caseSensitivity, QString delimiter, DelimiterCounterOption delimiterCounterOption, bool firstNameFirst) {
+void NameDerivationTable::deriveOneName(int i, DeletionLocationOption deleteNumberLocationOption, int deleteNumberCount, DeletionLocationOption deleteCharsLocationOption, QString deleteCharsText, QString replaceFrom, QString replaceTo, Qt::CaseSensitivity caseSensitivity, QString delimiter, DelimiterCounterOption delimiterCounterOption, bool correctCase, bool firstNameFirst) {
 
     if (m_overrideAutomatic.at(i) || m_exclude.at(i)) return;
     QString stripped = m_baseName.at(i);
@@ -287,11 +308,11 @@ void NameDerivationTable::deriveOneName(int i, DeletionLocationOption deleteNumb
 
 
     auto delimiterList = delimiterPlaces(stripped,delimiter);
-    separateStringToNames(stripped,&m_table[i][0], &m_table[i][1], delimiter, delimiterList, delimiterCounterOption, firstNameFirst);
+    separateStringToNames(stripped,&m_table[i][0], &m_table[i][1], delimiter, delimiterList, delimiterCounterOption, correctCase, firstNameFirst);
 
 }
 
-void NameDerivationTable::runNameDerivation(DeletionLocationOption deleteNumberLocationOption, int deleteNumberCount, DeletionLocationOption deleteCharsLocationOption, QString deleteCharsText, QString replaceFrom, QString replaceTo, Qt::CaseSensitivity caseSensitivity, QString delimiter, DelimiterCounterOption delimiterCounterOption, bool firstNameFirst) {
+void NameDerivationTable::runNameDerivation(DeletionLocationOption deleteNumberLocationOption, int deleteNumberCount, DeletionLocationOption deleteCharsLocationOption, QString deleteCharsText, QString replaceFrom, QString replaceTo, Qt::CaseSensitivity caseSensitivity, QString delimiter, DelimiterCounterOption delimiterCounterOption, bool correctCase, bool firstNameFirst) {
     beginResetModel();
     for (int i = 1; i < m_table.count(); i++) {
         deriveOneName(i, deleteNumberLocationOption,
@@ -303,7 +324,18 @@ void NameDerivationTable::runNameDerivation(DeletionLocationOption deleteNumberL
                       caseSensitivity,
                       delimiter,
                       delimiterCounterOption,
+                      correctCase,
                       firstNameFirst);
     }
     endResetModel();
+}
+
+QString NameDerivationTable::groupName() const
+{
+    return m_groupName;
+}
+
+void NameDerivationTable::setGroupName(const QString &newGroupName)
+{
+    m_groupName = newGroupName;
 }

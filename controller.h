@@ -28,12 +28,12 @@ public:
 
     Q_INVOKABLE PersonData* nextPersonData() {
 
-        if (m_currentPersonDataMap.isEmpty()) {
-//            qDebug()<<"m_currentPersonDataMap.isEmpty(), NULLPTR returned!";
+        if (m_valuePersonMap.isEmpty()) {
+            qDebug()<<"m_valuePersonMap.isEmpty(), NULLPTR returned!";
             return nullptr;
         }
-        int r = QRandomGenerator::global()->bounded(1,m_currentPersonDataMap.count()-1);
-        QMultiMapIterator<qint64, PersonData*> iter(m_currentPersonDataMap);
+        int r = QRandomGenerator::global()->bounded(1,m_valuePersonMap.count()-1);
+        QMultiMapIterator<qreal, PersonData*> iter(m_valuePersonMap);
         iter.toFront();
         for(int i = 0; i<r; i++) {
             iter.next();
@@ -46,22 +46,22 @@ public:
     bool saveCurrentFolderData();
 
     bool saveAJsonFile(QString fileName, QString filePath, QJsonObject object);
-    bool scanFolderToCurrent(QString fileName, QString filePath) {
+    bool scanFolderToNameDerivationTable(QString fileName, QString filePath) {
+        m_nameDerivationTable.clear();
+
         QDir dir(filePath);
         dir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
         dir.setSorting(QDir::Size | QDir::Reversed);
 
+        if (fileName.isEmpty()) fileName = dir.dirName();
         QFileInfoList list = dir.entryInfoList();
         QStringList imageTypes = { "png", "jpg", "gif", "bmp"};
         for (auto &f: list) {
             if (imageTypes.contains(f.suffix())) {
-//                PersonData* p = new PersonData();
-//                p->setFirstName(f.baseName());
-//                p->setPicFileName(f.fileName());
-//                m_currentPersonDataMap.insert(1,p);
                 m_nameDerivationTable.addRow(f.fileName(), f.baseName());
             }
         }
+        m_nameDerivationTable.setGroupName(fileName);
         this->runNameDerivation();
         return true;
     }
@@ -76,6 +76,7 @@ public:
                                                 m_isCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive,
                                                 m_delimiter,
                                                 static_cast<NameDerivationTable::DelimiterCounterOption>(m_delimiterCounterIndex),
+                                                m_correctCase,
                                                 m_firstNameFirst
                                                 );
     }
@@ -89,9 +90,11 @@ public:
                                       m_isCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive,
                                       m_delimiter,
                                       static_cast<NameDerivationTable::DelimiterCounterOption>(m_delimiterCounterIndex),
+                                      m_correctCase,
                                       m_firstNameFirst);
     }
-
+    void rebuildValuePersonMap();
+    Q_INVOKABLE void takeOverTableContent();
     QString delimiter() const;
     void setDelimiter(const QString &newDelimiter);
 
@@ -122,6 +125,12 @@ public:
     bool isCaseSensitive() const;
     void setIsCaseSensitive(bool newIsCaseSensitive);
 
+    QString groupName() const;
+    void setGroupName(const QString &newGroupName);
+
+    bool correctCase() const;
+    void setCorrectCase(bool newCorrectCase);
+
 signals:
 
     void delimiterChanged();
@@ -144,8 +153,14 @@ signals:
 
     void isCaseSensitiveChanged();
 
+    void groupNameChanged();
+
+    void correctCaseChanged();
+
 private:
-    QMultiMap<qint64,PersonData*> m_currentPersonDataMap;
+    QVector<PersonData*> m_personsVector;
+    QMultiMap<qreal, PersonData*> m_valuePersonMap;
+
     QVector<FolderData> m_recentDirs;
     FaceImageProvider* m_imageProvider =  new FaceImageProvider();
     FolderData m_currentFolderData;
@@ -154,7 +169,8 @@ private:
     QString m_delimiter = " ";
     QString m_replaceFrom = "";
     QString m_replaceTo = "";
-    bool m_isCaseSensitive = true;
+    bool m_isCaseSensitive = true; // for replacement
+    bool m_correctCase = true; // will ensure that first letters in words are capitalized
 
     int m_delimiterCounterIndex = static_cast<int>(NameDerivationTable::DelimiterCounterOption::MIDDLE_LEFT);
     // specifies, which delimiter (if more than one is present) shall be used
@@ -184,6 +200,9 @@ private:
     Q_PROPERTY(QString deleteCharsText READ deleteCharsText WRITE setDeleteCharsText NOTIFY deleteCharsTextChanged)
     Q_PROPERTY(int deleteCharsLocationIndex READ deleteCharsLocationIndex WRITE setDeleteCharsLocationIndex NOTIFY deleteCharsLocationIndexChanged)
     Q_PROPERTY(bool isCaseSensitive READ isCaseSensitive WRITE setIsCaseSensitive NOTIFY isCaseSensitiveChanged)
+
+    Q_PROPERTY(QString groupName READ groupName WRITE setGroupName NOTIFY groupNameChanged)
+    Q_PROPERTY(bool correctCase READ correctCase WRITE setCorrectCase NOTIFY correctCaseChanged)
 };
 
 #endif // CONTROLLER_H

@@ -36,12 +36,12 @@ void PersonData::setPicFileName(const QString &picFileName)
     m_picFileName = picFileName;
 }
 
-qint64 PersonData::value() const
+qreal PersonData::value() const
 {
     return m_value;
 }
 
-void PersonData::setValue(const qint64 &value)
+void PersonData::setValue(const qreal &value)
 {
     m_value = value;
 }
@@ -74,4 +74,17 @@ int PersonData::wins() const
 void PersonData::setWins(int newWins)
 {
     m_wins = newWins;
+}
+
+int PersonData::uid() const
+{
+    return m_uid;
+}
+
+void PersonData::setUid(int newUid)
+{
+    if (m_uid == newUid)
+        return;
+    m_uid = newUid;
+    emit uidChanged();
 }

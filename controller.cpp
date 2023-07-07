@@ -30,6 +30,25 @@ bool Controller::saveAJsonFile(QString fileName, QString filePath, QJsonObject o
     return true;
 }
 
+void Controller::rebuildValuePersonMap(){
+    m_valuePersonMap.clear();
+    for(auto &p : m_personsVector) {
+        m_valuePersonMap.insert(p->value(), p);
+    }
+}
+
+void Controller::takeOverTableContent()
+{
+    qDebug()<<"takeOverTableContent";
+    qDeleteAll(m_personsVector);
+    m_personsVector.clear();
+    m_valuePersonMap.clear();
+    m_nameDerivationTable.fillPersonDataMap(&m_personsVector);
+    m_currentFolderData.setName(m_nameDerivationTable.groupName());
+    rebuildValuePersonMap();
+    saveCurrentFolderData();
+}
+
 QString Controller::delimiter() const
 {
     return m_delimiter;
@@ -160,29 +179,34 @@ void Controller::setIsCaseSensitive(bool newIsCaseSensitive)
     emit isCaseSensitiveChanged();
 }
 
+QString Controller::groupName() const
+{
+    return m_currentFolderData.name();
+}
+
+void Controller::setGroupName(const QString &newGroupName)
+{
+    if ( m_currentFolderData.name() == newGroupName)
+        return;
+    m_currentFolderData.setName(newGroupName);
+    emit groupNameChanged();
+}
+
+bool Controller::correctCase() const
+{
+    return m_correctCase;
+}
+
+void Controller::setCorrectCase(bool newCorrectCase)
+{
+    if (m_correctCase == newCorrectCase)
+        return;
+    m_correctCase = newCorrectCase;
+    emit correctCaseChanged();
+}
+
 Controller::Controller(QObject *parent) : QObject(parent){
     m_imageProvider = new FaceImageProvider();
-
-    //        PersonData* pd1 = new PersonData();
-    //        pd1->setFirstName("Harry");
-    //        pd1->setFamilyName("Potter");
-    //        pd1->setPicFileName("harry potter.jpg");
-    //        pd1->setValue(1);
-    //        m_currentPersonDataMap.insert(pd1->value(), pd1);
-
-    //        PersonData* pd2 = new PersonData();
-    //        pd2->setFirstName("Hermine");
-    //        pd2->setFamilyName("Granger");
-    //        pd2->setPicFileName("hermine granger.jpg");
-    //        pd2->setValue(0);
-    //        m_currentPersonDataMap.insert(pd2->value(), pd2);
-
-    //        PersonData* pd3 = new PersonData();
-    //        pd3->setFirstName("Ronald");
-    //        pd3->setFamilyName("Weasley");
-    //        pd3->setPicFileName("ronald weasley.jpg");
-    //        pd3->setValue(-1);
-    //        m_currentPersonDataMap.insert(pd3->value(), pd3);
 
     FolderData f0;
     f0.setPath("C:/Program Files (x86)/ClassInTouch/beispieldaten/bilder");
@@ -203,14 +227,8 @@ Controller::Controller(QObject *parent) : QObject(parent){
     m_currentFolderData.setName(f0.name());
     m_currentFolderData.setPath(f0.path());
 
-    scanFolderToCurrent("name", "C:/Program Files (x86)/ClassInTouch/beispieldaten/bilder");
+    scanFolderToNameDerivationTable(m_currentFolderData.name(), "C:/Program Files (x86)/ClassInTouch/beispieldaten/bilder");
     saveCurrentFolderData();
-    //        QMultiMapIterator<qint64, PersonData*> iter(m_currentPersonDataMap);
-    //        iter.toFront();
-    //        for(int i = 0; i<m_currentPersonDataMap.count(); i++) {
-    //            qDebug()<<i<<": "<<iter.next().value()->picFileName();
-    //        }
-    //        qDebug()<<"-----------------------------------------------------------";
 }
 
 void Controller::init(QQmlApplicationEngine *engine) {
@@ -251,7 +269,7 @@ bool Controller::saveCurrentFolderData()
     QString settingsFolder = this->appDataPath();
     QString fileName = m_currentFolderData.name();
     QJsonArray personsArray;
-    for (auto &p : m_currentPersonDataMap) {
+    for (auto &p : m_personsVector) {
         QJsonObject personObject;
         personObject.insert("firstName", QJsonValue(p->firstName()));
         personObject.insert("familyName", QJsonValue(p->familyName()));

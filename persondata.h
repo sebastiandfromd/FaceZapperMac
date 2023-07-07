@@ -9,9 +9,6 @@
 class PersonData: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString picFileName READ picFileName WRITE setPicFileName NOTIFY picFileNameChanged)
-    Q_PROPERTY(QString firstName READ firstName WRITE setFirstName NOTIFY firstNameChanged)
-    Q_PROPERTY(QString familyName READ familyName WRITE setFamilyName NOTIFY familyNameChanged)
 
 public:
     PersonData();
@@ -32,8 +29,8 @@ public:
     QString picFileName() const;
     void setPicFileName(const QString &picFileName);
 
-    qint64 value() const;
-    void setValue(const qint64 &value);
+    qreal value() const;
+    void setValue(const qreal &value);
 
     int skips() const;
     void setSkips(int newSkips);
@@ -44,22 +41,31 @@ public:
     int wins() const;
     void setWins(int newWins);
 
+    int uid() const;
+    void setUid(int newUid);
+
 signals:
     void picFileNameChanged();
     void firstNameChanged();
     void familyNameChanged();
 
-private:
+    void uidChanged();
 
+private:
+    int m_uid = -1;
     QString m_firstName = QString();
     QString m_familyName = QString();
     QString m_picFileName = QString();
-    qint64 m_value = 0;
+    qreal m_value = 0;
     QMap<QDateTime,InteractionType> m_interactions;
     int m_skips = 0;  // number of skipped decisions
     int m_fails = 0;  // number of failed guesses
     int m_wins = 0;   // number of correct recognitions
 
+    Q_PROPERTY(int uid READ uid WRITE setUid NOTIFY uidChanged)
+    Q_PROPERTY(QString picFileName READ picFileName WRITE setPicFileName NOTIFY picFileNameChanged)
+    Q_PROPERTY(QString firstName READ firstName WRITE setFirstName NOTIFY firstNameChanged)
+    Q_PROPERTY(QString familyName READ familyName WRITE setFamilyName NOTIFY familyNameChanged)
 };
 
 #endif // PERSONDATA_H

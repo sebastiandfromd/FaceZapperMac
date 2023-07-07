@@ -12,12 +12,10 @@ public:
     }
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) override
     {
-//        qDebug()<<"id is "<<id;
+        Q_UNUSED(requestedSize);
         QImage i(id);
         if (size)
             *size = QSize(i.width(), i.height());
-
-
         return i;
     }
 };

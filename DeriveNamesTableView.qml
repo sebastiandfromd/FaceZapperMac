@@ -7,14 +7,65 @@ Rectangle {
     property color bordercolor: "darkgray"
     property real widthEighth: ((11/12)*width) / 8
     property real widthMargin: width/24
+    property real heightMargin: widthMargin/2
     property real heightUnit: delimiterTitle.height * 1.8
     id: showFolderComponentRect
+
+    Rectangle {
+        id: groupNameTitleRect
+        color: "white";
+        width: 2 * widthEighth - widthMargin
+        height: heightUnit
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.leftMargin: 2 * widthMargin
+        border.width: borderwidth
+        border.color: bordercolor
+        Text {
+            id: groupNameTitle
+            anchors.centerIn: parent
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignRight
+            text: qsTr("Name der Gruppe:")
+            height: replaceFromTitle.contentHeight
+            width: parent.width
+            padding: 1
+            rightPadding: height/2
+        }
+    }
+    Rectangle {
+        id: groupNameTextRect
+        color: "wheat"
+        width: 6 * widthEighth  - widthMargin
+        height: heightUnit
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.rightMargin: 2 * widthMargin
+        border.width: borderwidth
+        border.color: bordercolor
+        TextInput {
+            id:  groupNameTextInput
+            anchors.centerIn: parent
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignLeft
+            padding: 1
+            leftPadding: height/4
+            text: controller ? controller.groupName : ""
+            width: parent.width
+            onTextChanged: if (controller) controller.groupName = text
+//            onEditingFinished: if (controller) controller.runNameDerivation()
+            clip: true
+            font.bold: true
+            font.letterSpacing: 1.3
+        }
+    }
     Rectangle {
         id: deleteNumberTitleRect
         color: "white";
         width: 1 * widthEighth
         height: heightUnit
-        anchors.top: parent.top
+        anchors.top: groupNameTitleRect.bottom
+        anchors.topMargin: heightMargin
         anchors.left: parent.left
         anchors.leftMargin: widthMargin
         border.width: borderwidth
@@ -36,7 +87,8 @@ Rectangle {
         color: "lightgray";
         width: 1.2 * widthEighth
         height: heightUnit
-        anchors.top: parent.top
+        anchors.top: groupNameTitleRect.bottom
+        anchors.topMargin: heightMargin
         anchors.left: deleteNumberTitleRect.right
         border.width: borderwidth
         border.color: bordercolor
@@ -68,7 +120,8 @@ Rectangle {
         color: "lightgray";
         width: 1 * widthEighth
         height: heightUnit
-        anchors.top: parent.top
+        anchors.top: groupNameTitleRect.bottom
+        anchors.topMargin: heightMargin
         anchors.left: deleteNumberLocationRect.right
         border.width: borderwidth
         border.color: bordercolor
@@ -105,7 +158,8 @@ Rectangle {
         color: "white";
         width: 0.6 * widthEighth
         height: heightUnit
-        anchors.top: parent.top
+        anchors.top: groupNameTitleRect.bottom
+        anchors.topMargin: heightMargin
         anchors.left: deleteNumberCountRect.right
         border.width: borderwidth
         border.color: bordercolor
@@ -126,7 +180,8 @@ Rectangle {
         color: "lightgray";
         width: 1.2 * widthEighth
         height: heightUnit
-        anchors.top: parent.top
+        anchors.top: groupNameTitleRect.bottom
+        anchors.topMargin: heightMargin
         anchors.right: deleteCharsTextRect.left
         border.width: borderwidth
         border.color: bordercolor
@@ -160,7 +215,8 @@ Rectangle {
         color: "wheat"
         width: 3 * widthEighth
         height: heightUnit
-        anchors.top: parent.top
+        anchors.top: groupNameTitleRect.bottom
+        anchors.topMargin: heightMargin
         anchors.right: parent.right
         anchors.rightMargin: widthMargin
         border.width: borderwidth
@@ -393,7 +449,7 @@ Rectangle {
     Rectangle {
         id: delimiterTitleRect
         color: "white";
-        width: 1.4 * widthEighth
+        width: 1.1 * widthEighth
         height: heightUnit
         anchors.top: replaceFromTitleRect.bottom
         anchors.left: parent.left
@@ -416,7 +472,7 @@ Rectangle {
     Rectangle {
         id: delimiterTextRect
         color: "wheat"
-        width: 2.6 * widthEighth
+        width: 2.3 * widthEighth
         height: heightUnit
         anchors.top: replaceFromTitleRect.bottom
         anchors.left: delimiterTitleRect.right
@@ -441,7 +497,7 @@ Rectangle {
         width: 2 * widthEighth
         height: heightUnit
         anchors.top: replaceFromTitleRect.bottom
-        anchors.right: nameOrderRect.left
+        anchors.right: caseCorrectionRect.left
         border.width: borderwidth
         border.color: bordercolor
         ComboBox {
@@ -468,6 +524,30 @@ Rectangle {
                                        controller.delimiterCounterIndex = currentIndex
                                        controller.runNameDerivation()
                                    }
+        }
+    }
+    Rectangle {
+        id: caseCorrectionRect
+        color: caseCorrectionMouseArea.pressed ? "red":"lightgray";
+        width: 0.6 * widthEighth
+        height: heightUnit
+        anchors.top: replaceFromTitleRect.bottom
+        anchors.right: nameOrderRect.left
+        border.width: borderwidth
+        border.color: bordercolor
+        Text {
+            anchors.fill: parent
+            text: controller ? (controller.correctCase ? "Abc" : "abc") : ""
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+        }
+        MouseArea {
+            id: caseCorrectionMouseArea
+            anchors.fill: parent
+            onClicked: if (controller) {
+                           controller.correctCase = !controller.correctCase
+                           controller.runNameDerivation()
+                       }
         }
     }
     Rectangle {
@@ -516,6 +596,13 @@ Rectangle {
 
     TableView {
         id: nameTable
+        function combinedHeights () {
+            var heightResult = 0
+            for (var i = 0; i < arguments.length; i++) {
+                heightResult += (arguments[i].height + arguments[i].anchors.topMargin);
+            }
+            return heightResult
+        }
         columnWidthProvider: function c(column) {
             switch (column) {
             case 0: return (width * 30/100) - nameTable.borderwidth
@@ -525,7 +612,7 @@ Rectangle {
             }
         }
         width: parent.width * 22/24
-        height: parent.height - delimiterTitleRect.height - replaceFromTitleRect.height - verticalSpaceToTable.height - 3 *borderwidth
+        height: parent.height - combinedHeights(groupNameTitleRect, deleteNumberTitleRect, delimiterTitleRect, replaceFromTitleRect, verticalSpaceToTable) - 3 *borderwidth
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: verticalSpaceToTable.bottom
         columnSpacing: 1

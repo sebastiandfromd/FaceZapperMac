@@ -10,6 +10,20 @@ SwipeView {
     property var colors: ["orange", "lightgreen", "yellow"]
     background: Rectangle { color: "blue" }
 
+    function clear() {
+        while (swipeView.count() > 0) {
+            takeItem(0);
+        }
+    }
+    function createPages() {
+        creationInProgress = true
+        for (var i = 0; i<4; i++) {
+            // create a number of pre-load pages
+            addItem(picPageComponent.createObject(swipeView, {color: swipeView.colors[counter%3], count: counter++, person: controller.nextPersonData()}));
+        }
+        creationInProgress = false
+    }
+
     enum PageType {
         FACE_PAGE,
         SHOW_FOLDER_PAGE,
@@ -40,10 +54,7 @@ SwipeView {
     }
 
     Component.onCompleted: {
-        for (var i = 0; i<4; i++) {
-            // create a number of pre-load pages
-            addItem(picPageComponent.createObject(swipeView, {color: swipeView.colors[counter%3], count: counter++, person: controller.nextPersonData()}));
-        }
+
     }
 
 
