@@ -41,6 +41,7 @@ SwipeView {
         if (creationInProgress) {
             return // don't interfere with a current operation!
         }
+        if (controller) controller.solveAttempt = ""
         var forw = currentIndex > lastIndex     // forw: user swiped to the *next* picture
         if (currentIndex>=2 && forw) {
             creationInProgress = true
@@ -64,6 +65,7 @@ SwipeView {
             property int count: -1
             property var person: null
             property int pageType: FaceSwipeView.PageType.FACE_PAGE
+            property real faceMargin: Math.min(height/40, width/40)
             id: picPageComponentRect
             color: picPageComponent.color
             Text {
@@ -76,7 +78,7 @@ SwipeView {
                 cache: false
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                anchors.topMargin: parent.height/15
+                anchors.topMargin: faceMargin
                 width: parent.width
                 height: parent.height *2/3
                 fillMode: Image.PreserveAspectFit
@@ -84,6 +86,24 @@ SwipeView {
                                           "image://faceProvider/"+controller.currentFolderPath()+"/"+picPageComponentRect.person.picFileName
                                         : ""
                 source: name
+            }
+            Rectangle {
+                id:solveAttemptsRec
+                color: "lightgray"
+                height: parent.height - (faceImage.height + 3*faceMargin)
+                width: parent.width - 2* anchors.margins
+                anchors.top: faceImage.bottom
+                anchors.left: parent.left
+                anchors.margins: faceMargin
+                border.color: "darkgray"
+                border.width: 1
+                Loader {
+                    property bool isCurrent: swipeView.currentItem == picPageComponentRect
+                    id: solveAttemptsLoader
+                    sourceComponent: fullTypeInSolver
+                    anchors.fill: parent
+                    property var person: picPageComponentRect.person
+                }
             }
         }
     }
@@ -98,6 +118,29 @@ SwipeView {
                 id: settingsTextField
                 anchors.fill: parent
                 text: "Settings"
+            }
+        }
+    }
+    Component {
+        id: fullTypeInSolver
+        Rectangle {
+            color: "lightgreen"
+            anchors.fill: parent
+            TextInput {
+                id: fullTypeInSolverInput
+                anchors.fill: parent
+                verticalAlignment: "AlignVCenter"
+                horizontalAlignment: "AlignHCenter"
+                text: (controller && isCurrent)? controller.solveAttempt : ""
+                onTextChanged: {
+                    if (controller && isCurrent) {
+                        controller.solveAttempt = text;
+                        console.debug("onTextChanged: "+person.picFileName)
+                        console.debug("onTextChanged: "+person.firstName)
+                        console.debug("onTextChanged: "+person.familyName)
+                        console.debug("onTextChanged: "+person.uid)
+                    }
+                }
             }
         }
     }

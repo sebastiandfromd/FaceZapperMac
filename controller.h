@@ -131,6 +131,9 @@ public:
     bool correctCase() const;
     void setCorrectCase(bool newCorrectCase);
 
+    QString solveAttempt() const;
+    void setSolveAttempt(const QString &newSolveAttempt);
+
 signals:
 
     void delimiterChanged();
@@ -156,6 +159,9 @@ signals:
     void groupNameChanged();
 
     void correctCaseChanged();
+
+    void solveAttemptChanged();
+public slots:
 
 private:
     QVector<PersonData*> m_personsVector;
@@ -188,7 +194,7 @@ private:
     // specifies, which special chars shall be deleted
 
     bool m_firstNameFirst = false;
-
+    QString m_solveAttempt = QString();
 
     Q_PROPERTY(QString delimiter READ delimiter WRITE setDelimiter NOTIFY delimiterChanged)
     Q_PROPERTY(int delimiterCounterIndex READ delimiterCounterIndex WRITE setDelimiterCounterIndex NOTIFY delimiterCounterIndexChanged)
@@ -203,6 +209,7 @@ private:
 
     Q_PROPERTY(QString groupName READ groupName WRITE setGroupName NOTIFY groupNameChanged)
     Q_PROPERTY(bool correctCase READ correctCase WRITE setCorrectCase NOTIFY correctCaseChanged)
+    Q_PROPERTY(QString solveAttempt READ solveAttempt WRITE setSolveAttempt NOTIFY solveAttemptChanged)
 };
 
 #endif // CONTROLLER_H

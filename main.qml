@@ -23,6 +23,7 @@ ApplicationWindow {
         width: swipeView.width
         implicitWidth: 50
         color: "red"
+//        visible: deriveNamesTableView.visible
 //        Button {
 //            visible: swipeView.currentItem.pageType === FaceSwipeView.PageType.FACE_PAGE
 //            anchors.centerIn: parent

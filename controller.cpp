@@ -205,6 +205,22 @@ void Controller::setCorrectCase(bool newCorrectCase)
     emit correctCaseChanged();
 }
 
+QString Controller::solveAttempt() const
+{
+    return m_solveAttempt;
+}
+
+void Controller::setSolveAttempt(const QString &newSolveAttempt)
+{
+    if (m_solveAttempt == newSolveAttempt)
+        return;
+    m_solveAttempt = newSolveAttempt;
+    qDebug()<< "so far, user has made this input :"<<newSolveAttempt;
+    emit solveAttemptChanged();
+}
+
+
+
 Controller::Controller(QObject *parent) : QObject(parent){
     m_imageProvider = new FaceImageProvider();
 
