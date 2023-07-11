@@ -100,7 +100,7 @@ SwipeView {
                 Loader {
                     property bool isCurrent: swipeView.currentItem == picPageComponentRect
                     id: solveAttemptsLoader
-                    sourceComponent: fullTypeInSolver
+                    sourceComponent: letterLineSolver
                     anchors.fill: parent
                     property var person: picPageComponentRect.person
                 }
@@ -127,6 +127,11 @@ SwipeView {
             color: "lightgreen"
             anchors.fill: parent
             TextInput {
+                property bool curr: isCurrent
+                onCurrChanged: {
+                    controller.solveAttempt = "";
+                    forceActiveFocus()
+                }
                 id: fullTypeInSolverInput
                 anchors.fill: parent
                 verticalAlignment: "AlignVCenter"
@@ -144,4 +149,72 @@ SwipeView {
             }
         }
     }
+    Component {
+        id: letterLineSolver
+        Rectangle {
+            id: letterLineRect
+            color: "lightgreen"
+            anchors.fill: parent
+            Row {
+                height: parent.height
+                width: childrenRect.width
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+
+
+
+                Repeater {
+                    id: lineRepeater
+                    model: 9
+                    property string randomText: controller? controller.randomLetters(9,"Ö") : "012345678"
+                    Rectangle {
+                        width: Math.min(letterLineRect.width, letterLineRect.height) / 2
+                        height: width
+                        radius: width / 2
+                        anchors.verticalCenter: parent.verticalCenter
+                        Text {
+                            anchors.fill: parent
+                            text: lineRepeater.randomText.charAt(index)
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                    }
+                }
+
+            }
+
+        }
+    }
+    Component {
+        id: letterCircleSolver
+        Rectangle {
+            color: "lightgreen"
+            anchors.fill: parent
+
+            Repeater {
+                id: circleRepeater
+                model: 9
+                Rectangle {
+                    width: Math.min(parent.width, parent.height) / 3
+                    height: width
+                    radius: width / 2
+                    property real phi: Math.PI*1/2 + index*2*Math.PI/circleRepeater.count
+                    x: 70*Math.cos(phi)+parent.width/2 - width/2
+                    y: 40*Math.sin(phi)+parent.height/2 - height/2
+                    Text {
+                        anchors.fill: parent
+                        text: Math.round(phi * 360 / (2*Math.PI))
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+
+                }
+            }
+
+
+
+        }
+    }
+
 }

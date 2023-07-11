@@ -225,25 +225,28 @@ Controller::Controller(QObject *parent) : QObject(parent){
     m_imageProvider = new FaceImageProvider();
 
     FolderData f0;
-    f0.setPath("C:/Program Files (x86)/ClassInTouch/beispieldaten/bilder");
-    f0.setName("7b bilder");
+    f0.setPath("C:/Users/user/Desktop/Pic2");
+    f0.setName("7b Pic2");
     FolderData f1;
-    f1.setPath("C:/Users/user/cit/ressources/icons");
-    f1.setName("7b Icons");
+    f1.setPath("C:/Program Files (x86)/ClassInTouch/beispieldaten/bilder");
+    f1.setName("7b bilder");
     FolderData f2;
-    f2.setPath("C:/Users/user/cit2/classintouch-2/ClassInTouch2/resources");
-    f2.setName("8c resources");
+    f2.setPath("C:/Users/user/cit/ressources/icons");
+    f2.setName("7b Icons");
     FolderData f3;
-    f3.setPath("C:/Users/user");
-    f3.setName("Q2 user");
-    m_recentDirs << f0 << f1 << f2 << f3;
+    f3.setPath("C:/Users/user/cit2/classintouch-2/ClassInTouch2/resources");
+    f3.setName("8c resources");
+    FolderData f4;
+    f4.setPath("C:/Users/user");
+    f4.setName("Q2 user");
+    m_recentDirs << f0 << f1 << f2 << f3 << f4;
 
     saveRecentFolders();
 
     m_currentFolderData.setName(f0.name());
     m_currentFolderData.setPath(f0.path());
 
-    scanFolderToNameDerivationTable(m_currentFolderData.name(), "C:/Program Files (x86)/ClassInTouch/beispieldaten/bilder");
+    scanFolderToNameDerivationTable(m_currentFolderData.name(), m_currentFolderData.path());
     saveCurrentFolderData();
 }
 
@@ -253,8 +256,6 @@ void Controller::init(QQmlApplicationEngine *engine) {
     qmlRegisterType<NameDerivationTable>("de.herrdiel.facezapper", 1, 0, "NameDerivationTable");
     qmlRegisterType<FolderData>("de.herrdiel.facezapper", 1, 0, "FolderData");
     engine->addImageProvider(QLatin1String("faceProvider"), m_imageProvider);
-
-
 
     auto view = new QQuickView(engine, nullptr);
     QQmlContext *ctxt = view->rootContext();

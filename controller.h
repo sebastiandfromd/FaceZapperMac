@@ -58,7 +58,7 @@ public:
         QStringList imageTypes = { "png", "jpg", "gif", "bmp"};
         for (auto &f: list) {
             if (imageTypes.contains(f.suffix())) {
-                m_nameDerivationTable.addRow(f.fileName(), f.baseName());
+                m_nameDerivationTable.addRow(f.fileName(), f.completeBaseName());
             }
         }
         m_nameDerivationTable.setGroupName(fileName);
@@ -95,6 +95,27 @@ public:
     }
     void rebuildValuePersonMap();
     Q_INVOKABLE void takeOverTableContent();
+    Q_INVOKABLE QString randomLetters(int length, QString correctLetter) {
+        QString result;
+        if (length == 0) return result;
+        QString alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞ";  // repeat common letters herein
+        if (length > alphabet.length()) {
+            Q_ASSERT(length <= alphabet.length());
+            return QString();
+        }
+        for (int i =0; i < (length-1); i++){
+            QString randomLetter;
+            do {
+                int r = QRandomGenerator::global()->bounded(0, alphabet.length());
+                randomLetter = alphabet.at(r);
+            } while (result.contains(randomLetter) || randomLetter == correctLetter);
+            result.append(randomLetter);
+        }
+        int locationCorrectLetter = QRandomGenerator::global()->bounded(0, result.length()+1);
+        result.insert(locationCorrectLetter, correctLetter);
+
+        return result;
+    }
     QString delimiter() const;
     void setDelimiter(const QString &newDelimiter);
 
