@@ -17,6 +17,9 @@
 #include <QRandomGenerator>
 
 
+
+
+
 class Controller : public QObject
 {
     Q_OBJECT
@@ -32,7 +35,7 @@ public:
             qDebug()<<"m_valuePersonMap.isEmpty(), NULLPTR returned!";
             return nullptr;
         }
-        int r = QRandomGenerator::global()->bounded(1,m_valuePersonMap.count()-1);
+        int r = int(QRandomGenerator::global()->bounded(1,m_valuePersonMap.count()-1));
         QMultiMapIterator<qreal, PersonData*> iter(m_valuePersonMap);
         iter.toFront();
         for(int i = 0; i<r; i++) {
@@ -57,7 +60,7 @@ public:
         QFileInfoList list = dir.entryInfoList();
         QStringList imageTypes = { "png", "jpg", "gif", "bmp"};
         for (auto &f: list) {
-            if (imageTypes.contains(f.suffix())) {
+            if (imageTypes.contains(f.suffix(), Qt::CaseInsensitive)) {
                 m_nameDerivationTable.addRow(f.fileName(), f.completeBaseName());
             }
         }
@@ -106,12 +109,12 @@ public:
         for (int i =0; i < (length-1); i++){
             QString randomLetter;
             do {
-                int r = QRandomGenerator::global()->bounded(0, alphabet.length());
+                int r = int(QRandomGenerator::global()->bounded(0, alphabet.length()));
                 randomLetter = alphabet.at(r);
             } while (result.contains(randomLetter) || randomLetter == correctLetter);
             result.append(randomLetter);
         }
-        int locationCorrectLetter = QRandomGenerator::global()->bounded(0, result.length()+1);
+        int locationCorrectLetter = int(QRandomGenerator::global()->bounded(0, result.length()+1));
         result.insert(locationCorrectLetter, correctLetter);
 
         return result;
@@ -155,6 +158,9 @@ public:
     QString solveAttempt() const;
     void setSolveAttempt(const QString &newSolveAttempt);
 
+    QString groupFolder() const;
+    void setGroupFolder(const QString &newGroupFolder);
+
 signals:
 
     void delimiterChanged();
@@ -182,6 +188,8 @@ signals:
     void correctCaseChanged();
 
     void solveAttemptChanged();
+    void groupFolderChanged();
+
 public slots:
 
 private:
@@ -217,6 +225,7 @@ private:
     bool m_firstNameFirst = false;
     QString m_solveAttempt = QString();
 
+
     Q_PROPERTY(QString delimiter READ delimiter WRITE setDelimiter NOTIFY delimiterChanged)
     Q_PROPERTY(int delimiterCounterIndex READ delimiterCounterIndex WRITE setDelimiterCounterIndex NOTIFY delimiterCounterIndexChanged)
     Q_PROPERTY(QString replaceFrom READ replaceFrom WRITE setReplaceFrom NOTIFY replaceFromChanged)
@@ -231,6 +240,7 @@ private:
     Q_PROPERTY(QString groupName READ groupName WRITE setGroupName NOTIFY groupNameChanged)
     Q_PROPERTY(bool correctCase READ correctCase WRITE setCorrectCase NOTIFY correctCaseChanged)
     Q_PROPERTY(QString solveAttempt READ solveAttempt WRITE setSolveAttempt NOTIFY solveAttemptChanged)
+    Q_PROPERTY(QString groupFolder READ groupFolder WRITE setGroupFolder NOTIFY groupFolderChanged)
 };
 
 #endif // CONTROLLER_H

@@ -10,24 +10,9 @@ public:
     FaceImageProvider()
         : QQuickImageProvider(QQuickImageProvider::ImageType::Image/*,QQmlImageProviderBase::ForceAsynchronousImageLoading*/) {
     }
-    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) override
-    {
-        Q_UNUSED(requestedSize);
-        QImage i(id);
-        if (size)
-            *size = QSize(i.width(), i.height());
-        return i;
-    }
+
+    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) override;
 };
 
 #endif // FACEIMAGEPROVIDER_H
 
-
-
-class ColorImageProvider
-{
-public:
-
-
-
-};

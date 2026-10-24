@@ -1,6 +1,9 @@
 QT += quick
 
 CONFIG += c++11
+android {
+    CONFIG += android
+}
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -36,3 +39,8 @@ HEADERS += \
     folderdata.h \
     namederivationtable.h \
     persondata.h
+
+contains(ANDROID_TARGET_ARCH,arm64-v8a) {
+    ANDROID_PACKAGE_SOURCE_DIR = \
+        $$PWD/android
+}

@@ -127,14 +127,19 @@ Rectangle {
         border.color: bordercolor
         ComboBox {
             model: ListModel {
-                ListElement { text: "0 Z." }
-                ListElement { text: "1 Z." }
-                ListElement { text: "2 Z." }
-                ListElement { text: "3 Z." }
-                ListElement { text: "4 Z." }
-                ListElement { text: "5 Z." }
-                ListElement { text: "6 Z." }
-                ListElement { text: "7 Z." }
+                ListElement { text: " 0 Z." }
+                ListElement { text: " 1 Z." }
+                ListElement { text: " 2 Z." }
+                ListElement { text: " 3 Z." }
+                ListElement { text: " 4 Z." }
+                ListElement { text: " 5 Z." }
+                ListElement { text: " 6 Z." }
+                ListElement { text: " 7 Z." }
+                ListElement { text: " 8 Z." }
+                ListElement { text: " 9 Z." }
+                ListElement { text: "10 Z." }
+                ListElement { text: "11 Z." }
+                ListElement { text: "12 Z." }
             }
             popup.font.pointSize: font.pointSize
             currentIndex: controller ? controller.deleteNumberCountIndex : 0

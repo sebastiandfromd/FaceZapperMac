@@ -1,5 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs
+//import QtCore
 
 ApplicationWindow {
     id: mainWin
@@ -11,9 +13,21 @@ ApplicationWindow {
     FaceSwipeView {
         id: swipeView
     }
+    FolderDialog {
+        id: fileDialog
+
+//        currentFolder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
+        onAccepted: {
+            console.debug(selectedFolder)
+            controller.groupFolder = selectedFolder
+        }
+    }
+
     DeriveNamesTableView {
         anchors.fill: parent
         id: deriveNamesTableView
+
+        Component.onCompleted: /*if (PermissionManager.requestPermissions()) */fileDialog.open()
     }
 
     footer: Rectangle {

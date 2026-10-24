@@ -7,6 +7,7 @@
 #include <QJsonDocument>
 #include <QDebug>
 #include <QDir>
+#include <QUrl>
 
 
 bool Controller::saveAJsonFile(QString fileName, QString filePath, QJsonObject object) {
@@ -219,17 +220,35 @@ void Controller::setSolveAttempt(const QString &newSolveAttempt)
     emit solveAttemptChanged();
 }
 
+QString Controller::groupFolder() const
+{
+    return m_currentFolderData.path();
+}
+
+void Controller::setGroupFolder(const QString &newGroupFolder)
+{
+    // FolderDialog delivers a URL ("file:///D:/..."), QDir needs a local path
+    const QUrl url(newGroupFolder);
+    const QString path = url.isLocalFile() ? url.toLocalFile() : newGroupFolder;
+    if (m_currentFolderData.path() == path)
+        return;
+    m_currentFolderData.setPath(path);
+    emit groupFolderChanged();
+    scanFolderToNameDerivationTable(m_currentFolderData.name(), m_currentFolderData.path());
+}
+
 
 
 Controller::Controller(QObject *parent) : QObject(parent){
     m_imageProvider = new FaceImageProvider();
 
+
     FolderData f0;
-    f0.setPath("C:/Users/user/Desktop/Pic2");
-    f0.setName("7b Pic2");
+    f0.setPath("D:/Schule/Uebergreifendes-Formalia/Fotos/2026-27 alle Fotos/Nachname, Vorname(Kl)/09B");
+    f0.setName("7b CD1");
     FolderData f1;
-    f1.setPath("C:/Program Files (x86)/ClassInTouch/beispieldaten/bilder");
-    f1.setName("7b bilder");
+    f1.setPath("D:/Schule/Uebergreifendes-Formalia/Fotos/2013 Foto Raabe cropped/Klasse Name Burts");
+    f1.setName("2013 Foto Raabe cropped");
     FolderData f2;
     f2.setPath("C:/Users/user/cit/ressources/icons");
     f2.setName("7b Icons");
