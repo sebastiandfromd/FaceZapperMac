@@ -39,8 +39,7 @@ ApplicationWindow {
         id: footer
         height: 50
         implicitHeight: 50
-        width: swipeView.width
-        implicitWidth: 50
+        // no explicit width: ApplicationWindow stretches the footer over the whole window
         color: "red"
 //        visible: deriveNamesTableView.visible
 //        Button {
