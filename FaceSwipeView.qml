@@ -83,7 +83,7 @@ SwipeView {
                 height: parent.height *2/3
                 fillMode: Image.PreserveAspectFit
                 property string name: (controller && picPageComponentRect.person) ?
-                                          "image://faceProvider/"+controller.currentFolderPath()+"/"+picPageComponentRect.person.picFileName
+                                          "image://faceProvider/"+encodeURIComponent(picPageComponentRect.person.picFileName)
                                         : ""
                 source: name
             }

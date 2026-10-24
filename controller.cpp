@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QUrl>
+#include <QRegularExpression>
 
 
 bool Controller::saveAJsonFile(QString fileName, QString filePath, QJsonObject object) {
@@ -45,6 +46,7 @@ void Controller::takeOverTableContent()
     m_personsVector.clear();
     m_valuePersonMap.clear();
     m_nameDerivationTable.fillPersonDataMap(&m_personsVector);
+    m_imageProvider->setFolder(m_currentFolderData.path());
     m_currentFolderData.setName(m_nameDerivationTable.groupName());
     rebuildValuePersonMap();
     saveCurrentFolderData();
@@ -234,6 +236,15 @@ void Controller::setGroupFolder(const QString &newGroupFolder)
         return;
     m_currentFolderData.setPath(path);
     emit groupFolderChanged();
+    // a new folder is a new group
+    // (a plain "D:/..." path parses as scheme "d", so check for "://" instead of the scheme)
+    if (url.isLocalFile() || !newGroupFolder.contains("://")) {
+        setGroupName(QDir(path).dirName());
+    } else {
+        // Android content URI, e.g. ".../tree/primary%3ADCIM%2F09B" -> "09B"
+        const QStringList parts = url.path(QUrl::FullyDecoded).split(QRegularExpression("[/:]"), Qt::SkipEmptyParts);
+        setGroupName(parts.isEmpty() ? newGroupFolder : parts.last());
+    }
     scanFolderToNameDerivationTable(m_currentFolderData.name(), m_currentFolderData.path());
 }
 

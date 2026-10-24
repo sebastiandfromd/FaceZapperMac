@@ -51,13 +51,14 @@ void NameDerivationTable::clicked(int row, int column, DeletionLocationOption de
         m_overrideAutomatic[row] = true;
     }
     auto index1 = this->index(row,0);
-    auto index2 = this->index(row,2);
+    auto index2 = this->index(row,columnCount()-1);
     emit dataChanged(index1, index2);
 }
 
 void NameDerivationTable::dataEdited(int row, int column, QString text) {
-    if (text == m_table[row][column]) return;
-    m_table[row][column]=text;
+    if (column < 1) return; // mode button column holds no text
+    if (text == m_table[row][column-1]) return;
+    m_table[row][column-1]=text;
     // no "emit dataChanged(...)" necessary, as editing was done by user. would lead to binding loop detection.
 }
 
@@ -66,7 +67,8 @@ QVariant NameDerivationTable::data(const QModelIndex &index, int role) const {
     Q_ASSERT(m_table.count() == m_exclude.count());
     switch (role) {
     case TableDataRole: {
-        return m_table.at(index.row()).at(index.column());
+        if (index.column() == 0) return QString(); // mode button column
+        return m_table.at(index.row()).at(index.column()-1);
     }
     case HeadingRole: {
         return index.row() == 0;
@@ -146,7 +148,12 @@ void NameDerivationTable::separateStringToNames(QString stripped, QString *first
         }
     }
 
-    if (position >= 0) {
+    if (!firstNameFirst && stripped.contains(',')) {
+        // "Nachname, Vorname": the comma marks the cut, regardless of delimiter
+        int comma = stripped.indexOf(',');
+        *familyName = stripped.left(comma).trimmed();
+        *firstName = stripped.mid(comma + 1).trimmed();
+    } else if (position >= 0) {
         // we have a valid position, let's cut
         *firstName = stripped.left(position);
         *familyName  = stripped.right(stripped.length() - (position + delimiter.length()));

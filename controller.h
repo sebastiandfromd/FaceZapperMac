@@ -59,11 +59,20 @@ public:
         if (fileName.isEmpty()) fileName = dir.dirName();
         QFileInfoList list = dir.entryInfoList();
         QStringList imageTypes = { "png", "jpg", "gif", "bmp"};
+        int imageCount = 0;
+        int commaCount = 0;
         for (auto &f: list) {
             if (imageTypes.contains(f.suffix(), Qt::CaseInsensitive)) {
                 m_nameDerivationTable.addRow(f.fileName(), f.completeBaseName());
+                imageCount++;
+                if (f.completeBaseName().contains(',')) commaCount++;
             }
         }
+        // mostly "Nachname, Vorname" -> family name first, otherwise "Vorname Nachname"
+        setFirstNameFirst(commaCount * 2 <= imageCount);
+        // split at the rightmost delimiter: with several words only the last one is
+        // the family name (or the first name, if family name comes first without comma)
+        setDelimiterCounterIndex(static_cast<int>(NameDerivationTable::DelimiterCounterOption::FIRST_FROM_RIGHT));
         m_nameDerivationTable.setGroupName(fileName);
         this->runNameDerivation();
         return true;

@@ -10,7 +10,29 @@ Rectangle {
     property real heightMargin: widthMargin/2
     property real heightUnit: delimiterTitle.height * 1.8
     id: showFolderComponentRect
+    signal openFolderRequested()
 
+    Rectangle {
+        id: openFolderRect
+        color: openFolderMouseArea.pressed ? "red" : "lightgray"
+        width: heightUnit
+        height: heightUnit
+        anchors.top: parent.top
+        anchors.right: groupNameTitleRect.left
+        anchors.rightMargin: heightMargin
+        border.width: borderwidth
+        border.color: bordercolor
+        Text {
+            anchors.centerIn: parent
+            text: "📂"
+            font.pointSize: delimiterInput.font.pointSize
+        }
+        MouseArea {
+            id: openFolderMouseArea
+            anchors.fill: parent
+            onClicked: showFolderComponentRect.openFolderRequested()
+        }
+    }
     Rectangle {
         id: groupNameTitleRect
         color: "white";
@@ -609,13 +631,16 @@ Rectangle {
             return heightResult
         }
         columnWidthProvider: function c(column) {
+            var rest = width - rowHeight - 3 * columnSpacing
             switch (column) {
-            case 0: return (width * 30/100) - nameTable.borderwidth
-            case 1: return (width * 30/100) - nameTable.borderwidth
-            case 2: return (width * 40/100) - nameTable.borderwidth
+            case 0: return rowHeight // square mode button
+            case 1: return (rest * 30/100) - nameTable.borderwidth
+            case 2: return (rest * 30/100) - nameTable.borderwidth
+            case 3: return (rest * 40/100) - nameTable.borderwidth
             default: return 0
             }
         }
+        property int rowHeight: 20
         width: parent.width * 22/24
         height: parent.height - combinedHeights(groupNameTitleRect, deleteNumberTitleRect, delimiterTitleRect, replaceFromTitleRect, verticalSpaceToTable) - 3 *borderwidth
         anchors.horizontalCenter: parent.horizontalCenter
@@ -629,27 +654,40 @@ Rectangle {
         model: nameDerivationTable
         delegate: Rectangle {
             id: nameTableRect
+            // column 0: mode button, 1: first name, 2: family name, 3: file
+            property bool modeColumn: column === 0
+            property bool nameColumn: column === 1 || column === 2
             implicitWidth: 100
-            implicitHeight: 20
+            implicitHeight: nameTable.rowHeight
             border.color: "black"
             border.width: borderwidth
-            color: heading ? 'teal': (exclude && column === 2 ? "tomato" : (overrideAutomatic && !exclude && column !== 2 ? "wheat" : "white"))
+            color: heading ? 'teal'
+                           : modeColumn ? (exclude ? "tomato" : (overrideAutomatic ? "wheat" : "white"))
+                                        : (exclude && column === 3 ? "tomato" : (overrideAutomatic && nameColumn ? "wheat" : "white"))
             clip: true
             TextInput {
+                visible: !modeColumn
                 width: parent.width
-                text: (exclude && column !== 2) ? "" : tabledata
+                text: (exclude && nameColumn) ? "" : tabledata
                 font.pointSize: 10
                 anchors.centerIn: parent
-                enabled: overrideAutomatic && (column!== 2)
+                enabled: overrideAutomatic && nameColumn
                 onTextChanged: {
                     if (nameDerivationTable) nameDerivationTable.dataEdited(row, column, text)
                 }
                 padding: 1
                 leftPadding: height/4
             }
+            // mode button: automatic -> manual -> excluded -> automatic
+            Text {
+                visible: modeColumn && !heading
+                anchors.centerIn: parent
+                font.pointSize: 10
+                text: exclude ? "✕" : (overrideAutomatic ? "✎" : "A")
+            }
             MouseArea {
                 anchors.fill: parent
-                enabled: !overrideAutomatic || (column === 2)
+                enabled: modeColumn && !heading
                 onClicked: {
                     if (controller) controller.nameDerivationTableClicked(row, column);
                 }

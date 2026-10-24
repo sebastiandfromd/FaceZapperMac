@@ -34,7 +34,8 @@ public:
     void init(QString fileName);
     void clear();
     int rowCount(const QModelIndex & = QModelIndex()) const override { return m_table.size(); }
-    int columnCount(const QModelIndex & = QModelIndex()) const override { return m_table.at(0).size(); }
+    // view column 0 is the mode button column, view column n shows m_table column n-1
+    int columnCount(const QModelIndex & = QModelIndex()) const override { return m_table.at(0).size() + 1; }
 
     void clicked(int row, int column,
                  DeletionLocationOption deleteNumberLocationOption,
@@ -90,7 +91,7 @@ public:
     void fillPersonDataMap(QVector<PersonData*> *personsVector) {
         int uid = 0;
         Q_ASSERT(personsVector->isEmpty()); // may be subject to change if we allow the adding of a folder to existing pics
-        for (int i = 0; i < m_table.count(); i++) {
+        for (int i = 1; i < m_table.count(); i++) { // row 0 is the heading
             if (m_exclude.at(i)) continue;
             auto p = new PersonData();
             p->setPicFileName(m_table.at(i).at(2));

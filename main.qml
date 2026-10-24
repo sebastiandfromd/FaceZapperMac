@@ -17,6 +17,11 @@ ApplicationWindow {
         id: fileDialog
 
 //        currentFolder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
+        // start in the current group's folder ("D:/x" -> "file:///D:/x", "/x" -> "file:///x",
+        // Android "content://..." stays as it is)
+        currentFolder: !controller || !controller.groupFolder ? ""
+                       : controller.groupFolder.indexOf("://") >= 0 ? controller.groupFolder
+                       : "file://" + (controller.groupFolder.startsWith("/") ? "" : "/") + controller.groupFolder
         onAccepted: {
             console.debug(selectedFolder)
             controller.groupFolder = selectedFolder
@@ -27,7 +32,7 @@ ApplicationWindow {
         anchors.fill: parent
         id: deriveNamesTableView
 
-        Component.onCompleted: /*if (PermissionManager.requestPermissions()) */fileDialog.open()
+        onOpenFolderRequested: fileDialog.open()
     }
 
     footer: Rectangle {
