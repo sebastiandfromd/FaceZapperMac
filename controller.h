@@ -48,6 +48,7 @@ public:
     LearningSession *session() { return &m_session; }
     QString appDataPath() { return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation); }
     bool saveRecentFolders();
+    static CardBoxSettings loadCardBoxSettings(); // QSettings, defaults until the settings page exists
     bool saveCurrentFolderData();
 
     bool saveAJsonFile(QString fileName, QString filePath, QJsonObject object);

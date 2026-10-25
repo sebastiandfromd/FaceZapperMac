@@ -76,6 +76,26 @@ void PersonData::setWins(int newWins)
     m_wins = newWins;
 }
 
+int PersonData::streak() const
+{
+    return m_streak;
+}
+
+void PersonData::setStreak(int newStreak)
+{
+    m_streak = newStreak;
+}
+
+QDateTime PersonData::lastSeen() const
+{
+    return m_lastSeen;
+}
+
+void PersonData::setLastSeen(const QDateTime &newLastSeen)
+{
+    m_lastSeen = newLastSeen;
+}
+
 int PersonData::uid() const
 {
     return m_uid;

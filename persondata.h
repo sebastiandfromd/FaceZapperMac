@@ -44,6 +44,12 @@ public:
     int uid() const;
     void setUid(int newUid);
 
+    int streak() const;
+    void setStreak(int newStreak);
+
+    QDateTime lastSeen() const;
+    void setLastSeen(const QDateTime &newLastSeen);
+
 signals:
     void picFileNameChanged();
     void firstNameChanged();
@@ -61,6 +67,8 @@ private:
     int m_skips = 0;  // number of skipped decisions
     int m_fails = 0;  // number of failed guesses
     int m_wins = 0;   // number of correct recognitions
+    int m_streak = 0; // card box level: known in a row (reset when not known)
+    QDateTime m_lastSeen;
 
     Q_PROPERTY(int uid READ uid WRITE setUid NOTIFY uidChanged)
     Q_PROPERTY(QString picFileName READ picFileName WRITE setPicFileName NOTIFY picFileNameChanged)

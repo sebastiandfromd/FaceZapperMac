@@ -9,6 +9,8 @@
 #include <QDir>
 #include <QUrl>
 #include <QRegularExpression>
+#include <QGuiApplication>
+#include <QSettings>
 
 
 bool Controller::saveAJsonFile(QString fileName, QString filePath, QJsonObject object) {
@@ -42,7 +44,8 @@ void Controller::rebuildValuePersonMap(){
 void Controller::takeOverTableContent()
 {
     qDebug()<<"takeOverTableContent";
-    m_session.clear(); // its history points to the persons deleted below
+    m_session.clear(); // its history and card box point to the persons deleted below
+    m_session.setDeck({});
     qDeleteAll(m_personsVector);
     m_personsVector.clear();
     m_valuePersonMap.clear();
@@ -260,6 +263,11 @@ Controller::Controller(QObject *parent) : QObject(parent){
     if (!m_letterModel.load(QStringLiteral(":/letterstats.json")))
         qWarning("Couldn't load letter statistics, the keyboard falls back to the folder's names.");
     m_session.setLetterModel(&m_letterModel);
+    m_session.setCardBoxSettings(loadCardBoxSettings());
+    // time the app spends in the background doesn't count as looking at a face
+    connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
+        m_session.setAppActive(state == Qt::ApplicationActive);
+    });
 
 
     FolderData f0;
@@ -303,6 +311,20 @@ void Controller::init(QQmlApplicationEngine *engine) {
     ctxt->setContextProperty("controller", this);
     ctxt->setContextProperty("nameDerivationTable", &m_nameDerivationTable);
     ctxt->setContextProperty("currentFolderData",  QVariant::fromValue(m_currentFolderData));
+}
+
+CardBoxSettings Controller::loadCardBoxSettings()
+{
+    QSettings s(QStringLiteral("herrdiel"), QStringLiteral("FaceZapper"));
+    s.beginGroup(QStringLiteral("cardBox"));
+    CardBoxSettings c;
+    c.easySeconds = s.value(QStringLiteral("easySeconds"), c.easySeconds).toDouble();
+    c.unsureSeconds = s.value(QStringLiteral("unsureSeconds"), c.unsureSeconds).toDouble();
+    c.easyFactor = s.value(QStringLiteral("easyFactor"), c.easyFactor).toInt();
+    c.goodFactor = s.value(QStringLiteral("goodFactor"), c.goodFactor).toInt();
+    c.unsureOffset = s.value(QStringLiteral("unsureOffset"), c.unsureOffset).toInt();
+    c.againOffset = s.value(QStringLiteral("againOffset"), c.againOffset).toInt();
+    return c;
 }
 
 bool Controller::saveRecentFolders()
