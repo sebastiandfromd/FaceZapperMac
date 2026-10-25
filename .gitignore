@@ -74,3 +74,6 @@ Thumbs.db
 
 # local source backup
 FaceZapper.zip
+
+# private name list (only used to derive letter statistics, never commit)
+nameslist.csv
