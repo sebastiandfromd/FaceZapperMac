@@ -14,6 +14,7 @@ SOURCES += \
         faceimageprovider.cpp \
         learningsession.cpp \
         lettermodel.cpp \
+        folderstore.cpp \
         folderdata.cpp \
         main.cpp \
         namederivationtable.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     faceimageprovider.h \
     learningsession.h \
     lettermodel.h \
+    folderstore.h \
     folderdata.h \
     namederivationtable.h \
     persondata.h

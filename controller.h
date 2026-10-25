@@ -12,6 +12,7 @@
 #include <QDebug>
 #include "faceimageprovider.h"
 #include "learningsession.h"
+#include <QJsonObject>
 #include <QDir>
 #include <QQuickView>
 #include <QQmlContext>
@@ -49,17 +50,29 @@ public:
     QString appDataPath() { return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation); }
     bool saveRecentFolders();
     static CardBoxSettings loadCardBoxSettings(); // QSettings, defaults until the settings page exists
-    bool saveCurrentFolderData();
+    // .faceZapperData in the picture folder: import settings, rows, group name, learning data
+    Q_INVOKABLE bool saveFolderData();
+    void loadFolder(const QString &path);
+    QJsonObject importSettingsToJson() const;
+    void applyImportSettings(const QJsonObject &settings);
+    QJsonObject learningToJson() const;
+    void applyLearning(const QJsonObject &learning);
+    void clearPersons();
+    void loadRecentFolders();
+    void addRecentFolder(const QString &path, const QString &name);
+    static QString folderDisplayName(const QString &pathOrUri);
+    QString storageHint() const { return m_storageHint; }
 
     bool saveAJsonFile(QString fileName, QString filePath, QJsonObject object);
-    bool scanFolderToNameDerivationTable(QString fileName, QString filePath) {
+    // fills the table with the folder's pictures; detectOrder: guess the name order from
+    // the file names (only for folders opened the first time - otherwise it's saved)
+    bool scanFolderToNameDerivationTable(const QString &filePath, bool detectOrder) {
         m_nameDerivationTable.clear();
 
         QDir dir(filePath);
         dir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
         dir.setSorting(QDir::Size | QDir::Reversed);
 
-        if (fileName.isEmpty()) fileName = dir.dirName();
         QFileInfoList list = dir.entryInfoList();
         QStringList imageTypes = { "png", "jpg", "gif", "bmp"};
         int imageCount = 0;
@@ -71,13 +84,13 @@ public:
                 if (f.completeBaseName().contains(',')) commaCount++;
             }
         }
-        // mostly "Nachname, Vorname" -> family name first, otherwise "Vorname Nachname"
-        setFirstNameFirst(commaCount * 2 <= imageCount);
-        // split at the rightmost delimiter: with several words only the last one is
-        // the family name (or the first name, if family name comes first without comma)
-        setDelimiterCounterIndex(static_cast<int>(NameDerivationTable::DelimiterCounterOption::FIRST_FROM_RIGHT));
-        m_nameDerivationTable.setGroupName(fileName);
-        this->runNameDerivation();
+        if (detectOrder) {
+            // mostly "Nachname, Vorname" -> family name first, otherwise "Vorname Nachname"
+            setFirstNameFirst(commaCount * 2 <= imageCount);
+            // split at the rightmost delimiter: with several words only the last one is
+            // the family name (or the first name, if family name comes first without comma)
+            setDelimiterCounterIndex(static_cast<int>(NameDerivationTable::DelimiterCounterOption::FIRST_FROM_RIGHT));
+        }
         return true;
     }
 
@@ -180,6 +193,7 @@ signals:
 
     void solveAttemptChanged();
     void groupFolderChanged();
+    void storageHintChanged();
 
 public slots:
 
@@ -193,6 +207,8 @@ private:
     NameDerivationTable m_nameDerivationTable;
     LearningSession m_session;
     LetterModel m_letterModel;
+    QJsonObject m_folderData;   // what's in the current folder's .faceZapperData
+    QString m_storageHint;      // set if the data couldn't be saved in the folder itself
 
     QString m_delimiter = " ";
     QString m_replaceFrom = "";
@@ -235,6 +251,7 @@ private:
     Q_PROPERTY(QString solveAttempt READ solveAttempt WRITE setSolveAttempt NOTIFY solveAttemptChanged)
     Q_PROPERTY(QString groupFolder READ groupFolder WRITE setGroupFolder NOTIFY groupFolderChanged)
     Q_PROPERTY(LearningSession* session READ session CONSTANT)
+    Q_PROPERTY(QString storageHint READ storageHint NOTIFY storageHintChanged)
 };
 
 #endif // CONTROLLER_H

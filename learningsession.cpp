@@ -29,7 +29,7 @@ void LearningSession::start()
     buildDeck();
     PersonData *p = pickNextPerson();
     if (!p) return;
-    m_history.append(Entry{p});
+    appendEntry(p);
     m_index = 0;
     emitCardChanged();
 }
@@ -40,6 +40,22 @@ void LearningSession::clear()
     m_history.clear();
     m_index = -1;
     emitCardChanged();
+    emit statsChanged();
+}
+
+int LearningSession::seenCount() const
+{
+    if (!m_persons) return 0;
+    return int(std::count_if(m_persons->cbegin(), m_persons->cend(),
+                             [](const PersonData *p) { return p->lastSeen().isValid(); }));
+}
+
+int LearningSession::learnedCount() const
+{
+    if (!m_persons) return 0;
+    const int needed = m_settings.learnedStreak;
+    return int(std::count_if(m_persons->cbegin(), m_persons->cend(),
+                             [needed](const PersonData *p) { return p->streak() >= needed; }));
 }
 
 bool LearningSession::finishCurrent()
@@ -48,6 +64,8 @@ bool LearningSession::finishCurrent()
     Entry &e = m_history[m_index];
     const Rating r = rate(e);
     applyRating(e, r);
+    emit rated();
+    emit statsChanged();
     return r != Rating::AGAIN;
 }
 
@@ -57,7 +75,7 @@ void LearningSession::next()
     if (m_index == m_history.size() - 1) {
         PersonData *p = pickNextPerson();
         if (!p) return;
-        m_history.append(Entry{p});
+        appendEntry(p);
     }
     m_index++;
     emitCardChanged();
@@ -69,6 +87,8 @@ void LearningSession::back()
     m_index--;
     undoRating(m_history[m_index]);
     emitCardChanged();
+    emit rated();
+    emit statsChanged();
 }
 
 void LearningSession::showSolution()
@@ -160,11 +180,28 @@ qint64 LearningSession::activeMs() const
 
 PersonData *LearningSession::pickNextPerson() const
 {
-    // front of the card box, but never the card just shown
     const PersonData *last = currentPerson();
+    // after newCardInterval-1 already known faces in a row, bring in one never seen before,
+    // so faces further back in the box aren't kept waiting by the hard ones in front
+    int seenInARow = 0;
+    for (int i = int(m_history.size()) - 1; i >= 0 && !m_history.at(i).wasNew; --i)
+        seenInARow++;
+    if (seenInARow >= m_settings.newCardInterval - 1) {
+        for (PersonData *p : m_deck)
+            if (p != last && !p->lastSeen().isValid()) return p;
+    }
+    // otherwise the front of the card box, but never the card just shown
     for (PersonData *p : m_deck)
         if (p != last) return p;
     return m_deck.isEmpty() ? nullptr : m_deck.first();
+}
+
+void LearningSession::appendEntry(PersonData *p)
+{
+    Entry e;
+    e.person = p;
+    e.wasNew = !p->lastSeen().isValid();
+    m_history.append(e);
 }
 
 LearningSession::Rating LearningSession::rate(const Entry &e) const

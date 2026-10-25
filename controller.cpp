@@ -11,6 +11,7 @@
 #include <QRegularExpression>
 #include <QGuiApplication>
 #include <QSettings>
+#include "folderstore.h"
 
 
 bool Controller::saveAJsonFile(QString fileName, QString filePath, QJsonObject object) {
@@ -44,20 +45,27 @@ void Controller::rebuildValuePersonMap(){
 void Controller::takeOverTableContent()
 {
     qDebug()<<"takeOverTableContent";
-    m_session.clear(); // its history and card box point to the persons deleted below
-    m_session.setDeck({});
-    qDeleteAll(m_personsVector);
-    m_personsVector.clear();
-    m_valuePersonMap.clear();
+    // keep what was learned so far (also for cards not in this run)
+    if (!m_personsVector.isEmpty()) m_folderData.insert("learning", learningToJson());
+    clearPersons();
     m_nameDerivationTable.fillPersonDataMap(&m_personsVector);
+    applyLearning(m_folderData.value("learning").toObject());
     m_imageProvider->setFolder(m_currentFolderData.path());
     QStringList names;
     for (const auto *p : std::as_const(m_personsVector))
         names << p->firstName() + u' ' + p->familyName();
     m_letterModel.setFolderNames(names);
-    m_currentFolderData.setName(m_nameDerivationTable.groupName());
     rebuildValuePersonMap();
-    saveCurrentFolderData();
+    saveFolderData();
+}
+
+void Controller::clearPersons()
+{
+    m_session.clear(); // its history and card box point to the persons deleted below
+    m_session.setDeck({});
+    qDeleteAll(m_personsVector);
+    m_personsVector.clear();
+    m_valuePersonMap.clear();
 }
 
 QString Controller::delimiter() const
@@ -242,18 +250,37 @@ void Controller::setGroupFolder(const QString &newGroupFolder)
     const QString path = url.isLocalFile() ? url.toLocalFile() : newGroupFolder;
     if (m_currentFolderData.path() == path)
         return;
+    saveFolderData(); // keep the work on the previous folder
+    FolderStore::takePersistableWritePermission(path);
+    loadFolder(path);
+}
+
+QString Controller::folderDisplayName(const QString &pathOrUri)
+{
+    // (a plain "D:/..." path parses as scheme "d", so check for "://" instead of the scheme)
+    const QUrl url(pathOrUri);
+    if (url.isLocalFile() || !pathOrUri.contains("://"))
+        return QDir(url.isLocalFile() ? url.toLocalFile() : pathOrUri).dirName();
+    // Android content URI, e.g. ".../tree/primary%3ADCIM%2F09B" -> "09B"
+    const QStringList parts = url.path(QUrl::FullyDecoded).split(QRegularExpression("[/:]"), Qt::SkipEmptyParts);
+    return parts.isEmpty() ? pathOrUri : parts.last();
+}
+
+void Controller::loadFolder(const QString &path)
+{
+    clearPersons(); // learning data of the previous folder must not end up in this one
     m_currentFolderData.setPath(path);
     emit groupFolderChanged();
-    // a new folder is a new group
-    // (a plain "D:/..." path parses as scheme "d", so check for "://" instead of the scheme)
-    if (url.isLocalFile() || !newGroupFolder.contains("://")) {
-        setGroupName(QDir(path).dirName());
-    } else {
-        // Android content URI, e.g. ".../tree/primary%3ADCIM%2F09B" -> "09B"
-        const QStringList parts = url.path(QUrl::FullyDecoded).split(QRegularExpression("[/:]"), Qt::SkipEmptyParts);
-        setGroupName(parts.isEmpty() ? newGroupFolder : parts.last());
-    }
-    scanFolderToNameDerivationTable(m_currentFolderData.name(), m_currentFolderData.path());
+    m_folderData = FolderStore::load(path);
+    // a folder opened before brings its settings (name order included) - no guessing then
+    const bool known = !m_folderData.isEmpty();
+    if (known) applyImportSettings(m_folderData.value("import").toObject());
+    scanFolderToNameDerivationTable(path, !known);
+    if (known) m_nameDerivationTable.applyRows(m_folderData.value("rows").toArray());
+    runNameDerivation();
+    const QString savedName = m_folderData.value("groupName").toString();
+    setGroupName(savedName.isEmpty() ? folderDisplayName(path) : savedName);
+    addRecentFolder(path, groupName());
 }
 
 
@@ -268,32 +295,14 @@ Controller::Controller(QObject *parent) : QObject(parent){
     connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
         m_session.setAppActive(state == Qt::ApplicationActive);
     });
+    // save after every rating and when the app ends
+    connect(&m_session, &LearningSession::rated, this, &Controller::saveFolderData);
+    connect(qGuiApp, &QCoreApplication::aboutToQuit, this, &Controller::saveFolderData);
 
-
-    FolderData f0;
-    f0.setPath("D:/Schule/Uebergreifendes-Formalia/Fotos/2026-27 alle Fotos/Nachname, Vorname(Kl)/09B");
-    f0.setName("7b CD1");
-    FolderData f1;
-    f1.setPath("D:/Schule/Uebergreifendes-Formalia/Fotos/2013 Foto Raabe cropped/Klasse Name Burts");
-    f1.setName("2013 Foto Raabe cropped");
-    FolderData f2;
-    f2.setPath("C:/Users/user/cit/ressources/icons");
-    f2.setName("7b Icons");
-    FolderData f3;
-    f3.setPath("C:/Users/user/cit2/classintouch-2/ClassInTouch2/resources");
-    f3.setName("8c resources");
-    FolderData f4;
-    f4.setPath("C:/Users/user");
-    f4.setName("Q2 user");
-    m_recentDirs << f0 << f1 << f2 << f3 << f4;
-
-    saveRecentFolders();
-
-    m_currentFolderData.setName(f0.name());
-    m_currentFolderData.setPath(f0.path());
-
-    scanFolderToNameDerivationTable(m_currentFolderData.name(), m_currentFolderData.path());
-    saveCurrentFolderData();
+    // start with the folder used last
+    loadRecentFolders();
+    if (!m_recentDirs.isEmpty())
+        loadFolder(m_recentDirs.first().path());
 }
 
 void Controller::init(QQmlApplicationEngine *engine) {
@@ -324,6 +333,8 @@ CardBoxSettings Controller::loadCardBoxSettings()
     c.goodFactor = s.value(QStringLiteral("goodFactor"), c.goodFactor).toInt();
     c.unsureOffset = s.value(QStringLiteral("unsureOffset"), c.unsureOffset).toInt();
     c.againOffset = s.value(QStringLiteral("againOffset"), c.againOffset).toInt();
+    c.learnedStreak = s.value(QStringLiteral("learnedStreak"), c.learnedStreak).toInt();
+    c.newCardInterval = s.value(QStringLiteral("newCardInterval"), c.newCardInterval).toInt();
     return c;
 }
 
@@ -343,24 +354,125 @@ bool Controller::saveRecentFolders()
     return saveAJsonFile(fileName, settingsFolder, foldersObject);
 }
 
-bool Controller::saveCurrentFolderData()
+void Controller::loadRecentFolders()
 {
-    QString settingsFolder = this->appDataPath();
-    QString fileName = m_currentFolderData.name();
-    QJsonArray personsArray;
-    for (auto &p : m_personsVector) {
-        QJsonObject personObject;
-        personObject.insert("firstName", QJsonValue(p->firstName()));
-        personObject.insert("familyName", QJsonValue(p->familyName()));
-        personObject.insert("picFileName", QJsonValue(p->picFileName()));
-        personObject.insert("value", QJsonValue(p->value()));
-        personObject.insert("skips", QJsonValue(p->skips()));
-        personObject.insert("fails", QJsonValue(p->fails()));
-        personObject.insert("wins", QJsonValue(p->wins()));
-        personsArray.append(personObject);
+    QFile f(appDataPath() + QStringLiteral("/recentFolders.json"));
+    if (!f.open(QIODevice::ReadOnly)) return;
+    const QJsonArray folders = QJsonDocument::fromJson(f.readAll()).object().value("folders").toArray();
+    m_recentDirs.clear();
+    for (const QJsonValue &v : folders) {
+        FolderData fd;
+        fd.setPath(v.toObject().value("path").toString());
+        fd.setName(v.toObject().value("name").toString());
+        if (!fd.path().isEmpty()) m_recentDirs << fd;
     }
-    QJsonObject folderObject;
-    folderObject.insert("name", m_currentFolderData.name());
-    folderObject.insert("persons", personsArray);
-    return saveAJsonFile(fileName, settingsFolder,folderObject);
+}
+
+void Controller::addRecentFolder(const QString &path, const QString &name)
+{
+    m_recentDirs.removeIf([&path](const FolderData &f) { return f.path() == path; });
+    FolderData fd;
+    fd.setPath(path);
+    fd.setName(name);
+    m_recentDirs.prepend(fd);
+    while (m_recentDirs.size() > 10) m_recentDirs.removeLast();
+    saveRecentFolders();
+}
+
+QJsonObject Controller::importSettingsToJson() const
+{
+    QJsonObject s;
+    s.insert("deleteNumberLocation", m_deleteNumberLocationIndex);
+    s.insert("deleteNumberCount", m_deleteNumberCountIndex);
+    s.insert("deleteCharsLocation", m_deleteCharsLocationIndex);
+    s.insert("deleteCharsText", m_deleteCharsText);
+    s.insert("replaceFrom", m_replaceFrom);
+    s.insert("replaceTo", m_replaceTo);
+    s.insert("caseSensitive", m_isCaseSensitive);
+    s.insert("delimiter", m_delimiter);
+    s.insert("delimiterCounter", m_delimiterCounterIndex);
+    s.insert("firstNameFirst", m_firstNameFirst);
+    s.insert("correctCase", m_correctCase);
+    return s;
+}
+
+void Controller::applyImportSettings(const QJsonObject &s)
+{
+    // through the setters, so the controls on the import screen follow
+    setDeleteNumberLocationIndex(s.value("deleteNumberLocation").toInt(m_deleteNumberLocationIndex));
+    setDeleteNumberCountIndex(s.value("deleteNumberCount").toInt(m_deleteNumberCountIndex));
+    setDeleteCharsLocationIndex(s.value("deleteCharsLocation").toInt(m_deleteCharsLocationIndex));
+    setDeleteCharsText(s.value("deleteCharsText").toString(m_deleteCharsText));
+    setReplaceFrom(s.value("replaceFrom").toString(m_replaceFrom));
+    setReplaceTo(s.value("replaceTo").toString(m_replaceTo));
+    setIsCaseSensitive(s.value("caseSensitive").toBool(m_isCaseSensitive));
+    setDelimiter(s.value("delimiter").toString(m_delimiter));
+    setDelimiterCounterIndex(s.value("delimiterCounter").toInt(m_delimiterCounterIndex));
+    setFirstNameFirst(s.value("firstNameFirst").toBool(m_firstNameFirst));
+    setCorrectCase(s.value("correctCase").toBool(m_correctCase));
+}
+
+QJsonObject Controller::learningToJson() const
+{
+    // start from the saved cards, so cards that aren't in the current run (excluded,
+    // file temporarily gone) keep their history
+    QJsonObject cards = m_folderData.value("learning").toObject().value("cards").toObject();
+    for (const PersonData *p : m_personsVector) {
+        QJsonObject c;
+        c.insert("streak", p->streak());
+        c.insert("wins", p->wins());
+        c.insert("fails", p->fails());
+        c.insert("skips", p->skips());
+        if (p->lastSeen().isValid()) c.insert("lastSeen", p->lastSeen().toString(Qt::ISODate));
+        cards.insert(p->picFileName(), c);
+    }
+    QJsonArray deck;
+    for (const PersonData *p : m_session.deck())
+        deck.append(p->picFileName());
+    QJsonObject learning;
+    learning.insert("cards", cards);
+    learning.insert("deck", deck.isEmpty() ? m_folderData.value("learning").toObject().value("deck") : deck);
+    return learning;
+}
+
+void Controller::applyLearning(const QJsonObject &learning)
+{
+    const QJsonObject cards = learning.value("cards").toObject();
+    QHash<QString, PersonData*> byFile;
+    for (PersonData *p : std::as_const(m_personsVector)) {
+        byFile.insert(p->picFileName(), p);
+        const QJsonObject c = cards.value(p->picFileName()).toObject();
+        if (c.isEmpty()) continue; // new picture: new card
+        p->setStreak(c.value("streak").toInt());
+        p->setWins(c.value("wins").toInt());
+        p->setFails(c.value("fails").toInt());
+        p->setSkips(c.value("skips").toInt());
+        p->setLastSeen(QDateTime::fromString(c.value("lastSeen").toString(), Qt::ISODate));
+    }
+    // card box order; new pictures are put in at random places when learning starts
+    QList<PersonData*> deck;
+    for (const QJsonValue &v : learning.value("deck").toArray())
+        if (PersonData *p = byFile.value(v.toString())) deck << p;
+    m_session.setDeck(deck);
+}
+
+bool Controller::saveFolderData()
+{
+    const QString path = m_currentFolderData.path();
+    if (path.isEmpty()) return false;
+    QJsonObject data;
+    data.insert("version", 1);
+    data.insert("groupName", m_currentFolderData.name());
+    data.insert("import", importSettingsToJson());
+    data.insert("rows", m_nameDerivationTable.rowsToJson());
+    data.insert("learning", m_personsVector.isEmpty() ? m_folderData.value("learning") : learningToJson());
+    m_folderData = data;
+    const bool inFolder = FolderStore::save(path, data);
+    const QString hint = inFolder ? QString()
+                                  : tr("Daten konnten nicht im Bilderordner gespeichert werden, sie liegen in der App.");
+    if (hint != m_storageHint) {
+        m_storageHint = hint;
+        emit storageHintChanged();
+    }
+    return inFolder;
 }

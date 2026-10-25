@@ -1,4 +1,5 @@
 #include "namederivationtable.h"
+#include <QJsonObject>
 
 
 
@@ -333,6 +334,47 @@ void NameDerivationTable::runNameDerivation(DeletionLocationOption deleteNumberL
                       delimiterCounterOption,
                       correctCase,
                       firstNameFirst);
+    }
+    endResetModel();
+}
+
+QJsonArray NameDerivationTable::rowsToJson() const
+{
+    QJsonArray rows;
+    for (int i = 1; i < m_table.count(); i++) { // row 0 is the heading
+        QJsonObject row;
+        row.insert("file", m_table.at(i).at(2));
+        if (m_exclude.at(i)) {
+            row.insert("mode", "excluded");
+        } else if (m_overrideAutomatic.at(i)) {
+            row.insert("mode", "manual");
+            row.insert("firstName", m_table.at(i).at(0));
+            row.insert("familyName", m_table.at(i).at(1));
+        } else {
+            row.insert("mode", "auto");
+        }
+        rows.append(row);
+    }
+    return rows;
+}
+
+void NameDerivationTable::applyRows(const QJsonArray &rows)
+{
+    QHash<QString, int> rowOfFile;
+    for (int i = 1; i < m_table.count(); i++)
+        rowOfFile.insert(m_table.at(i).at(2), i);
+    beginResetModel();
+    for (const QJsonValue &v : rows) {
+        const QJsonObject row = v.toObject();
+        const int i = rowOfFile.value(row.value("file").toString(), -1);
+        if (i < 0) continue; // file isn't in the folder anymore
+        const QString mode = row.value("mode").toString();
+        m_exclude[i] = (mode == "excluded");
+        m_overrideAutomatic[i] = (mode == "manual");
+        if (mode == "manual") {
+            m_table[i][0] = row.value("firstName").toString();
+            m_table[i][1] = row.value("familyName").toString();
+        }
     }
     endResetModel();
 }

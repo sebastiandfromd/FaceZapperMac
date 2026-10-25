@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QRandomGenerator>
 #include <QString>
+#include <QJsonArray>
 #include <persondata.h>
 
 class NameDerivationTable : public QAbstractTableModel {
@@ -103,6 +104,10 @@ public:
     };
     QString groupName() const;
     void setGroupName(const QString &newGroupName);
+
+    // per file: mode ("auto", "manual", "excluded") and, for manual rows, the names typed in
+    QJsonArray rowsToJson() const;
+    void applyRows(const QJsonArray &rows); // rows are matched by file name, unknown files are ignored
 
 private:
     QVector<QVector<QString>> m_table;

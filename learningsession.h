@@ -17,6 +17,8 @@ struct CardBoxSettings {
     int goodFactor = 2;       // good: offset = goodFactor * 2^streak
     int unsureOffset = 4;     // unsure (also: slip corrected on one's own)
     int againOffset = 3;      // not known: comes back soon
+    int learnedStreak = 2;    // known this many times in a row: counts as "sicher"
+    int newCardInterval = 5;  // at the latest every n-th card is one never seen before (while there are any)
 };
 
 // One run through the cards of a folder. Keeps a history of the shown cards,
@@ -69,6 +71,9 @@ public:
     QStringList keys() const { return m_keys; }
     qint64 activeMs() const;     // time the current card has been on screen while the app was active
     QList<PersonData*> deck() const { return m_deck; } // card box, front = next card
+    int cardCount() const { return m_persons ? int(m_persons->size()) : 0; }
+    int seenCount() const;    // rated at least once (in this or an earlier run)
+    int learnedCount() const; // known learnedStreak times in a row
     void setDeck(const QList<PersonData*> &deck) { m_deck = deck; }
 
 signals:
@@ -76,6 +81,8 @@ signals:
     void typedChanged();
     void solutionShownChanged();
     void keysChanged();
+    void rated(); // a card was rated or a rating undone - time to save
+    void statsChanged();
 
 private:
     struct Entry {
@@ -84,6 +91,7 @@ private:
         bool solutionShown = false;
         bool solutionVisible = false;
         int corrections = 0;  // wrong letters the user took back on their own: known, but not safely
+        bool wasNew = false;  // never seen before this showing
         Rating rating = Rating::NONE;
         // state before the rating, to undo it
         QList<PersonData*> deckBefore;
@@ -92,6 +100,7 @@ private:
     };
 
     PersonData *pickNextPerson() const;
+    void appendEntry(PersonData *p);
     Rating rate(const Entry &e) const;
     void applyRating(Entry &e, Rating r);
     void undoRating(Entry &e);
@@ -121,6 +130,9 @@ private:
     Q_PROPERTY(bool solutionVisible READ solutionVisible NOTIFY solutionShownChanged)
     Q_PROPERTY(bool canGoBack READ canGoBack NOTIFY currentChanged)
     Q_PROPERTY(QString targetName READ targetName NOTIFY currentChanged)
+    Q_PROPERTY(int cardCount READ cardCount NOTIFY statsChanged)
+    Q_PROPERTY(int seenCount READ seenCount NOTIFY statsChanged)
+    Q_PROPERTY(int learnedCount READ learnedCount NOTIFY statsChanged)
 };
 
 #endif // LEARNINGSESSION_H

@@ -43,7 +43,38 @@ ApplicationWindow {
         implicitHeight: 50
         // no explicit width: ApplicationWindow stretches the footer over the whole window
         color: "red"
+        // learning progress: all pictures / rated at least once / known several times in a row
+        Column {
+            anchors.left: parent.left
+            anchors.leftMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
+            visible: mainWin.learning && controller !== null
+            property var session: controller ? controller.session : null
+            Repeater {
+                model: parent.session ? [qsTr("%1 Bilder").arg(parent.session.cardCount),
+                                         qsTr("%1 gesehen").arg(parent.session.seenCount),
+                                         qsTr("%1 sicher").arg(parent.session.learnedCount)] : []
+                Text {
+                    text: modelData
+                    color: "black"
+                    font.bold: true
+                    font.pixelSize: 11
+                }
+            }
+        }
+        // shown when the data couldn't be saved in the picture folder itself
+        Text {
+            anchors.left: footerButton.right
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: 8
+            text: controller ? controller.storageHint : ""
+            color: "white"
+            wrapMode: Text.WordWrap
+            font.pixelSize: 11
+        }
         Button {
+            id: footerButton
             anchors.centerIn: parent
             // import table: take the names over and start learning; learning: show the name
             text: mainWin.learning ? "Lösung" : "Übernehmen"
