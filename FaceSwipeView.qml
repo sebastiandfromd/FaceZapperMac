@@ -138,10 +138,23 @@ Rectangle {
                     opacity: keyMouseArea.enabled ? 1 : 0.4
                     Text {
                         anchors.fill: parent
-                        text: modelData === " " ? "␣" : modelData
+                        // "⌫" and "␣" are missing in Android's default font: "←" for backspace,
+                        // the space is drawn (see below)
+                        text: modelData === " " ? "" : modelData === "⌫" ? "←" : modelData
                         font.pixelSize: height * 0.5
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
+                    }
+                    // space key: the usual "␣" shape - a line with two short ends
+                    Item {
+                        visible: modelData === " "
+                        anchors.centerIn: parent
+                        width: parent.width * 0.45
+                        height: parent.height * 0.15
+                        property real stroke: Math.max(2, parent.width / 22)
+                        Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: parent.stroke; color: "black" }
+                        Rectangle { anchors.left: parent.left; width: parent.stroke; height: parent.height; color: "black" }
+                        Rectangle { anchors.right: parent.right; width: parent.stroke; height: parent.height; color: "black" }
                     }
                     MouseArea {
                         id: keyMouseArea

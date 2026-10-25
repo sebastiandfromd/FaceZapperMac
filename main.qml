@@ -73,7 +73,7 @@ ApplicationWindow {
         z: 20
         width: 36
         height: 36
-        text: "✕"
+        text: "×" // not "✕": Android's default font doesn't have that one
         font.pixelSize: 16
         onClicked: Qt.quit()
     }
@@ -165,7 +165,7 @@ ApplicationWindow {
             anchors.right: parent.right
             anchors.rightMargin: 8
             anchors.verticalCenter: parent.verticalCenter
-            text: "☰"
+            text: "≡" // not "☰": Android's default font doesn't have that one
             font.pixelSize: 18
             onClicked: menu.open()
             Menu {
