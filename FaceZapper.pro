@@ -13,6 +13,7 @@ SOURCES += \
         controller.cpp \
         faceimageprovider.cpp \
         learningsession.cpp \
+        lettermodel.cpp \
         folderdata.cpp \
         main.cpp \
         namederivationtable.cpp \
@@ -38,6 +39,7 @@ HEADERS += \
     controller.h \
     faceimageprovider.h \
     learningsession.h \
+    lettermodel.h \
     folderdata.h \
     namederivationtable.h \
     persondata.h

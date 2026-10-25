@@ -12,9 +12,7 @@ void LearningSession::start()
     if (!p) return;
     m_history.append(Entry{p});
     m_index = 0;
-    emit currentChanged();
-    emit typedChanged();
-    emit solutionShownChanged();
+    emitCardChanged();
 }
 
 void LearningSession::clear()
@@ -22,9 +20,7 @@ void LearningSession::clear()
     // ratings stay with the persons, only the way back is forgotten
     m_history.clear();
     m_index = -1;
-    emit currentChanged();
-    emit typedChanged();
-    emit solutionShownChanged();
+    emitCardChanged();
 }
 
 bool LearningSession::finishCurrent()
@@ -45,9 +41,7 @@ void LearningSession::next()
         m_history.append(Entry{p});
     }
     m_index++;
-    emit currentChanged();
-    emit typedChanged();
-    emit solutionShownChanged();
+    emitCardChanged();
 }
 
 void LearningSession::back()
@@ -55,30 +49,49 @@ void LearningSession::back()
     if (m_index <= 0) return;
     m_index--;
     undoResult(m_history[m_index]);
-    emit currentChanged();
-    emit typedChanged();
-    emit solutionShownChanged();
+    emitCardChanged();
 }
 
 void LearningSession::showSolution()
 {
-    if (m_index < 0 || m_history[m_index].solutionShown) return;
-    m_history[m_index].solutionShown = true;
+    if (m_index < 0) return;
+    Entry &e = m_history[m_index];
+    e.solutionShown = true;
+    e.solutionVisible = true;
+    e.typed.clear(); // start over, typing the name helps learning it
+    emit typedChanged();
     emit solutionShownChanged();
+    updateKeys();
 }
 
 void LearningSession::typeLetter(const QString &letter)
 {
     if (m_index < 0) return;
-    m_history[m_index].typed.append(letter);
+    if (!typedIsCorrect()) {
+        // the wrong letter wasn't taken back: resolve, counts as not known
+        showSolution();
+        return;
+    }
+    Entry &e = m_history[m_index];
+    e.typed.append(letter);
+    if (e.solutionVisible && typedIsCorrect()) {
+        // correct letter while the name is shown: go on as with a new card (still not known)
+        e.solutionVisible = false;
+        emit solutionShownChanged();
+    }
     emit typedChanged();
+    updateKeys();
 }
 
 void LearningSession::backspace()
 {
     if (m_index < 0 || m_history[m_index].typed.isEmpty()) return;
-    m_history[m_index].typed.chop(1);
+    Entry &e = m_history[m_index];
+    const bool wasWrong = !typedIsCorrect();
+    e.typed.chop(1);
+    if (wasWrong && typedIsCorrect()) e.corrections++; // noticed the slip without a hint
     emit typedChanged();
+    updateKeys();
 }
 
 PersonData *LearningSession::currentPerson() const
@@ -94,6 +107,16 @@ QString LearningSession::typed() const
 bool LearningSession::solutionShown() const
 {
     return m_index >= 0 && m_history.at(m_index).solutionShown;
+}
+
+bool LearningSession::solutionVisible() const
+{
+    return m_index >= 0 && m_history.at(m_index).solutionVisible;
+}
+
+int LearningSession::corrections() const
+{
+    return m_index < 0 ? 0 : m_history.at(m_index).corrections;
 }
 
 QString LearningSession::targetName() const
@@ -133,4 +156,18 @@ void LearningSession::undoResult(Entry &e)
     if (e.result == Result::KNOWN) e.person->setWins(e.person->wins() - 1);
     else if (e.result == Result::NOT_KNOWN) e.person->setFails(e.person->fails() - 1);
     e.result = Result::NONE;
+}
+
+void LearningSession::updateKeys()
+{
+    m_keys = (m_letterModel && m_index >= 0) ? m_letterModel->keys(targetName(), typed()) : QStringList();
+    emit keysChanged();
+}
+
+void LearningSession::emitCardChanged()
+{
+    emit currentChanged();
+    emit typedChanged();
+    emit solutionShownChanged();
+    updateKeys();
 }

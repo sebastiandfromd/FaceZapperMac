@@ -48,6 +48,10 @@ void Controller::takeOverTableContent()
     m_valuePersonMap.clear();
     m_nameDerivationTable.fillPersonDataMap(&m_personsVector);
     m_imageProvider->setFolder(m_currentFolderData.path());
+    QStringList names;
+    for (const auto *p : std::as_const(m_personsVector))
+        names << p->firstName() + u' ' + p->familyName();
+    m_letterModel.setFolderNames(names);
     m_currentFolderData.setName(m_nameDerivationTable.groupName());
     rebuildValuePersonMap();
     saveCurrentFolderData();
@@ -253,6 +257,9 @@ void Controller::setGroupFolder(const QString &newGroupFolder)
 
 Controller::Controller(QObject *parent) : QObject(parent){
     m_session.setPersons(&m_personsVector);
+    if (!m_letterModel.load(QStringLiteral(":/letterstats.json")))
+        qWarning("Couldn't load letter statistics, the keyboard falls back to the folder's names.");
+    m_session.setLetterModel(&m_letterModel);
 
 
     FolderData f0;

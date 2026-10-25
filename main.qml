@@ -48,7 +48,7 @@ ApplicationWindow {
             // import table: take the names over and start learning; learning: show the name
             text: mainWin.learning ? "Lösung" : "Übernehmen"
             enabled: !mainWin.learning || (controller && controller.session.currentPerson !== null
-                                           && !controller.session.solutionShown)
+                                           && !controller.session.solutionVisible)
             onClicked: {
                 if (!controller) return
                 if (mainWin.learning) {

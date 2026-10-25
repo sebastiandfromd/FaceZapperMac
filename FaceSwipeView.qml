@@ -23,10 +23,15 @@ Rectangle {
         if (!session || !session.canGoBack) return
         session.back()
     }
-    // "Lösung" shows the name until the swipe
+    function pressKey(key) {
+        if (busy || !session) return
+        if (key === "⌫") session.backspace()
+        else session.typeLetter(key)
+    }
+    // "Lösung" shows the name until the first correct letter is typed (or the swipe)
     function syncSolutionOverlay() {
         if (busy || !session) return
-        if (session.solutionShown) nameOverlay.showPermanent(session.targetName, false)
+        if (session.solutionVisible) nameOverlay.showPermanent(session.targetName, false)
         else nameOverlay.hide()
     }
 
@@ -90,25 +95,49 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: faceMargin
-        // placeholder until step 2 (letter keyboard): still random letters around a fixed "Ö"
+        // what has been typed so far - a wrong letter is not marked, it may be a slip the user notices
+        Text {
+            id: typedText
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: parent.height * 0.35
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            font.pixelSize: height * 0.7
+            font.bold: true
+            text: learnView.session ? learnView.session.typed : ""
+        }
+        // letter keyboard: 8 likely characters (exactly one of them is right) + backspace
         Row {
-            height: parent.height
+            id: keyRow
+            anchors.top: typedText.bottom
+            anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
+            property real keySize: Math.min(letterLineRect.width / 9, height) * 0.9
+            spacing: keySize / 9
             Repeater {
-                id: lineRepeater
-                model: 9
-                property string randomText: (controller && learnView.person) ? controller.randomLetters(9, "Ö") : ""
+                model: learnView.session ? learnView.session.keys.concat(["⌫"]) : []
                 Rectangle {
-                    width: Math.min(letterLineRect.width / 9, letterLineRect.height) * 0.9
+                    width: keyRow.keySize
                     height: width
                     radius: width / 2
                     anchors.verticalCenter: parent.verticalCenter
+                    color: keyMouseArea.pressed ? "gold" : "white"
+                    border.color: "darkgray"
+                    opacity: keyMouseArea.enabled ? 1 : 0.4
                     Text {
                         anchors.fill: parent
-                        text: lineRepeater.randomText.charAt(index)
+                        text: modelData === " " ? "␣" : modelData
+                        font.pixelSize: height * 0.5
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
+                    }
+                    MouseArea {
+                        id: keyMouseArea
+                        anchors.fill: parent
+                        enabled: !learnView.busy
+                        onClicked: learnView.pressKey(modelData)
                     }
                 }
             }
