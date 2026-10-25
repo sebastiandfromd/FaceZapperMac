@@ -42,6 +42,7 @@ void Controller::rebuildValuePersonMap(){
 void Controller::takeOverTableContent()
 {
     qDebug()<<"takeOverTableContent";
+    m_session.clear(); // its history points to the persons deleted below
     qDeleteAll(m_personsVector);
     m_personsVector.clear();
     m_valuePersonMap.clear();
@@ -251,7 +252,7 @@ void Controller::setGroupFolder(const QString &newGroupFolder)
 
 
 Controller::Controller(QObject *parent) : QObject(parent){
-    m_imageProvider = new FaceImageProvider();
+    m_session.setPersons(&m_personsVector);
 
 
     FolderData f0;
@@ -285,6 +286,8 @@ void Controller::init(QQmlApplicationEngine *engine) {
     qmlRegisterType<PersonData>("de.herrdiel.facezapper", 1, 0, "PersonData");
     qmlRegisterType<NameDerivationTable>("de.herrdiel.facezapper", 1, 0, "NameDerivationTable");
     qmlRegisterType<FolderData>("de.herrdiel.facezapper", 1, 0, "FolderData");
+    qmlRegisterUncreatableType<LearningSession>("de.herrdiel.facezapper", 1, 0, "LearningSession",
+                                                "LearningSession is provided by controller.session");
     engine->addImageProvider(QLatin1String("faceProvider"), m_imageProvider);
 
     auto view = new QQuickView(engine, nullptr);

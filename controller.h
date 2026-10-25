@@ -11,6 +11,7 @@
 #include "folderdata.h"
 #include <QDebug>
 #include "faceimageprovider.h"
+#include "learningsession.h"
 #include <QDir>
 #include <QQuickView>
 #include <QQmlContext>
@@ -35,7 +36,7 @@ public:
             qDebug()<<"m_valuePersonMap.isEmpty(), NULLPTR returned!";
             return nullptr;
         }
-        int r = int(QRandomGenerator::global()->bounded(1,m_valuePersonMap.count()-1));
+        int r = int(QRandomGenerator::global()->bounded(m_valuePersonMap.count()));
         QMultiMapIterator<qreal, PersonData*> iter(m_valuePersonMap);
         iter.toFront();
         for(int i = 0; i<r; i++) {
@@ -44,6 +45,7 @@ public:
         return iter.value();
     }
     Q_INVOKABLE QString currentFolderPath() { return m_currentFolderData.path(); }
+    LearningSession *session() { return &m_session; }
     QString appDataPath() { return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation); }
     bool saveRecentFolders();
     bool saveCurrentFolderData();
@@ -209,6 +211,7 @@ private:
     FaceImageProvider* m_imageProvider =  new FaceImageProvider();
     FolderData m_currentFolderData;
     NameDerivationTable m_nameDerivationTable;
+    LearningSession m_session;
 
     QString m_delimiter = " ";
     QString m_replaceFrom = "";
@@ -250,6 +253,7 @@ private:
     Q_PROPERTY(bool correctCase READ correctCase WRITE setCorrectCase NOTIFY correctCaseChanged)
     Q_PROPERTY(QString solveAttempt READ solveAttempt WRITE setSolveAttempt NOTIFY solveAttemptChanged)
     Q_PROPERTY(QString groupFolder READ groupFolder WRITE setGroupFolder NOTIFY groupFolderChanged)
+    Q_PROPERTY(LearningSession* session READ session CONSTANT)
 };
 
 #endif // CONTROLLER_H

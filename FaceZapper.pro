@@ -12,6 +12,7 @@ android {
 SOURCES += \
         controller.cpp \
         faceimageprovider.cpp \
+        learningsession.cpp \
         folderdata.cpp \
         main.cpp \
         namederivationtable.cpp \
@@ -36,6 +37,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     controller.h \
     faceimageprovider.h \
+    learningsession.h \
     folderdata.h \
     namederivationtable.h \
     persondata.h

@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 Rectangle {
-    property int pageType: FaceSwipeView.PageType.SHOW_FOLDER_PAGE
     property int borderwidth: 1
     property color bordercolor: "darkgray"
     property real widthEighth: ((11/12)*width) / 8

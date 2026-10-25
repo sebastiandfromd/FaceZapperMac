@@ -9,9 +9,11 @@ ApplicationWindow {
     height: 480
     visible: true
     title: qsTr("FaceZapper")
+    property bool learning: !deriveNamesTableView.visible
 
     FaceSwipeView {
-        id: swipeView
+        id: learnView
+        anchors.fill: parent
     }
     FolderDialog {
         id: fileDialog
@@ -41,26 +43,21 @@ ApplicationWindow {
         implicitHeight: 50
         // no explicit width: ApplicationWindow stretches the footer over the whole window
         color: "red"
-//        visible: deriveNamesTableView.visible
-//        Button {
-//            visible: swipeView.currentItem.pageType === FaceSwipeView.PageType.FACE_PAGE
-//            anchors.centerIn: parent
-//            text: "Settings"
-//            onClicked: {
-////                if (!swipeView.currentItem.pageType !== FaceSwipeView.PageType.SETTINGS_PAGE) swipeView.createSettingsPage()
-//                swipeView.visible = !swipeView.visible
-//                deriveNamesTableView.visible = !deriveNamesTableView.visible
-//            }
-//        }
         Button {
-//            visible: swipeView.currentItem.pageType === FaceSwipeView.PageType.SHOW_FOLDER_PAGE
             anchors.centerIn: parent
-            text: "Übernehmen"
+            // import table: take the names over and start learning; learning: show the name
+            text: mainWin.learning ? "Lösung" : "Übernehmen"
+            enabled: !mainWin.learning || (controller && controller.session.currentPerson !== null
+                                           && !controller.session.solutionShown)
             onClicked: {
-//                if (!swipeView.currentItem.pageType !== FaceSwipeView.PageType.SETTINGS_PAGE) swipeView.createSettingsPage()
-                if (controller) controller.takeOverTableContent()
-                swipeView.createPages()
-                deriveNamesTableView.visible = false;
+                if (!controller) return
+                if (mainWin.learning) {
+                    controller.session.showSolution()
+                } else {
+                    controller.takeOverTableContent()
+                    controller.session.start()
+                    deriveNamesTableView.visible = false
+                }
             }
         }
     }

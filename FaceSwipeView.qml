@@ -1,220 +1,117 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-SwipeView {
-    id: swipeView
-    property int lastIndex: -1;
-    property int counter: 0
-    anchors.fill: parent
-    property bool creationInProgress: false;
-    property var colors: ["orange", "lightgreen", "yellow"]
-    background: Rectangle { color: "blue" }
+// Learning page: one face at a time, the flow lives in controller.session (LearningSession).
+// Swipe left  = done with this person: the name flashes (green/red), then the next face.
+// Swipe right = back to the previous face, its answer can be redone.
+Rectangle {
+    id: learnView
+    property var session: controller ? controller.session : null
+    property var person: session ? session.currentPerson : null
+    property int flashDuration: 500  // ms, will move to the settings page
+    property bool busy: false         // while the name flashes after a swipe
+    property real faceMargin: Math.min(height/40, width/40)
+    color: "lightgray"
 
-    function clear() {
-        while (swipeView.count() > 0) {
-            takeItem(0);
-        }
+    function swipedLeft() {
+        if (!session || !person) return
+        busy = true
+        var known = session.finishCurrent()
+        nameOverlay.flash(session.targetName, known, flashDuration)
     }
-    function createPages() {
-        creationInProgress = true
-        for (var i = 0; i<4; i++) {
-            // create a number of pre-load pages
-            addItem(picPageComponent.createObject(swipeView, {color: swipeView.colors[counter%3], count: counter++, person: controller.nextPersonData()}));
-        }
-        creationInProgress = false
+    function swipedRight() {
+        if (!session || !session.canGoBack) return
+        session.back()
     }
-
-    enum PageType {
-        FACE_PAGE,
-        SHOW_FOLDER_PAGE,
-        SETTINGS_PAGE
-    }
-    function createSettingsPage() {
-        creationInProgress = true
-        if (currentIndex>0) removeItem(swipeView.itemAt(0));
-        insertItem(currentIndex,settingsComponent.createObject(swipeView))
-        swipeView.decrementCurrentIndex()
-        creationInProgress = false
+    // "Lösung" shows the name until the swipe
+    function syncSolutionOverlay() {
+        if (busy || !session) return
+        if (session.solutionShown) nameOverlay.showPermanent(session.targetName, false)
+        else nameOverlay.hide()
     }
 
-    onCurrentIndexChanged: {
-        if (creationInProgress) {
-            return // don't interfere with a current operation!
-        }
-        if (controller) controller.solveAttempt = ""
-        var forw = currentIndex > lastIndex     // forw: user swiped to the *next* picture
-        if (currentIndex>=2 && forw) {
-            creationInProgress = true
-            addItem(picPageComponent.createObject(swipeView, {color: swipeView.colors[counter%3], count: counter++, person: controller.nextPersonData()}));
-            removeItem(swipeView.itemAt(0));
-            lastIndex = currentIndex
-            creationInProgress = false
-        }
-        lastIndex = currentIndex
-        creationInProgress = false
+    Connections {
+        target: learnView.session
+        function onSolutionShownChanged() { learnView.syncSolutionOverlay() }
     }
 
-    Component.onCompleted: {
+    Item {
+        id: photoArea
+        anchors.top: parent.top
+        anchors.topMargin: faceMargin
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: parent.height * 2/3
+        clip: true
 
-    }
-
-
-    Component {
-        id: picPageComponent
-        Rectangle {
-            property int count: -1
-            property var person: null
-            property int pageType: FaceSwipeView.PageType.FACE_PAGE
-            property real faceMargin: Math.min(height/40, width/40)
-            id: picPageComponentRect
-            color: picPageComponent.color
-            Text {
-                id: rectTextField
-                anchors.fill: parent
-                text: picPageComponentRect.count+": "+(picPageComponentRect.person ? picPageComponentRect.person.picFileName : "")
+        Image {
+            id: faceImage
+            width: parent.width
+            height: parent.height
+            fillMode: Image.PreserveAspectFit
+            cache: false
+            asynchronous: true
+            source: learnView.person ? "image://faceProvider/" + encodeURIComponent(learnView.person.picFileName) : ""
+            Behavior on x {
+                enabled: !dragHandler.active
+                NumberAnimation { duration: 150 }
             }
-            Image {
-                id: faceImage
-                cache: false
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: parent.top
-                anchors.topMargin: faceMargin
-                width: parent.width
-                height: parent.height *2/3
-                fillMode: Image.PreserveAspectFit
-                property string name: (controller && picPageComponentRect.person) ?
-                                          "image://faceProvider/"+encodeURIComponent(picPageComponentRect.person.picFileName)
-                                        : ""
-                source: name
+        }
+        DragHandler {
+            id: dragHandler
+            target: faceImage
+            enabled: !learnView.busy
+            yAxis.enabled: false
+            onActiveChanged: {
+                if (active) return
+                var dx = faceImage.x
+                faceImage.x = 0
+                if (dx < -photoArea.width / 4) learnView.swipedLeft()
+                else if (dx > photoArea.width / 4) learnView.swipedRight()
             }
-            Rectangle {
-                id:solveAttemptsRec
-                color: "lightgray"
-                height: parent.height - (faceImage.height + 3*faceMargin)
-                width: parent.width - 2* anchors.margins
-                anchors.top: faceImage.bottom
-                anchors.left: parent.left
-                anchors.margins: faceMargin
-                border.color: "darkgray"
-                border.width: 1
-                Loader {
-                    property bool isCurrent: swipeView.currentItem == picPageComponentRect
-                    id: solveAttemptsLoader
-                    sourceComponent: letterLineSolver
-                    anchors.fill: parent
-                    property var person: picPageComponentRect.person
-                }
+        }
+        NameOverlay {
+            id: nameOverlay
+            onFinished: {
+                learnView.session.next()
+                learnView.busy = false
+                learnView.syncSolutionOverlay()
             }
         }
     }
 
-    Component {
-        id: settingsComponent
-        Rectangle {
-            property int pageType: FaceSwipeView.PageType.SETTINGS_PAGE
-            id: settingsComponentRect
-            color: "white"
-            Text {
-                id: settingsTextField
-                anchors.fill: parent
-                text: "Settings"
-            }
-        }
-    }
-    Component {
-        id: fullTypeInSolver
-        Rectangle {
-            color: "lightgreen"
-            anchors.fill: parent
-            TextInput {
-                property bool curr: isCurrent
-                onCurrChanged: {
-                    controller.solveAttempt = "";
-                    forceActiveFocus()
-                }
-                id: fullTypeInSolverInput
-                anchors.fill: parent
-                verticalAlignment: "AlignVCenter"
-                horizontalAlignment: "AlignHCenter"
-                text: (controller && isCurrent)? controller.solveAttempt : ""
-                onTextChanged: {
-                    if (controller && isCurrent) {
-                        controller.solveAttempt = text;
-                        console.debug("onTextChanged: "+person.picFileName)
-                        console.debug("onTextChanged: "+person.firstName)
-                        console.debug("onTextChanged: "+person.familyName)
-                        console.debug("onTextChanged: "+person.uid)
-                    }
-                }
-            }
-        }
-    }
-    Component {
-        id: letterLineSolver
-        Rectangle {
-            id: letterLineRect
-            color: "lightgreen"
-            anchors.fill: parent
-            Row {
-                height: parent.height
-                width: childrenRect.width
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-
-
-
-                Repeater {
-                    id: lineRepeater
-                    model: 9
-                    property string randomText: controller? controller.randomLetters(9,"Ö") : "012345678"
-                    Rectangle {
-                        width: Math.min(letterLineRect.width, letterLineRect.height) / 2
-                        height: width
-                        radius: width / 2
-                        anchors.verticalCenter: parent.verticalCenter
-                        Text {
-                            anchors.fill: parent
-                            text: lineRepeater.randomText.charAt(index)
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                        }
-
-                    }
-                }
-
-            }
-
-        }
-    }
-    Component {
-        id: letterCircleSolver
-        Rectangle {
-            color: "lightgreen"
-            anchors.fill: parent
-
+    Rectangle {
+        id: letterLineRect
+        color: "lightgreen"
+        border.color: "darkgray"
+        border.width: 1
+        anchors.top: photoArea.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: faceMargin
+        // placeholder until step 2 (letter keyboard): still random letters around a fixed "Ö"
+        Row {
+            height: parent.height
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
             Repeater {
-                id: circleRepeater
+                id: lineRepeater
                 model: 9
+                property string randomText: (controller && learnView.person) ? controller.randomLetters(9, "Ö") : ""
                 Rectangle {
-                    width: Math.min(parent.width, parent.height) / 3
+                    width: Math.min(letterLineRect.width / 9, letterLineRect.height) * 0.9
                     height: width
                     radius: width / 2
-                    property real phi: Math.PI*1/2 + index*2*Math.PI/circleRepeater.count
-                    x: 70*Math.cos(phi)+parent.width/2 - width/2
-                    y: 40*Math.sin(phi)+parent.height/2 - height/2
+                    anchors.verticalCenter: parent.verticalCenter
                     Text {
                         anchors.fill: parent
-                        text: Math.round(phi * 360 / (2*Math.PI))
+                        text: lineRepeater.randomText.charAt(index)
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
-
                 }
             }
-
-
-
         }
     }
-
 }
