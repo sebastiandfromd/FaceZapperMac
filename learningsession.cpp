@@ -12,6 +12,17 @@ LearningSession::LearningSession(QObject *parent) : QObject(parent)
     m_nowMs = [timer] { return timer->elapsed(); };
 }
 
+void LearningSession::setCardBoxSettings(const CardBoxSettings &settings)
+{
+    const bool targetChanged = settings.targetMode != m_settings.targetMode;
+    m_settings = settings;
+    emit statsChanged(); // "sicher" depends on learnedStreak
+    if (targetChanged && m_index >= 0) {
+        m_history[m_index].typed.clear(); // the typed text belonged to the old target
+        emitCardChanged();
+    }
+}
+
 void LearningSession::setAppActive(bool active)
 {
     const qint64 now = m_nowMs();
@@ -58,15 +69,37 @@ int LearningSession::learnedCount() const
                              [needed](const PersonData *p) { return p->streak() >= needed; }));
 }
 
-bool LearningSession::finishCurrent()
+int LearningSession::finishCurrent()
 {
-    if (m_index < 0) return false;
+    if (m_index < 0) return int(Outcome::NOT_KNOWN);
     Entry &e = m_history[m_index];
+    // typed correctly after the name had been shown: not wrong, but not known either
+    const bool practiced = e.solutionShown && !e.typed.isEmpty() && typedIsCorrect();
+    if (e.inRetry) {
+        // second look after a red answer: nothing is counted
+        if (e.typed.isEmpty()) return int(Outcome::SKIPPED);
+        return int(practiced ? Outcome::PRACTICED : Outcome::NOT_KNOWN);
+    }
     const Rating r = rate(e);
     applyRating(e, r);
     emit rated();
     emit statsChanged();
-    return r != Rating::AGAIN;
+    if (r != Rating::AGAIN) return int(Outcome::KNOWN);
+    return int(practiced ? Outcome::PRACTICED : Outcome::NOT_KNOWN);
+}
+
+void LearningSession::retry()
+{
+    if (m_index < 0) return;
+    Entry &e = m_history[m_index];
+    e.inRetry = true;
+    e.solutionShown = true;
+    e.solutionVisible = true;
+    e.typed.clear();
+    restartClock();
+    emit typedChanged();
+    emit solutionShownChanged();
+    updateKeys();
 }
 
 void LearningSession::next()
@@ -84,8 +117,12 @@ void LearningSession::next()
 void LearningSession::back()
 {
     if (m_index <= 0) return;
+    // a card in its retry is already rated - undo it too, so all cards from here on are unrated
+    undoRating(m_history[m_index]);
+    m_history[m_index].inRetry = false;
     m_index--;
     undoRating(m_history[m_index]);
+    m_history[m_index].inRetry = false;
     emitCardChanged();
     emit rated();
     emit statsChanged();
@@ -163,7 +200,12 @@ QString LearningSession::targetName() const
 {
     const PersonData *p = currentPerson();
     if (!p) return QString();
-    return QString(p->firstName() + u' ' + p->familyName()).simplified();
+    switch (m_settings.targetMode) {
+    case 0: return p->firstName().simplified();
+    case 1: return p->familyName().simplified();
+    case 3: return QString(p->familyName().simplified() + u", " + p->firstName().simplified());
+    default: return QString(p->firstName() + u' ' + p->familyName()).simplified();
+    }
 }
 
 bool LearningSession::typedIsCorrect() const

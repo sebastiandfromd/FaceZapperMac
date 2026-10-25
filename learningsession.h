@@ -19,6 +19,8 @@ struct CardBoxSettings {
     int againOffset = 3;      // not known: comes back soon
     int learnedStreak = 2;    // known this many times in a row: counts as "sicher"
     int newCardInterval = 5;  // at the latest every n-th card is one never seen before (while there are any)
+    int targetMode = 2;       // what to type: 0 = first name, 1 = family name, 2 = "Vorname Nachname",
+                              // 3 = "Nachname, Vorname" (the comma is a key like any other character)
 };
 
 // One run through the cards of a folder. Keeps a history of the shown cards,
@@ -39,17 +41,29 @@ public:
     };
     Q_ENUM(Rating)
 
+    // what the user sees after a swipe
+    enum class Outcome {
+        NOT_KNOWN = 0,  // red: the face stays, with its name, for another look (retry())
+        KNOWN = 1,      // green
+        PRACTICED = 2,  // yellow: typed correctly, but after the name had been shown
+        SKIPPED = 3     // no flash: swiped on in a retry without typing
+    };
+    Q_ENUM(Outcome)
+
     explicit LearningSession(QObject *parent = nullptr);
 
     void setPersons(const QVector<PersonData*> *persons) { m_persons = persons; }
     void setLetterModel(const LetterModel *letterModel) { m_letterModel = letterModel; }
-    void setCardBoxSettings(const CardBoxSettings &settings) { m_settings = settings; }
+    void setCardBoxSettings(const CardBoxSettings &settings);
     void setClock(std::function<qint64()> nowMs) { m_nowMs = std::move(nowMs); } // for tests
     void setAppActive(bool active); // time in the background doesn't count as looking
 
     Q_INVOKABLE void start();
     Q_INVOKABLE void clear();
-    Q_INVOKABLE bool finishCurrent(); // rates the current card, returns true if known
+    // rates the current card (in a retry: only says what the user did, nothing is counted)
+    Q_INVOKABLE int finishCurrent(); // returns an Outcome
+    // after a red answer: same face again, name visible, input empty - the next swipe isn't counted
+    Q_INVOKABLE void retry();
     Q_INVOKABLE void next();          // shows the next card (from history or the front of the box)
     Q_INVOKABLE void back();          // returns to the previous card and undoes its rating
     // shows the name and clears the input, so the user can type it again for practice;
@@ -92,6 +106,7 @@ private:
         bool solutionVisible = false;
         int corrections = 0;  // wrong letters the user took back on their own: known, but not safely
         bool wasNew = false;  // never seen before this showing
+        bool inRetry = false; // already rated, shown again after a red answer
         Rating rating = Rating::NONE;
         // state before the rating, to undo it
         QList<PersonData*> deckBefore;

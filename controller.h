@@ -49,7 +49,18 @@ public:
     LearningSession *session() { return &m_session; }
     QString appDataPath() { return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation); }
     bool saveRecentFolders();
-    static CardBoxSettings loadCardBoxSettings(); // QSettings, defaults until the settings page exists
+    static CardBoxSettings loadCardBoxSettings(); // from QSettings, see defaultSettings()
+
+    // settings page: keys as stored in QSettings ("cardBox/...", "learning/...") with their defaults
+    static QVariantMap defaultSettings();
+    Q_INVOKABLE QVariant setting(const QString &key) const;
+    Q_INVOKABLE void setSetting(const QString &key, const QVariant &value);
+    Q_INVOKABLE void resetSettings();
+    int flashDuration() const { return setting(QStringLiteral("learning/flashDuration")).toInt(); }
+
+    // menu: forget what was learned in this folder / everything saved about it
+    Q_INVOKABLE void resetTrainingData();
+    Q_INVOKABLE void resetFolderData();
     // .faceZapperData in the picture folder: import settings, rows, group name, learning data
     Q_INVOKABLE bool saveFolderData();
     void loadFolder(const QString &path);
@@ -194,6 +205,7 @@ signals:
     void solveAttemptChanged();
     void groupFolderChanged();
     void storageHintChanged();
+    void settingsChanged();
 
 public slots:
 
@@ -209,6 +221,7 @@ private:
     LetterModel m_letterModel;
     QJsonObject m_folderData;   // what's in the current folder's .faceZapperData
     QString m_storageHint;      // set if the data couldn't be saved in the folder itself
+    QJsonObject m_defaultImportSettings; // to open a folder "as new" after resetting its data
 
     QString m_delimiter = " ";
     QString m_replaceFrom = "";
@@ -252,6 +265,7 @@ private:
     Q_PROPERTY(QString groupFolder READ groupFolder WRITE setGroupFolder NOTIFY groupFolderChanged)
     Q_PROPERTY(LearningSession* session READ session CONSTANT)
     Q_PROPERTY(QString storageHint READ storageHint NOTIFY storageHintChanged)
+    Q_PROPERTY(int flashDuration READ flashDuration NOTIFY settingsChanged)
 };
 
 #endif // CONTROLLER_H

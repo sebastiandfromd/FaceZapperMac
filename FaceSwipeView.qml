@@ -2,22 +2,30 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 // Learning page: one face at a time, the flow lives in controller.session (LearningSession).
-// Swipe left  = done with this person: the name flashes (green/red), then the next face.
+// Swipe left  = done with this person: the name flashes green (known), yellow (typed after
+//               "Lösung") or red (not known), then the next face - after red the same face stays,
+//               with its name, for another look.
 // Swipe right = back to the previous face, its answer can be redone.
 Rectangle {
     id: learnView
     property var session: controller ? controller.session : null
     property var person: session ? session.currentPerson : null
-    property int flashDuration: 500  // ms, will move to the settings page
+    property int flashDuration: controller ? controller.flashDuration : 500 // ms, settings page
     property bool busy: false         // while the name flashes after a swipe
+    property int lastOutcome: 1       // LearningSession.Outcome of the last swipe
     property real faceMargin: Math.min(height/40, width/40)
     color: "lightgray"
 
     function swipedLeft() {
         if (!session || !person) return
+        lastOutcome = session.finishCurrent()
+        if (lastOutcome === 3) { // SKIPPED: second look without typing - just go on
+            session.next()
+            syncSolutionOverlay()
+            return
+        }
         busy = true
-        var known = session.finishCurrent()
-        nameOverlay.flash(session.targetName, known, flashDuration)
+        nameOverlay.flash(session.targetName, lastOutcome, flashDuration)
     }
     function swipedRight() {
         if (!session || !session.canGoBack) return
@@ -31,7 +39,7 @@ Rectangle {
     // "Lösung" shows the name until the first correct letter is typed (or the swipe)
     function syncSolutionOverlay() {
         if (busy || !session) return
-        if (session.solutionVisible) nameOverlay.showPermanent(session.targetName, false)
+        if (session.solutionVisible) nameOverlay.showPermanent(session.targetName, 0)
         else nameOverlay.hide()
     }
 
@@ -78,7 +86,9 @@ Rectangle {
         NameOverlay {
             id: nameOverlay
             onFinished: {
-                learnView.session.next()
+                // red: the same face stays, with its name; otherwise the next face
+                if (learnView.lastOutcome === 0) learnView.session.retry()
+                else learnView.session.next()
                 learnView.busy = false
                 learnView.syncSolutionOverlay()
             }

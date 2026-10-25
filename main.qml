@@ -11,6 +11,11 @@ ApplicationWindow {
     title: qsTr("FaceZapper")
     property bool learning: !deriveNamesTableView.visible
 
+    function showImportTable() {
+        controller.session.clear()
+        deriveNamesTableView.visible = true
+    }
+
     FaceSwipeView {
         id: learnView
         anchors.fill: parent
@@ -27,6 +32,7 @@ ApplicationWindow {
         onAccepted: {
             console.debug(selectedFolder)
             controller.groupFolder = selectedFolder
+            mainWin.showImportTable()
         }
     }
 
@@ -37,8 +43,64 @@ ApplicationWindow {
         onOpenFolderRequested: fileDialog.open()
     }
 
+    SettingsPage {
+        id: settingsPage
+        anchors.fill: parent
+        visible: false
+        z: 10
+        onDone: visible = false
+    }
+
+    // close the app (saves on the way out, see Controller: aboutToQuit) - not on the settings
+    // page, which has its own way back
+    RoundButton {
+        visible: !settingsPage.visible
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 4
+        z: 20
+        width: 36
+        height: 36
+        text: "✕"
+        font.pixelSize: 16
+        onClicked: Qt.quit()
+    }
+
+    Dialog {
+        id: resetTrainingDialog
+        anchors.centerIn: parent
+        modal: true
+        title: qsTr("Trainingsdaten zurücksetzen?")
+        standardButtons: Dialog.Yes | Dialog.No
+        Label {
+            width: parent.width
+            wrapMode: Text.WordWrap
+            text: qsTr("Alles Gelernte für „%1“ wird gelöscht. Namen und Einlese-Einstellungen bleiben erhalten.")
+                  .arg(controller ? controller.groupName : "")
+        }
+        onAccepted: controller.resetTrainingData()
+    }
+    Dialog {
+        id: resetFolderDialog
+        anchors.centerIn: parent
+        modal: true
+        title: qsTr("Alle Daten dieses Ordners zurücksetzen?")
+        standardButtons: Dialog.Yes | Dialog.No
+        Label {
+            width: parent.width
+            wrapMode: Text.WordWrap
+            text: qsTr("Gelerntes, Namenskorrekturen, Einlese-Einstellungen und Gruppenname von „%1“ werden gelöscht. Der Ordner wird neu eingelesen.")
+                  .arg(controller ? controller.groupName : "")
+        }
+        onAccepted: {
+            mainWin.showImportTable()
+            controller.resetFolderData()
+        }
+    }
+
     footer: Rectangle {
         id: footer
+        visible: !settingsPage.visible
         height: 50
         implicitHeight: 50
         // no explicit width: ApplicationWindow stretches the footer over the whole window
@@ -65,7 +127,7 @@ ApplicationWindow {
         // shown when the data couldn't be saved in the picture folder itself
         Text {
             anchors.left: footerButton.right
-            anchors.right: parent.right
+            anchors.right: menuButton.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.margins: 8
             text: controller ? controller.storageHint : ""
@@ -88,6 +150,45 @@ ApplicationWindow {
                     controller.takeOverTableContent()
                     controller.session.start()
                     deriveNamesTableView.visible = false
+                }
+            }
+        }
+        Button {
+            id: menuButton
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
+            text: "☰"
+            font.pixelSize: 18
+            onClicked: menu.open()
+            Menu {
+                id: menu
+                y: -height
+                MenuItem {
+                    text: qsTr("Namen bearbeiten")
+                    enabled: mainWin.learning
+                    onTriggered: mainWin.showImportTable()
+                }
+                MenuItem {
+                    text: qsTr("Ordner öffnen")
+                    onTriggered: fileDialog.open()
+                }
+                MenuSeparator {}
+                MenuItem {
+                    text: qsTr("Trainingsdaten zurücksetzen")
+                    onTriggered: resetTrainingDialog.open()
+                }
+                MenuItem {
+                    text: qsTr("Alle Daten dieses Ordners zurücksetzen")
+                    onTriggered: resetFolderDialog.open()
+                }
+                MenuSeparator {}
+                MenuItem {
+                    text: qsTr("Einstellungen")
+                    onTriggered: {
+                        settingsPage.visible = true
+                        settingsPage.forceActiveFocus() // for Esc / Android back
+                    }
                 }
             }
         }

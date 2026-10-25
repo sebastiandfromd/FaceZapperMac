@@ -299,6 +299,8 @@ Controller::Controller(QObject *parent) : QObject(parent){
     connect(&m_session, &LearningSession::rated, this, &Controller::saveFolderData);
     connect(qGuiApp, &QCoreApplication::aboutToQuit, this, &Controller::saveFolderData);
 
+    m_defaultImportSettings = importSettingsToJson(); // before any folder changes them
+
     // start with the folder used last
     loadRecentFolders();
     if (!m_recentDirs.isEmpty())
@@ -322,20 +324,98 @@ void Controller::init(QQmlApplicationEngine *engine) {
     ctxt->setContextProperty("currentFolderData",  QVariant::fromValue(m_currentFolderData));
 }
 
+// where the app-wide settings live (registry on Windows, shared prefs on Android)
+static const QString settingsOrg = QStringLiteral("herrdiel");
+static const QString settingsApp = QStringLiteral("FaceZapper");
+
+QVariantMap Controller::defaultSettings()
+{
+    const CardBoxSettings c; // its member initializers are the defaults
+    return {
+        {"cardBox/easySeconds", c.easySeconds},
+        {"cardBox/unsureSeconds", c.unsureSeconds},
+        {"cardBox/easyFactor", c.easyFactor},
+        {"cardBox/goodFactor", c.goodFactor},
+        {"cardBox/unsureOffset", c.unsureOffset},
+        {"cardBox/againOffset", c.againOffset},
+        {"cardBox/learnedStreak", c.learnedStreak},
+        {"cardBox/newCardInterval", c.newCardInterval},
+        {"learning/targetMode", c.targetMode},
+        {"learning/flashDuration", 500},
+    };
+}
+
 CardBoxSettings Controller::loadCardBoxSettings()
 {
-    QSettings s(QStringLiteral("herrdiel"), QStringLiteral("FaceZapper"));
-    s.beginGroup(QStringLiteral("cardBox"));
+    QSettings s(settingsOrg, settingsApp);
+    const QVariantMap d = defaultSettings();
+    auto value = [&s, &d](const char *key) { return s.value(QLatin1String(key), d.value(QLatin1String(key))); };
     CardBoxSettings c;
-    c.easySeconds = s.value(QStringLiteral("easySeconds"), c.easySeconds).toDouble();
-    c.unsureSeconds = s.value(QStringLiteral("unsureSeconds"), c.unsureSeconds).toDouble();
-    c.easyFactor = s.value(QStringLiteral("easyFactor"), c.easyFactor).toInt();
-    c.goodFactor = s.value(QStringLiteral("goodFactor"), c.goodFactor).toInt();
-    c.unsureOffset = s.value(QStringLiteral("unsureOffset"), c.unsureOffset).toInt();
-    c.againOffset = s.value(QStringLiteral("againOffset"), c.againOffset).toInt();
-    c.learnedStreak = s.value(QStringLiteral("learnedStreak"), c.learnedStreak).toInt();
-    c.newCardInterval = s.value(QStringLiteral("newCardInterval"), c.newCardInterval).toInt();
+    c.easySeconds = value("cardBox/easySeconds").toDouble();
+    c.unsureSeconds = value("cardBox/unsureSeconds").toDouble();
+    c.easyFactor = value("cardBox/easyFactor").toInt();
+    c.goodFactor = value("cardBox/goodFactor").toInt();
+    c.unsureOffset = value("cardBox/unsureOffset").toInt();
+    c.againOffset = value("cardBox/againOffset").toInt();
+    c.learnedStreak = value("cardBox/learnedStreak").toInt();
+    c.newCardInterval = value("cardBox/newCardInterval").toInt();
+    c.targetMode = value("learning/targetMode").toInt();
     return c;
+}
+
+QVariant Controller::setting(const QString &key) const
+{
+    return QSettings(settingsOrg, settingsApp).value(key, defaultSettings().value(key));
+}
+
+void Controller::setSetting(const QString &key, const QVariant &value)
+{
+    if (!defaultSettings().contains(key) || setting(key) == value) return;
+    QSettings s(settingsOrg, settingsApp);
+    s.setValue(key, value);
+    s.sync();
+    m_session.setCardBoxSettings(loadCardBoxSettings());
+    emit settingsChanged();
+}
+
+void Controller::resetSettings()
+{
+    QSettings s(settingsOrg, settingsApp);
+    for (const QString &key : defaultSettings().keys())
+        s.remove(key);
+    s.sync();
+    m_session.setCardBoxSettings(loadCardBoxSettings());
+    emit settingsChanged();
+}
+
+void Controller::resetTrainingData()
+{
+    // only what was learned - names and import settings stay
+    const bool learning = m_session.currentPerson() != nullptr;
+    m_session.clear();
+    m_session.setDeck({}); // new random order
+    for (PersonData *p : std::as_const(m_personsVector)) {
+        p->setStreak(0);
+        p->setWins(0);
+        p->setFails(0);
+        p->setSkips(0);
+        p->setLastSeen(QDateTime());
+    }
+    m_folderData.remove("learning");
+    if (learning) m_session.start();
+    saveFolderData();
+}
+
+void Controller::resetFolderData()
+{
+    // forget everything about this folder and open it as if for the first time
+    const QString path = m_currentFolderData.path();
+    if (path.isEmpty()) return;
+    clearPersons();
+    FolderStore::remove(path);
+    m_folderData = QJsonObject();
+    applyImportSettings(m_defaultImportSettings);
+    loadFolder(path);
 }
 
 bool Controller::saveRecentFolders()

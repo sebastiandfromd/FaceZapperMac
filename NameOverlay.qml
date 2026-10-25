@@ -1,11 +1,12 @@
 import QtQuick 2.15
 
-// Big name (or letter) in the middle of its parent: green = correct, red = correction.
+// Big name in the middle of its parent, colored by LearningSession.Outcome:
+// 0 = red (not known), 1 = green (known), 2 = yellow (typed correctly after the name was shown).
 // flash() hides it again after a while and emits finished(), showPermanent() keeps it.
 Rectangle {
     id: overlay
     property alias text: label.text
-    property bool correct: true
+    property int outcome: 1
     signal finished()
 
     visible: false
@@ -13,19 +14,19 @@ Rectangle {
     width: parent.width * 0.9
     height: parent.height / 4
     radius: height / 8
-    color: correct ? "#dd2e7d32" : "#ddc62828"
+    color: outcome === 1 ? "#dd2e7d32" : outcome === 2 ? "#eef9c825" : "#ddc62828"
 
-    function flash(newText, isCorrect, duration) {
+    function flash(newText, newOutcome, duration) {
         text = newText
-        correct = isCorrect
+        outcome = newOutcome
         visible = true
         timer.interval = duration
         timer.restart()
     }
-    function showPermanent(newText, isCorrect) {
+    function showPermanent(newText, newOutcome) {
         timer.stop()
         text = newText
-        correct = isCorrect
+        outcome = newOutcome
         visible = true
     }
     function hide() {
@@ -39,7 +40,7 @@ Rectangle {
         anchors.margins: parent.height / 10
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        color: "white"
+        color: overlay.outcome === 2 ? "black" : "white"
         font.bold: true
         font.pixelSize: height * 0.8
         fontSizeMode: Text.Fit

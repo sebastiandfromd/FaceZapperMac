@@ -5,6 +5,7 @@
         <file>FaceSwipeView.qml</file>
         <file>DeriveNamesTableView.qml</file>
         <file>NameOverlay.qml</file>
+        <file>SettingsPage.qml</file>
         <file>letterstats.json</file>
     </qresource>
 </RCC>
