@@ -130,12 +130,13 @@ Rectangle {
                     Label {
                         text: modelData.label
                         wrapMode: Text.WordWrap
-                        Layout.maximumWidth: parent.width - spinBox.width - 48
+                        // fixed room for ⓘ (32) and spin box (160) plus spacing - not taken from the
+                        // row itself, which would make the layout recalculate itself in a loop
+                        Layout.maximumWidth: Math.max(80, scroll.availableWidth - 240)
                     }
                     InfoButton { info: modelData.info }
                     Item { Layout.fillWidth: true }
                     SpinBox {
-                        id: spinBox
                         from: modelData.from
                         to: modelData.to
                         stepSize: modelData.step

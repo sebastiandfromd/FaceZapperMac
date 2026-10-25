@@ -73,6 +73,7 @@ public:
     void addRecentFolder(const QString &path, const QString &name);
     static QString folderDisplayName(const QString &pathOrUri);
     QString storageHint() const { return m_storageHint; }
+    bool folderKnown() const { return m_folderKnown; } // the folder brought a .faceZapperData
 
     bool saveAJsonFile(QString fileName, QString filePath, QJsonObject object);
     // fills the table with the folder's pictures; detectOrder: guess the name order from
@@ -205,6 +206,7 @@ signals:
     void solveAttemptChanged();
     void groupFolderChanged();
     void storageHintChanged();
+    void folderKnownChanged();
     void settingsChanged();
 
 public slots:
@@ -221,6 +223,7 @@ private:
     LetterModel m_letterModel;
     QJsonObject m_folderData;   // what's in the current folder's .faceZapperData
     QString m_storageHint;      // set if the data couldn't be saved in the folder itself
+    bool m_folderKnown = false; // .faceZapperData existed when the folder was opened
     QJsonObject m_defaultImportSettings; // to open a folder "as new" after resetting its data
 
     QString m_delimiter = " ";
@@ -265,6 +268,7 @@ private:
     Q_PROPERTY(QString groupFolder READ groupFolder WRITE setGroupFolder NOTIFY groupFolderChanged)
     Q_PROPERTY(LearningSession* session READ session CONSTANT)
     Q_PROPERTY(QString storageHint READ storageHint NOTIFY storageHintChanged)
+    Q_PROPERTY(bool folderKnown READ folderKnown NOTIFY folderKnownChanged)
     Q_PROPERTY(int flashDuration READ flashDuration NOTIFY settingsChanged)
 };
 

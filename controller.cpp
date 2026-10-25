@@ -274,13 +274,16 @@ void Controller::loadFolder(const QString &path)
     m_folderData = FolderStore::load(path);
     // a folder opened before brings its settings (name order included) - no guessing then
     const bool known = !m_folderData.isEmpty();
-    if (known) applyImportSettings(m_folderData.value("import").toObject());
+    // a new folder starts from the defaults, not with the previous folder's settings
+    applyImportSettings(known ? m_folderData.value("import").toObject() : m_defaultImportSettings);
     scanFolderToNameDerivationTable(path, !known);
     if (known) m_nameDerivationTable.applyRows(m_folderData.value("rows").toArray());
     runNameDerivation();
     const QString savedName = m_folderData.value("groupName").toString();
     setGroupName(savedName.isEmpty() ? folderDisplayName(path) : savedName);
     addRecentFolder(path, groupName());
+    m_folderKnown = known;
+    emit folderKnownChanged();
 }
 
 
@@ -342,6 +345,7 @@ QVariantMap Controller::defaultSettings()
         {"cardBox/newCardInterval", c.newCardInterval},
         {"learning/targetMode", c.targetMode},
         {"learning/flashDuration", 500},
+        {"ui/expertMode", false}, // import screen: show all options for deriving names from file names
     };
 }
 
@@ -382,7 +386,8 @@ void Controller::resetSettings()
 {
     QSettings s(settingsOrg, settingsApp);
     for (const QString &key : defaultSettings().keys())
-        s.remove(key);
+        if (!key.startsWith(QLatin1String("ui/"))) s.remove(key); // screen layout isn't a learning setting
+
     s.sync();
     m_session.setCardBoxSettings(loadCardBoxSettings());
     emit settingsChanged();
@@ -414,8 +419,7 @@ void Controller::resetFolderData()
     clearPersons();
     FolderStore::remove(path);
     m_folderData = QJsonObject();
-    applyImportSettings(m_defaultImportSettings);
-    loadFolder(path);
+    loadFolder(path); // without data: default settings and automatic detection
 }
 
 bool Controller::saveRecentFolders()
@@ -548,6 +552,10 @@ bool Controller::saveFolderData()
     data.insert("learning", m_personsVector.isEmpty() ? m_folderData.value("learning") : learningToJson());
     m_folderData = data;
     const bool inFolder = FolderStore::save(path, data);
+    if (!m_folderKnown) {
+        m_folderKnown = true; // saved in the folder or the fallback - it has data now
+        emit folderKnownChanged();
+    }
     const QString hint = inFolder ? QString()
                                   : tr("Daten konnten nicht im Bilderordner gespeichert werden, sie liegen in der App.");
     if (hint != m_storageHint) {

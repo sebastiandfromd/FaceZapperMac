@@ -8,6 +8,10 @@ Rectangle {
     property real widthMargin: width/24
     property real heightMargin: widthMargin/2
     property real heightUnit: delimiterTitle.height * 1.8
+    // basic mode: only group name and table, the automatic detection does the rest;
+    // expert mode also shows the rows for deleting/replacing characters and splitting the names
+    property bool expertMode: controller ? controller.setting("ui/expertMode") : false
+    property real expertRowHeight: expertMode ? heightUnit : 0
     id: showFolderComponentRect
     signal openFolderRequested()
 
@@ -55,13 +59,41 @@ Rectangle {
         }
     }
     Rectangle {
-        id: groupNameTextRect
-        color: "wheat"
-        width: 6 * widthEighth  - widthMargin
+        id: expertModeRect
+        color: expertModeMouseArea.pressed ? "red" : "lightgray"
+        width: 1.2 * widthEighth
         height: heightUnit
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.rightMargin: 2 * widthMargin
+        border.width: borderwidth
+        border.color: bordercolor
+        Text {
+            anchors.fill: parent
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            text: showFolderComponentRect.expertMode ? qsTr("Einfacher") : qsTr("Komplexer")
+            fontSizeMode: Text.HorizontalFit
+            minimumPointSize: 6
+            font.pointSize: delimiterInput.font.pointSize
+        }
+        MouseArea {
+            id: expertModeMouseArea
+            anchors.fill: parent
+            onClicked: {
+                showFolderComponentRect.expertMode = !showFolderComponentRect.expertMode
+                if (controller) controller.setSetting("ui/expertMode", showFolderComponentRect.expertMode)
+            }
+        }
+    }
+    Rectangle {
+        id: groupNameTextRect
+        color: "wheat"
+        height: heightUnit
+        anchors.top: parent.top
+        anchors.left: groupNameTitleRect.right
+        anchors.right: expertModeRect.left
+        anchors.rightMargin: heightMargin
         border.width: borderwidth
         border.color: bordercolor
         TextInput {
@@ -82,11 +114,12 @@ Rectangle {
     }
     Rectangle {
         id: deleteNumberTitleRect
+        visible: expertMode
         color: "white";
         width: 1 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: groupNameTitleRect.bottom
-        anchors.topMargin: heightMargin
+        anchors.topMargin: expertMode ? heightMargin : 0
         anchors.left: parent.left
         anchors.leftMargin: widthMargin
         border.width: borderwidth
@@ -105,11 +138,12 @@ Rectangle {
     }
     Rectangle {
         id: deleteNumberLocationRect
+        visible: expertMode
         color: "lightgray";
         width: 1.2 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: groupNameTitleRect.bottom
-        anchors.topMargin: heightMargin
+        anchors.topMargin: expertMode ? heightMargin : 0
         anchors.left: deleteNumberTitleRect.right
         border.width: borderwidth
         border.color: bordercolor
@@ -138,11 +172,12 @@ Rectangle {
     }
     Rectangle {
         id: deleteNumberCountRect
+        visible: expertMode
         color: "lightgray";
         width: 1 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: groupNameTitleRect.bottom
-        anchors.topMargin: heightMargin
+        anchors.topMargin: expertMode ? heightMargin : 0
         anchors.left: deleteNumberLocationRect.right
         border.width: borderwidth
         border.color: bordercolor
@@ -181,11 +216,12 @@ Rectangle {
     }
     Rectangle {
         id: deleteAndTitleRect
+        visible: expertMode
         color: "white";
         width: 0.6 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: groupNameTitleRect.bottom
-        anchors.topMargin: heightMargin
+        anchors.topMargin: expertMode ? heightMargin : 0
         anchors.left: deleteNumberCountRect.right
         border.width: borderwidth
         border.color: bordercolor
@@ -203,11 +239,12 @@ Rectangle {
     }
     Rectangle {
         id: deleteCharsLocationRect
+        visible: expertMode
         color: "lightgray";
         width: 1.2 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: groupNameTitleRect.bottom
-        anchors.topMargin: heightMargin
+        anchors.topMargin: expertMode ? heightMargin : 0
         anchors.right: deleteCharsTextRect.left
         border.width: borderwidth
         border.color: bordercolor
@@ -238,11 +275,12 @@ Rectangle {
     }
     Rectangle {
         id: deleteCharsTextRect
+        visible: expertMode
         color: "wheat"
         width: 3 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: groupNameTitleRect.bottom
-        anchors.topMargin: heightMargin
+        anchors.topMargin: expertMode ? heightMargin : 0
         anchors.right: parent.right
         anchors.rightMargin: widthMargin
         border.width: borderwidth
@@ -263,9 +301,10 @@ Rectangle {
     }
     Rectangle {
         id: replaceFromTitleRect
+        visible: expertMode
         color: "white";
         width: 1 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: deleteNumberTitleRect.bottom
         anchors.left: parent.left
         anchors.leftMargin: widthMargin
@@ -285,9 +324,10 @@ Rectangle {
     }
     Rectangle {
         id: replaceFromTextRect
+        visible: expertMode
         color: "wheat"
         width: 2.8 * widthEighth - heightUnit
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: deleteNumberTitleRect.bottom
         anchors.left: replaceFromTitleRect.right
         border.width: borderwidth
@@ -307,8 +347,9 @@ Rectangle {
     }
     Rectangle {
         id: infoReplaceFromRect
+        visible: expertMode
         color: "blue"
-        height: heightUnit
+        height: expertRowHeight
         width: height
         anchors.top: deleteNumberTitleRect.bottom
         anchors.left: replaceFromTextRect.right
@@ -357,9 +398,10 @@ Rectangle {
     }
     Rectangle {
         id: replaceWithTitleRect
+        visible: expertMode
         color: "white";
         width: 0.8 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: deleteNumberTitleRect.bottom
         anchors.right: replaceWithTextRect.left
         border.width: borderwidth
@@ -378,9 +420,10 @@ Rectangle {
     }
     Rectangle {
         id: replaceWithTextRect
+        visible: expertMode
         color: "wheat"
         width: 2.8 * widthEighth-heightUnit
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: deleteNumberTitleRect.bottom
         anchors.right: infoReplaceToRect.left
         border.width: borderwidth
@@ -400,8 +443,9 @@ Rectangle {
     }
     Rectangle {
         id: infoReplaceToRect
+        visible: expertMode
         color: "blue"
-        height: heightUnit
+        height: expertRowHeight
         width: height
         anchors.top: deleteNumberTitleRect.bottom
         anchors.right: caseSensitivityRect.left
@@ -449,9 +493,10 @@ Rectangle {
     }
     Rectangle {
         id: caseSensitivityRect
+        visible: expertMode
         color: caseSensitivityMouseArea.pressed ? "red":"lightgray";
         width: 0.6 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: deleteNumberTitleRect.bottom
         anchors.right: parent.right
         anchors.rightMargin: widthMargin
@@ -474,9 +519,10 @@ Rectangle {
     }
     Rectangle {
         id: delimiterTitleRect
+        visible: expertMode
         color: "white";
         width: 1.1 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: replaceFromTitleRect.bottom
         anchors.left: parent.left
         anchors.leftMargin: widthMargin
@@ -497,9 +543,10 @@ Rectangle {
     }
     Rectangle {
         id: delimiterTextRect
+        visible: expertMode
         color: "wheat"
         width: 2.3 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: replaceFromTitleRect.bottom
         anchors.left: delimiterTitleRect.right
         border.width: borderwidth
@@ -519,9 +566,10 @@ Rectangle {
     }
     Rectangle {
         id: delimiterCounterRect
+        visible: expertMode
         color: "lightgray";
         width: 2 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: replaceFromTitleRect.bottom
         anchors.right: caseCorrectionRect.left
         border.width: borderwidth
@@ -554,9 +602,10 @@ Rectangle {
     }
     Rectangle {
         id: caseCorrectionRect
+        visible: expertMode
         color: caseCorrectionMouseArea.pressed ? "red":"lightgray";
         width: 0.6 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: replaceFromTitleRect.bottom
         anchors.right: nameOrderRect.left
         border.width: borderwidth
@@ -578,9 +627,10 @@ Rectangle {
     }
     Rectangle {
         id: nameOrderRect
+        visible: expertMode
         color: "lightgray"
         width: 2 * widthEighth
-        height: heightUnit
+        height: expertRowHeight
         anchors.top: replaceFromTitleRect.bottom
         anchors.right: parent.right
         anchors.rightMargin: widthMargin

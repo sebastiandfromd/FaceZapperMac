@@ -15,6 +15,18 @@ ApplicationWindow {
         controller.session.clear()
         deriveNamesTableView.visible = true
     }
+    function startLearning() {
+        controller.takeOverTableContent()
+        controller.session.start()
+        deriveNamesTableView.visible = false
+    }
+    // a folder that was worked on before (it has a .faceZapperData) goes straight to learning,
+    // a new one starts with the import table
+    function showFolder() {
+        if (controller.folderKnown) startLearning()
+        else showImportTable()
+    }
+    Component.onCompleted: if (controller) showFolder()
 
     FaceSwipeView {
         id: learnView
@@ -32,7 +44,7 @@ ApplicationWindow {
         onAccepted: {
             console.debug(selectedFolder)
             controller.groupFolder = selectedFolder
-            mainWin.showImportTable()
+            mainWin.showFolder()
         }
     }
 
@@ -144,13 +156,8 @@ ApplicationWindow {
                                            && !controller.session.solutionVisible)
             onClicked: {
                 if (!controller) return
-                if (mainWin.learning) {
-                    controller.session.showSolution()
-                } else {
-                    controller.takeOverTableContent()
-                    controller.session.start()
-                    deriveNamesTableView.visible = false
-                }
+                if (mainWin.learning) controller.session.showSolution()
+                else mainWin.startLearning()
             }
         }
         Button {
