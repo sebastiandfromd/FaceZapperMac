@@ -128,7 +128,8 @@ ApplicationWindow {
         // learning progress: all pictures / rated at least once / known several times in a row
         Column {
             anchors.left: parent.left
-            anchors.leftMargin: 8
+            // on phones the rounded screen corner would cover the start of the lines
+            anchors.leftMargin: 8 + (Qt.platform.os === "android" ? width / 3 : 0)
             anchors.verticalCenter: parent.verticalCenter
             visible: mainWin.learning && controller !== null
             property var session: controller ? controller.session : null
