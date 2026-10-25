@@ -14,6 +14,8 @@ Rectangle {
     property real expertRowHeight: expertMode ? heightUnit : 0
     id: showFolderComponentRect
     signal openFolderRequested()
+    // first start: a red arrow points at the folder button until a folder is chosen
+    property bool showFolderHint: false
 
     Rectangle {
         id: openFolderRect
@@ -35,6 +37,43 @@ Rectangle {
             anchors.fill: parent
             onClicked: showFolderComponentRect.openFolderRequested()
         }
+    }
+    // red arrow from bottom right up to the folder button (drawn: no font needed, works on Android)
+    Canvas {
+        id: folderHintArrow
+        visible: showFolderComponentRect.showFolderHint && controller && !controller.groupFolder
+        z: 10
+        width: 3 * heightUnit
+        height: 3 * heightUnit
+        property real bounce: 0
+        x: openFolderRect.x + openFolderRect.width * 0.6 + bounce
+        y: openFolderRect.y + openFolderRect.height + bounce
+        SequentialAnimation on bounce {
+            running: folderHintArrow.visible
+            loops: Animation.Infinite
+            NumberAnimation { to: heightUnit / 3; duration: 450; easing.type: Easing.InOutQuad }
+            NumberAnimation { to: 0; duration: 450; easing.type: Easing.InOutQuad }
+        }
+        onPaint: {
+            var ctx = getContext("2d")
+            ctx.reset()
+            var w = width, h = height, head = width / 4
+            ctx.strokeStyle = "red"
+            ctx.fillStyle = "red"
+            ctx.lineWidth = Math.max(4, width / 14)
+            ctx.lineCap = "round"
+            ctx.beginPath()          // shaft: from bottom right towards the tip at top left
+            ctx.moveTo(w - ctx.lineWidth, h - ctx.lineWidth)
+            ctx.lineTo(head * 0.5, head * 0.5)
+            ctx.stroke()
+            ctx.beginPath()          // head
+            ctx.moveTo(0, 0)
+            ctx.lineTo(head * 1.3, head * 0.25)
+            ctx.lineTo(head * 0.25, head * 1.3)
+            ctx.closePath()
+            ctx.fill()
+        }
+        onWidthChanged: requestPaint()
     }
     Rectangle {
         id: groupNameTitleRect

@@ -56,6 +56,10 @@ void Controller::takeOverTableContent()
         names << p->firstName() + u' ' + p->familyName();
     m_letterModel.setFolderNames(names);
     rebuildValuePersonMap();
+    if (!m_folderKnown) {
+        m_folderKnown = true; // "Übernehmen" is what makes a folder one that keeps its data
+        emit folderKnownChanged();
+    }
     saveFolderData();
 }
 
@@ -543,7 +547,9 @@ void Controller::applyLearning(const QJsonObject &learning)
 bool Controller::saveFolderData()
 {
     const QString path = m_currentFolderData.path();
-    if (path.isEmpty()) return false;
+    // only a folder that was taken over ("Übernehmen") or already has data gets written -
+    // just looking at a folder (and its automatic detection) leaves no file behind
+    if (path.isEmpty() || !m_folderKnown) return false;
     QJsonObject data;
     data.insert("version", 1);
     data.insert("groupName", m_currentFolderData.name());
@@ -552,10 +558,6 @@ bool Controller::saveFolderData()
     data.insert("learning", m_personsVector.isEmpty() ? m_folderData.value("learning") : learningToJson());
     m_folderData = data;
     const bool inFolder = FolderStore::save(path, data);
-    if (!m_folderKnown) {
-        m_folderKnown = true; // saved in the folder or the fallback - it has data now
-        emit folderKnownChanged();
-    }
     const QString hint = inFolder ? QString()
                                   : tr("Daten konnten nicht im Bilderordner gespeichert werden, sie liegen in der App.");
     if (hint != m_storageHint) {

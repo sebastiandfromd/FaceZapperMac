@@ -26,7 +26,27 @@ ApplicationWindow {
         if (controller.folderKnown) startLearning()
         else showImportTable()
     }
-    Component.onCompleted: if (controller) showFolder()
+    Component.onCompleted: {
+        if (!controller) return
+        showFolder()
+        if (!controller.groupFolder) welcomeDialog.open() // first start: no picture folder yet
+    }
+
+    // first start: what kind of folder is needed - then the red arrow points at the folder button
+    TextDialog {
+        id: welcomeDialog
+        heading: qsTr("Willkommen bei FaceZapper!")
+        standardButtons: Dialog.Ok
+        message: qsTr("Wähle zuerst einen Ordner mit Fotos der Personen, die du lernen möchtest – "
+                      + "mit dem Ordner-Knopf oben links.\n\n"
+                      + "Die Dateinamen sollten die Namen enthalten, am besten so:\n"
+                      + "    „Nachname, Vorname.jpg“  (z. B. „Muster, Anna.jpg“)\n"
+                      + "oder so:\n"
+                      + "    „Vorname Nachname.jpg“  (z. B. „Anna Muster.jpg“)\n\n"
+                      + "Die Namen werden automatisch erkannt. Zusätze wie die Klasse „(09B)“ oder "
+                      + "Nummern lassen sich mit „Komplexer“ entfernen.")
+        onClosed: deriveNamesTableView.showFolderHint = true
+    }
 
     FaceSwipeView {
         id: learnView
@@ -78,32 +98,20 @@ ApplicationWindow {
         onClicked: Qt.quit()
     }
 
-    Dialog {
+    TextDialog {
         id: resetTrainingDialog
-        anchors.centerIn: parent
-        modal: true
-        title: qsTr("Trainingsdaten zurücksetzen?")
+        heading: qsTr("Trainingsdaten zurücksetzen?")
         standardButtons: Dialog.Yes | Dialog.No
-        Label {
-            width: parent.width
-            wrapMode: Text.WordWrap
-            text: qsTr("Alles Gelernte für „%1“ wird gelöscht. Namen und Einlese-Einstellungen bleiben erhalten.")
-                  .arg(controller ? controller.groupName : "")
-        }
+        message: qsTr("Alles Gelernte für „%1“ wird gelöscht. Namen und Einlese-Einstellungen bleiben erhalten.")
+                 .arg(controller ? controller.groupName : "")
         onAccepted: controller.resetTrainingData()
     }
-    Dialog {
+    TextDialog {
         id: resetFolderDialog
-        anchors.centerIn: parent
-        modal: true
-        title: qsTr("Alle Daten dieses Ordners zurücksetzen?")
+        heading: qsTr("Alle Daten dieses Ordners zurücksetzen?")
         standardButtons: Dialog.Yes | Dialog.No
-        Label {
-            width: parent.width
-            wrapMode: Text.WordWrap
-            text: qsTr("Gelerntes, Namenskorrekturen, Einlese-Einstellungen und Gruppenname von „%1“ werden gelöscht. Der Ordner wird neu eingelesen.")
-                  .arg(controller ? controller.groupName : "")
-        }
+        message: qsTr("Gelerntes, Namenskorrekturen, Einlese-Einstellungen und Gruppenname von „%1“ werden gelöscht. Der Ordner wird neu eingelesen.")
+                 .arg(controller ? controller.groupName : "")
         onAccepted: {
             mainWin.showImportTable()
             controller.resetFolderData()
@@ -177,8 +185,12 @@ ApplicationWindow {
                     onTriggered: mainWin.showImportTable()
                 }
                 MenuItem {
-                    text: qsTr("Ordner öffnen")
-                    onTriggered: fileDialog.open()
+                    // back to the first page, picker right away (cancelled: stay on the first page)
+                    text: qsTr("Ordner ändern")
+                    onTriggered: {
+                        mainWin.showImportTable()
+                        fileDialog.open()
+                    }
                 }
                 MenuSeparator {}
                 MenuItem {

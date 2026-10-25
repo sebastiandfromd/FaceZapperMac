@@ -73,7 +73,8 @@ public:
     void addRecentFolder(const QString &path, const QString &name);
     static QString folderDisplayName(const QString &pathOrUri);
     QString storageHint() const { return m_storageHint; }
-    bool folderKnown() const { return m_folderKnown; } // the folder brought a .faceZapperData
+    // the folder brought a .faceZapperData or was taken over ("Übernehmen") - only then data is saved
+    bool folderKnown() const { return m_folderKnown; }
 
     bool saveAJsonFile(QString fileName, QString filePath, QJsonObject object);
     // fills the table with the folder's pictures; detectOrder: guess the name order from
