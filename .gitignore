@@ -77,3 +77,6 @@ FaceZapper.zip
 
 # private name list (only used to derive letter statistics, never commit)
 nameslist.csv
+
+# local material (icon sources etc.)
+Stuff(gitignored)/

@@ -3,6 +3,9 @@ QT += quick
 CONFIG += c++11
 android {
     CONFIG += android
+    # Google Play: ANDROID_VERSION_CODE must grow with every upload
+    ANDROID_VERSION_CODE = 1
+    ANDROID_VERSION_NAME = "1.0"
 }
 
 # You can make your code fail to compile if it uses deprecated APIs.
