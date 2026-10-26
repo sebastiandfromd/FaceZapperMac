@@ -90,8 +90,9 @@ Rectangle {
                     .arg("<a href=\"https://download.qt.io/official_releases/qt/6.12/\">download.qt.io</a>")
                   + "<br><br>"
                   + qsTr("Qt enthält Bibliotheken anderer Autoren: FreeType, HarfBuzz, libpng, libjpeg-turbo, PCRE2, "
-                         + "double-conversion, SHA-3 (Keccak), TinyCBOR, MD4C, libwebp, libtiff und den JavaScriptCore "
-                         + "Macro Assembler; dazu kommt die C++-Laufzeitbibliothek LLVM libc++. %1")
+                         + "double-conversion, SHA-3 (Keccak), TinyCBOR, MD4C, libwebp, libtiff, den JavaScriptCore "
+                         + "Macro Assembler und unter Windows zlib; dazu kommen die C++-Laufzeitbibliotheken "
+                         + "(LLVM libc++ unter Android, GCC/MinGW-w64 unter Windows). %1")
                     .arg("<a href=\"license:THIRD-PARTY-NOTICES.txt\">" + qsTr("Lizenzen und Copyright-Hinweise") + "</a>")
                   + "<br><br>"
                   + "Portions of this software are copyright © 2026 The FreeType Project (www.freetype.org). All rights reserved."

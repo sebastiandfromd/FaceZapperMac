@@ -9,8 +9,10 @@ $jsons = @(
     "qtbase\src\3rdparty\libjpeg", "qtbase\src\3rdparty\pcre2", "qtbase\src\3rdparty\double-conversion",
     "qtbase\src\3rdparty\sha3", "qtbase\src\3rdparty\tinycbor", "qtbase\src\3rdparty\md4c",
     "qtimageformats\src\3rdparty\libwebp", "qtimageformats\src\3rdparty\libtiff",
-    "qtdeclarative\src\3rdparty\masm"
+    "qtdeclarative\src\3rdparty\masm",
+    "qtbase\src\3rdparty\zlib"   # Windows only - Android uses the system's zlib
 )
+$mingw = "C:\Qt\Tools\mingw1310_64\licenses"   # MinGW-w64 toolchain used for the Windows build
 New-Item -ItemType Directory -Force $OutDir | Out-Null
 $sb = New-Object System.Text.StringBuilder
 $line = "=" * 78
@@ -38,9 +40,24 @@ foreach ($dir in $jsons) {
         }
     }
 }
-# C++ runtime from the Android NDK
+# C++ runtime on Windows: MinGW-w64 (libgcc_s_seh-1.dll, libstdc++-6.dll, libwinpthread-1.dll)
 [void]$sb.AppendLine($line)
-[void]$sb.AppendLine("LLVM libc++ (libc++_shared.so, Android NDK r27c)")
+[void]$sb.AppendLine("GCC Runtime Libraries (libgcc_s_seh-1.dll, libstdc++-6.dll; nur Windows / Windows only)")
+[void]$sb.AppendLine("Lizenz / License: GNU General Public License v3 with GCC Runtime Library Exception 3.1")
+[void]$sb.AppendLine("Copyright (C) Free Software Foundation, Inc. - GPL text: see GPL-3.0.txt")
+[void]$sb.AppendLine($line)
+[void]$sb.AppendLine((Get-Content "$mingw\gcc\COPYING.RUNTIME" -Raw -Encoding UTF8).TrimEnd())
+[void]$sb.AppendLine("")
+[void]$sb.AppendLine($line)
+[void]$sb.AppendLine("MinGW-w64 winpthreads (libwinpthread-1.dll; nur Windows / Windows only)")
+[void]$sb.AppendLine("Lizenz / License: MIT License (and BSD 3-clause for parts)")
+[void]$sb.AppendLine($line)
+[void]$sb.AppendLine((Get-Content "$mingw\winpthreads\COPYING" -Raw -Encoding UTF8).TrimEnd())
+[void]$sb.AppendLine("")
+
+# C++ runtime on Android: from the Android NDK
+[void]$sb.AppendLine($line)
+[void]$sb.AppendLine("LLVM libc++ (libc++_shared.so, Android NDK r27c; nur Android / Android only)")
 [void]$sb.AppendLine("Lizenz / License: Apache License v2.0 with LLVM Exceptions")
 [void]$sb.AppendLine("Copyright (c) 2009-2019 by the contributors listed in CREDITS.TXT (LLVM Project)")
 [void]$sb.AppendLine($line)

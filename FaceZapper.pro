@@ -3,13 +3,21 @@ QT += quick
 CONFIG += c++11
 
 # app version, shown on the "Über FaceZapper" page and used as the Android version name
-VERSION = 1.0
+VERSION = 1.1
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+
+win32 {
+    # icon and "Eigenschaften -> Details" of FaceZapper.exe (icon from tools/make-icons)
+    RC_ICONS = windows/FaceZapper.ico
+    QMAKE_TARGET_PRODUCT = FaceZapper
+    QMAKE_TARGET_DESCRIPTION = "Namen und Gesichter lernen"
+    QMAKE_TARGET_COPYRIGHT = "(c) 2026 Sebastian Diel"
+}
 
 android {
     CONFIG += android
     # Google Play: ANDROID_VERSION_CODE must grow with every upload
-    ANDROID_VERSION_CODE = 1
+    ANDROID_VERSION_CODE = 2
     ANDROID_VERSION_NAME = $$VERSION
 }
 

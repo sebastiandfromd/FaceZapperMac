@@ -83,3 +83,6 @@ Stuff(gitignored)/
 
 # learning data the app writes into picture folders (e.g. when the example folder is opened from disk)
 .faceZapperData
+
+# Windows release output (tools/build-windows-release.ps1)
+dist/
