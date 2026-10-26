@@ -1,0 +1,10 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <!-- licence texts shown on the "Über FaceZapper" page. THIRD-PARTY-NOTICES.txt is generated from
+         Qt's qt_attribution.json files of the third-party code this Qt build bundles (see its header). -->
+    <qresource prefix="/licenses">
+        <file alias="LGPL-3.0.txt">licenses/LGPL-3.0.txt</file>
+        <file alias="GPL-3.0.txt">licenses/GPL-3.0.txt</file>
+        <file alias="THIRD-PARTY-NOTICES.txt">licenses/THIRD-PARTY-NOTICES.txt</file>
+    </qresource>
+</RCC>

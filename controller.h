@@ -58,6 +58,9 @@ public:
     Q_INVOKABLE void resetSettings();
     int flashDuration() const { return setting(QStringLiteral("learning/flashDuration")).toInt(); }
 
+    // about page: a licence text shipped with the app (licenses.qrc), e.g. "LGPL-3.0.txt"
+    Q_INVOKABLE QString licenseText(const QString &name) const;
+
     // menu: forget what was learned in this folder / everything saved about it
     Q_INVOKABLE void resetTrainingData();
     Q_INVOKABLE void resetFolderData();

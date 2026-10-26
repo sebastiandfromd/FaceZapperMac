@@ -88,11 +88,18 @@ ApplicationWindow {
         z: 10
         onDone: visible = false
     }
+    AboutPage {
+        id: aboutPage
+        anchors.fill: parent
+        visible: false
+        z: 10
+        onDone: visible = false
+    }
 
     // close the app (saves on the way out, see Controller: aboutToQuit) - not on the settings
     // page, which has its own way back
     RoundButton {
-        visible: !settingsPage.visible
+        visible: !settingsPage.visible && !aboutPage.visible
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.margins: 4
@@ -126,7 +133,7 @@ ApplicationWindow {
 
     footer: Rectangle {
         id: footer
-        visible: !settingsPage.visible
+        visible: !settingsPage.visible && !aboutPage.visible
         height: 50
         implicitHeight: 50
         // no explicit width: ApplicationWindow stretches the footer over the whole window
@@ -238,6 +245,13 @@ ApplicationWindow {
                     onTriggered: {
                         settingsPage.visible = true
                         settingsPage.forceActiveFocus() // for Esc / Android back
+                    }
+                }
+                MenuItem {
+                    text: qsTr("Über FaceZapper")
+                    onTriggered: {
+                        aboutPage.visible = true
+                        aboutPage.forceActiveFocus() // for Esc / Android back
                     }
                 }
             }

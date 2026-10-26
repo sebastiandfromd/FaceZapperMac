@@ -411,6 +411,14 @@ void Controller::resetSettings()
     emit settingsChanged();
 }
 
+QString Controller::licenseText(const QString &name) const
+{
+    if (name.contains(u'/')) return QString(); // only files from the licence folder
+    QFile f(QStringLiteral(":/licenses/") + name);
+    if (!f.open(QIODevice::ReadOnly)) return QString();
+    return QString::fromUtf8(f.readAll());
+}
+
 void Controller::resetTrainingData()
 {
     // only what was learned - names and import settings stay

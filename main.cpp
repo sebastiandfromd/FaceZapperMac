@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 #endif
 
     QGuiApplication app(argc, argv);
+    app.setApplicationVersion(QStringLiteral(APP_VERSION)); // from FaceZapper.pro, shown on the about page
 
 
     QQmlApplicationEngine engine;

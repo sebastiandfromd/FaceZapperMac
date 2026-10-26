@@ -7,6 +7,7 @@
         <file>NameOverlay.qml</file>
         <file>SettingsPage.qml</file>
         <file>TextDialog.qml</file>
+        <file>AboutPage.qml</file>
         <file>letterstats.json</file>
     </qresource>
 </RCC>

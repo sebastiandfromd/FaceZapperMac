@@ -1,11 +1,16 @@
 QT += quick
 
 CONFIG += c++11
+
+# app version, shown on the "Über FaceZapper" page and used as the Android version name
+VERSION = 1.0
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+
 android {
     CONFIG += android
     # Google Play: ANDROID_VERSION_CODE must grow with every upload
     ANDROID_VERSION_CODE = 1
-    ANDROID_VERSION_NAME = "1.0"
+    ANDROID_VERSION_NAME = $$VERSION
 }
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -24,7 +29,8 @@ SOURCES += \
         persondata.cpp
 
 RESOURCES += qml.qrc \
-    beispiel.qrc
+    beispiel.qrc \
+    licenses.qrc
 
 TRANSLATIONS += \
     FaceZapper_de_DE.ts
