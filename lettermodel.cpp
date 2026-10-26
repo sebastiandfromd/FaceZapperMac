@@ -90,21 +90,21 @@ LetterModel::Counts LetterModel::candidates(const QString &typed) const
     return result;
 }
 
-QStringList LetterModel::keys(const QString &target, const QString &typed, int count) const
+QStringList LetterModel::keys(const QStringList &targets, const QString &typed, int count) const
 {
-    const QString t = normalize(target);
     const QString ty = normalize(typed);
-    QChar correct;
-    if (t.startsWith(ty) && ty.size() < t.size())
-        correct = t.at(ty.size());
-
-    QString chosen;
-    if (!correct.isNull()) chosen += correct;
+    QString chosen; // the correct next characters (one per distinct character)
+    for (const QString &target : targets) {
+        const QString t = normalize(target);
+        if (t.startsWith(ty) && ty.size() < t.size() && !chosen.contains(t.at(ty.size())))
+            chosen += t.at(ty.size());
+    }
 
     // decoys: weighted random draw without repeats
     const bool newPart = typed.isEmpty() || typed.endsWith(u' ') || typed.endsWith(u'-');
     Counts c = candidates(typed);
-    c.remove(correct);
+    for (QChar correct : std::as_const(chosen))
+        c.remove(correct);
     if (newPart) c.remove(u' '); // no leading or double space, no space after a hyphen
     while (chosen.size() < count && !c.isEmpty()) {
         double total = 0;

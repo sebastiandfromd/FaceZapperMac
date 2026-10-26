@@ -108,9 +108,9 @@ ApplicationWindow {
     }
     TextDialog {
         id: resetFolderDialog
-        heading: qsTr("Alle Daten dieses Ordners zurücksetzen?")
+        heading: qsTr("Alle Gruppendaten löschen?")
         standardButtons: Dialog.Yes | Dialog.No
-        message: qsTr("Gelerntes, Namenskorrekturen, Einlese-Einstellungen und Gruppenname von „%1“ werden gelöscht. Der Ordner wird neu eingelesen.")
+        message: qsTr("Gelerntes, Namenskorrekturen, Einlese-Einstellungen und Gruppenname von „%1“ werden gelöscht. Die Gruppe wird danach neu eingelesen, wie beim ersten Öffnen.")
                  .arg(controller ? controller.groupName : "")
         onAccepted: {
             mainWin.showImportTable()
@@ -179,6 +179,9 @@ ApplicationWindow {
             onClicked: menu.open()
             Menu {
                 id: menu
+                // wide enough for the long entries (they were cut off on phones), right-aligned
+                width: Math.min(mainWin.width - 16, 460)
+                x: menuButton.width - width
                 y: -height
                 MenuItem {
                     text: qsTr("Namen bearbeiten")
@@ -187,10 +190,31 @@ ApplicationWindow {
                 }
                 MenuItem {
                     // back to the first page, picker right away (cancelled: stay on the first page)
-                    text: qsTr("Ordner ändern")
+                    text: qsTr("Gruppe ändern")
                     onTriggered: {
                         mainWin.showImportTable()
                         fileDialog.open()
+                    }
+                }
+                Menu {
+                    id: recentMenu
+                    title: qsTr("Letzte Gruppen")
+                    width: menu.width
+                    enabled: count > 0
+                    Instantiator {
+                        model: controller ? controller.recentFolders : []
+                        delegate: MenuItem {
+                            text: modelData.name
+                            // the group that is open now can't be chosen again
+                            enabled: !controller || modelData.path !== controller.groupFolder
+                            onTriggered: {
+                                mainWin.showImportTable()
+                                controller.groupFolder = modelData.path
+                                mainWin.showFolder()
+                            }
+                        }
+                        onObjectAdded: (index, object) => recentMenu.insertItem(index, object)
+                        onObjectRemoved: (index, object) => recentMenu.removeItem(object)
                     }
                 }
                 MenuSeparator {}
@@ -199,7 +223,7 @@ ApplicationWindow {
                     onTriggered: resetTrainingDialog.open()
                 }
                 MenuItem {
-                    text: qsTr("Alle Daten dieses Ordners zurücksetzen")
+                    text: qsTr("Alle Gruppendaten löschen")
                     onTriggered: resetFolderDialog.open()
                 }
                 MenuSeparator {}

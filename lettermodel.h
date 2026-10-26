@@ -16,10 +16,13 @@ public:
 
     // Keys for the letter keyboard: `count` different characters, sorted (space first).
     // Hyphens and apostrophes are normal characters: they appear when they're the next correct one.
-    // Contains the next correct character of `target` exactly once if `typed` is a correct
-    // prefix and the name isn't complete yet - otherwise only decoys (after a mistake,
-    // backspace is the correct key).
-    QStringList keys(const QString &target, const QString &typed, int count = 8) const;
+    // `targets` are the accepted spellings (e.g. "Anna Lena Groß" and "Anna Groß"): every next
+    // character of a target that `typed` is a prefix of is on the keyboard exactly once - usually
+    // that's one key, at a point where a middle name may be left out it can be two. If `typed`
+    // fits no target (a mistake, backspace is the correct key) or is complete, there are only decoys.
+    QStringList keys(const QStringList &targets, const QString &typed, int count = 8) const;
+    QStringList keys(const QString &target, const QString &typed, int count = 8) const
+    { return keys(QStringList{target}, typed, count); }
 
     static QString normalize(const QString &s); // upper case per character, ß stays ß, no trimming
 

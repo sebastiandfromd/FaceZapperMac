@@ -123,6 +123,7 @@ void LearningSession::back()
     m_index--;
     undoRating(m_history[m_index]);
     m_history[m_index].inRetry = false;
+    m_history[m_index].thinkingMs = -1; // answered anew, timed anew
     emitCardChanged();
     emit rated();
     emit statsChanged();
@@ -148,8 +149,8 @@ void LearningSession::typeLetter(const QString &letter)
         showSolution();
         return;
     }
+    noteFirstKey();
     Entry &e = m_history[m_index];
-    const int pressedIndex = int(m_keys.indexOf(letter));
     e.typed.append(letter);
     if (e.solutionVisible && typedIsCorrect()) {
         // correct letter while the name is shown: go on as with a new card (still not known)
@@ -157,16 +158,14 @@ void LearningSession::typeLetter(const QString &letter)
         emit solutionShownChanged();
     }
     emit typedChanged();
-    updateKeys(letter, pressedIndex);
+    updateKeys();
 }
 
 void LearningSession::backspace()
 {
     if (m_index < 0 || m_history[m_index].typed.isEmpty()) return;
-    Entry &e = m_history[m_index];
-    const bool wasWrong = !typedIsCorrect();
-    e.typed.chop(1);
-    if (wasWrong && typedIsCorrect()) e.corrections++; // noticed the slip without a hint
+    noteFirstKey();
+    m_history[m_index].typed.chop(1); // never counts against the answer
     emit typedChanged();
     updateKeys();
 }
@@ -191,9 +190,17 @@ bool LearningSession::solutionVisible() const
     return m_index >= 0 && m_history.at(m_index).solutionVisible;
 }
 
-int LearningSession::corrections() const
+qint64 LearningSession::thinkingMs() const
 {
-    return m_index < 0 ? 0 : m_history.at(m_index).corrections;
+    if (m_index < 0) return 0;
+    const qint64 t = m_history.at(m_index).thinkingMs;
+    return t >= 0 ? t : activeMs();
+}
+
+void LearningSession::noteFirstKey()
+{
+    if (m_index >= 0 && m_history[m_index].thinkingMs < 0)
+        m_history[m_index].thinkingMs = activeMs();
 }
 
 QString LearningSession::targetName() const
@@ -208,9 +215,28 @@ QString LearningSession::targetName() const
     }
 }
 
+QStringList LearningSession::acceptedTargets() const
+{
+    const QString full = targetName();
+    const PersonData *p = currentPerson();
+    if (!p || m_settings.targetMode != 2) return {full}; // other orders: leaving out = stopping early
+    // "Anna Lena Marie Groß": also "Anna Lena Groß" and "Anna Groß" - given names may be dropped
+    // from the end, separated by spaces only ("Anna-Lena" is one name)
+    const QStringList given = p->firstName().simplified().split(u' ', Qt::SkipEmptyParts);
+    const QString family = p->familyName().simplified();
+    QStringList targets{full};
+    if (family.isEmpty()) return targets;
+    for (qsizetype n = given.size() - 1; n >= 1; --n)
+        targets << QStringList(given.mid(0, n)).join(u' ') + u' ' + family;
+    return targets;
+}
+
 bool LearningSession::typedIsCorrect() const
 {
-    return targetName().startsWith(typed(), Qt::CaseInsensitive);
+    const QString t = typed();
+    for (const QString &target : acceptedTargets())
+        if (target.startsWith(t, Qt::CaseInsensitive)) return true;
+    return false;
 }
 
 qint64 LearningSession::activeMs() const
@@ -249,11 +275,10 @@ void LearningSession::appendEntry(PersonData *p)
 LearningSession::Rating LearningSession::rate(const Entry &e) const
 {
     if (e.solutionShown || !typedIsCorrect()) return Rating::AGAIN;
-    if (e.corrections > 0) return Rating::UNSURE;
-    if (!e.typed.isEmpty()) return Rating::GOOD;
-    const double seconds = activeMs() / 1000.0;
-    if (seconds < m_settings.easySeconds) return Rating::VERY_EASY;
+    // thinking time: until the first key, or until the swipe if nothing was typed
+    const double seconds = thinkingMs() / 1000.0;
     if (seconds > m_settings.unsureSeconds) return Rating::UNSURE;
+    if (e.typed.isEmpty() && seconds < m_settings.easySeconds) return Rating::VERY_EASY;
     return Rating::GOOD;
 }
 
@@ -330,16 +355,30 @@ void LearningSession::restartClock()
     if (m_pauseStart >= 0) m_pauseStart = m_cardStart;
 }
 
-void LearningSession::updateKeys(const QString &pressed, int pressedIndex)
+void LearningSession::updateKeys(bool keepPositions)
 {
-    m_keys = (m_letterModel && m_index >= 0) ? m_letterModel->keys(targetName(), typed()) : QStringList();
-    // the key just pressed stays where it was if it's offered again ("Hanna", "Emma"), so a quick
-    // second tap hits the same letter. Done for every repeated letter, not only correct ones,
-    // so a key that didn't move gives nothing away.
-    if (!pressed.isEmpty() && pressedIndex >= 0 && pressedIndex < m_keys.size()) {
-        const int i = int(m_keys.indexOf(pressed));
-        if (i >= 0 && i != pressedIndex) m_keys.move(i, pressedIndex);
+    const QStringList fresh = (m_letterModel && m_index >= 0)
+                                  ? m_letterModel->keys(acceptedTargets(), typed()) : QStringList();
+    if (!keepPositions || m_keys.size() != fresh.size()) {
+        m_keys = fresh;
+        emit keysChanged();
+        return;
     }
+    // every key that is offered again stays in its place ("Hanna": the second n where the first
+    // one was; "A" -> "a" counts as the same key) - for decoys and correct keys alike, so a key
+    // that didn't move gives nothing away. New keys fill the free places in alphabetical order.
+    QStringList placed(fresh.size());
+    QStringList rest;
+    for (const QString &k : fresh) {
+        qsizetype old = -1;
+        for (qsizetype i = 0; i < m_keys.size(); ++i)
+            if (m_keys.at(i).compare(k, Qt::CaseInsensitive) == 0) { old = i; break; }
+        if (old >= 0) placed[old] = k;
+        else rest << k;
+    }
+    for (QString &slot : placed)
+        if (slot.isNull()) slot = rest.takeFirst(); // fresh is sorted, so rest is too
+    m_keys = placed;
     emit keysChanged();
 }
 
@@ -349,5 +388,5 @@ void LearningSession::emitCardChanged()
     emit currentChanged();
     emit typedChanged();
     emit solutionShownChanged();
-    updateKeys();
+    updateKeys(false); // a new card starts with a freshly sorted keyboard
 }

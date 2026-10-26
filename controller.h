@@ -71,6 +71,7 @@ public:
     void clearPersons();
     void loadRecentFolders();
     void addRecentFolder(const QString &path, const QString &name);
+    QVariantList recentFolders() const; // [{name, path}], most recent first - menu "Letzte Gruppen"
     static QString folderDisplayName(const QString &pathOrUri);
     QString storageHint() const { return m_storageHint; }
     // the folder brought a .faceZapperData or was taken over ("Übernehmen") - only then data is saved
@@ -208,6 +209,7 @@ signals:
     void groupFolderChanged();
     void storageHintChanged();
     void folderKnownChanged();
+    void recentFoldersChanged();
     void settingsChanged();
 
 public slots:
@@ -270,6 +272,7 @@ private:
     Q_PROPERTY(LearningSession* session READ session CONSTANT)
     Q_PROPERTY(QString storageHint READ storageHint NOTIFY storageHintChanged)
     Q_PROPERTY(bool folderKnown READ folderKnown NOTIFY folderKnownChanged)
+    Q_PROPERTY(QVariantList recentFolders READ recentFolders NOTIFY recentFoldersChanged)
     Q_PROPERTY(int flashDuration READ flashDuration NOTIFY settingsChanged)
 };
 

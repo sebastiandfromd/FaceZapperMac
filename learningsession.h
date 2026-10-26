@@ -12,10 +12,10 @@
 // How far a card moves back in the card box. Editable on the settings page.
 struct CardBoxSettings {
     double easySeconds = 2;   // swiped without letters faster than this: very easy
-    double unsureSeconds = 8; // looked longer than this, then swiped without letters: unsure
+    double unsureSeconds = 8; // thought longer than this (until the first key or the swipe): unsure
     int easyFactor = 4;       // very easy: offset = easyFactor * 2^streak
     int goodFactor = 2;       // good: offset = goodFactor * 2^streak
-    int unsureOffset = 4;     // unsure (also: slip corrected on one's own)
+    int unsureOffset = 4;     // unsure
     int againOffset = 3;      // not known: comes back soon
     int learnedStreak = 2;    // known this many times in a row: counts as "sicher"
     int newCardInterval = 5;  // at the latest every n-th card is one never seen before (while there are any)
@@ -78,12 +78,15 @@ public:
     QString typed() const;
     bool solutionShown() const;   // "Lösung" was used for this card -> not known
     bool solutionVisible() const; // the name is on screen right now
-    int corrections() const;      // self-corrected mistakes on the current card
     bool canGoBack() const { return m_index > 0; }
-    QString targetName() const; // what the user is supposed to type for the current card
-    bool typedIsCorrect() const; // typed text is a (case-insensitive) prefix of targetName()
+    QString targetName() const; // the full name in the chosen order, as shown after the swipe
+    // all spellings that count as correct: with "Vorname Nachname", middle names separated by a
+    // space may be left out ("Anna Lena Groß" -> also "Anna Groß"), hyphenated ones may not
+    QStringList acceptedTargets() const;
+    bool typedIsCorrect() const; // typed text is a (case-insensitive) prefix of an accepted target
     QStringList keys() const { return m_keys; }
     qint64 activeMs() const;     // time the current card has been on screen while the app was active
+    qint64 thinkingMs() const;   // until the first key (typing takes time, that doesn't count)
     QList<PersonData*> deck() const { return m_deck; } // card box, front = next card
     int cardCount() const { return m_persons ? int(m_persons->size()) : 0; }
     int seenCount() const;    // rated at least once (in this or an earlier run)
@@ -104,7 +107,7 @@ private:
         QString typed;
         bool solutionShown = false;
         bool solutionVisible = false;
-        int corrections = 0;  // wrong letters the user took back on their own: known, but not safely
+        qint64 thinkingMs = -1; // active time until the first key, -1 = no key pressed yet
         bool wasNew = false;  // never seen before this showing
         bool inRetry = false; // already rated, shown again after a red answer
         Rating rating = Rating::NONE;
@@ -121,7 +124,9 @@ private:
     void undoRating(Entry &e);
     void buildDeck();
     void restartClock();
-    void updateKeys(const QString &pressed = QString(), int pressedIndex = -1);
+    // keepPositions: a key offered again stays in its place (within a card)
+    void updateKeys(bool keepPositions = true);
+    void noteFirstKey();
     void emitCardChanged();
 
     const QVector<PersonData*> *m_persons = nullptr;

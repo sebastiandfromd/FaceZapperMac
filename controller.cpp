@@ -465,6 +465,18 @@ void Controller::addRecentFolder(const QString &path, const QString &name)
     m_recentDirs.prepend(fd);
     while (m_recentDirs.size() > 10) m_recentDirs.removeLast();
     saveRecentFolders();
+    emit recentFoldersChanged();
+}
+
+QVariantList Controller::recentFolders() const
+{
+    QVariantList list;
+    for (const FolderData &f : m_recentDirs) {
+        // local folders that are gone are left out (Android content:// folders can't be checked cheaply)
+        if (!f.path().contains(QLatin1String("://")) && !QDir(f.path()).exists()) continue;
+        list << QVariantMap{{"name", f.name()}, {"path", f.path()}};
+    }
+    return list;
 }
 
 QJsonObject Controller::importSettingsToJson() const
@@ -558,6 +570,14 @@ bool Controller::saveFolderData()
     data.insert("learning", m_personsVector.isEmpty() ? m_folderData.value("learning") : learningToJson());
     m_folderData = data;
     const bool inFolder = FolderStore::save(path, data);
+    // a renamed group shows its new name under "Letzte Gruppen"
+    for (FolderData &f : m_recentDirs) {
+        if (f.path() == path && f.name() != m_currentFolderData.name()) {
+            f.setName(m_currentFolderData.name());
+            saveRecentFolders();
+            emit recentFoldersChanged();
+        }
+    }
     const QString hint = inFolder ? QString()
                                   : tr("Daten konnten nicht im Bilderordner gespeichert werden, sie liegen in der App.");
     if (hint != m_storageHint) {
