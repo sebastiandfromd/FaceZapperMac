@@ -14,8 +14,10 @@ namespace FolderStore
 
     // empty object if there is no data yet
     QJsonObject load(const QString &folder);
-    // returns false if only the fallback location could be written
+    // returns false if only the fallback location could be written (a built-in folder always uses it)
     bool save(const QString &folder, const QJsonObject &data);
+    // a folder inside the app's resources (":/..."), like the example class - read-only
+    inline bool isBuiltIn(const QString &folder) { return folder.startsWith(u':'); }
     // deletes the data in the folder and in the fallback location
     void remove(const QString &folder);
 

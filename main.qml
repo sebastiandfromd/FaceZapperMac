@@ -29,7 +29,8 @@ ApplicationWindow {
     Component.onCompleted: {
         if (!controller) return
         showFolder()
-        if (!controller.groupFolder) welcomeDialog.open() // first start: no picture folder yet
+        // first start (the example class is open) or no picture folder at all
+        if (controller.firstRun || !controller.groupFolder) welcomeDialog.open()
     }
 
     // first start: what kind of folder is needed - then the red arrow points at the folder button
@@ -37,9 +38,13 @@ ApplicationWindow {
         id: welcomeDialog
         heading: qsTr("Willkommen bei FaceZapper!")
         standardButtons: Dialog.Ok
-        message: qsTr("Wähle zuerst einen Ordner mit Fotos der Personen, die du lernen möchtest – "
-                      + "mit dem Ordner-Knopf oben links.\n\n"
-                      + "Die Dateinamen sollten die Namen enthalten, am besten so:\n"
+        message: (controller && controller.exampleOpen
+                  ? qsTr("Zum Ausprobieren ist die Beispielgruppe „Klasse 10d (Beispiel)“ geöffnet – "
+                         + "die Fotos sind KI-generiert, die Namen ausgedacht. Mit „Übernehmen“ geht es los.\n\n"
+                         + "Für deine eigene Gruppe wählst du mit dem Ordner-Knopf oben links einen Ordner mit Fotos.\n\n")
+                  : qsTr("Wähle zuerst einen Ordner mit Fotos der Personen, die du lernen möchtest – "
+                         + "mit dem Ordner-Knopf oben links.\n\n"))
+                 + qsTr("Die Dateinamen sollten die Namen enthalten, am besten so:\n"
                       + "    „Nachname, Vorname.jpg“  (z. B. „Muster, Anna.jpg“)\n"
                       + "oder so:\n"
                       + "    „Vorname Nachname.jpg“  (z. B. „Anna Muster.jpg“)\n\n"
@@ -58,7 +63,8 @@ ApplicationWindow {
 //        currentFolder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
         // start in the current group's folder ("D:/x" -> "file:///D:/x", "/x" -> "file:///x",
         // Android "content://..." stays as it is)
-        currentFolder: !controller || !controller.groupFolder ? ""
+        // (the example class lives inside the app - the picker can't start there)
+        currentFolder: !controller || !controller.groupFolder || controller.exampleOpen ? ""
                        : controller.groupFolder.indexOf("://") >= 0 ? controller.groupFolder
                        : "file://" + (controller.groupFolder.startsWith("/") ? "" : "/") + controller.groupFolder
         onAccepted: {

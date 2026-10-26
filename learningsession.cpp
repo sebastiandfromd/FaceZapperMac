@@ -233,9 +233,11 @@ QStringList LearningSession::acceptedTargets() const
 
 bool LearningSession::typedIsCorrect() const
 {
-    const QString t = typed();
+    // same upper-casing as the keyboard: Unicode case folding would treat the "I" key and a
+    // Turkish dotless "ı" (Yıldırım) as different letters
+    const QString t = LetterModel::normalize(typed());
     for (const QString &target : acceptedTargets())
-        if (target.startsWith(t, Qt::CaseInsensitive)) return true;
+        if (LetterModel::normalize(target).startsWith(t)) return true;
     return false;
 }
 

@@ -310,8 +310,22 @@ Controller::Controller(QObject *parent) : QObject(parent){
 
     // start with the folder used last
     loadRecentFolders();
-    if (!m_recentDirs.isEmpty())
-        loadFolder(m_recentDirs.first().path());
+    // the most recent group whose folder can still be opened - a folder may be gone, Android may
+    // have revoked the access, or a restored backup may bring paths from another device
+    QString startFolder;
+    for (const FolderData &f : std::as_const(m_recentDirs)) {
+        if (QDir(f.path()).exists()) {
+            startFolder = f.path();
+            break;
+        }
+    }
+    if (!startFolder.isEmpty()) {
+        loadFolder(startFolder);
+    } else {
+        // first start (or nothing usable left): the example class shipped with the app
+        m_firstRun = true;
+        loadFolder(exampleFolder());
+    }
 }
 
 void Controller::init(QQmlApplicationEngine *engine) {
@@ -578,7 +592,7 @@ bool Controller::saveFolderData()
             emit recentFoldersChanged();
         }
     }
-    const QString hint = inFolder ? QString()
+    const QString hint = (inFolder || FolderStore::isBuiltIn(path)) ? QString()
                                   : tr("Daten konnten nicht im Bilderordner gespeichert werden, sie liegen in der App.");
     if (hint != m_storageHint) {
         m_storageHint = hint;

@@ -1,0 +1,43 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <!-- example class shipped with the app (AI-generated pictures, made-up names), opened on the first start.
+         Files with special characters are stored under ASCII names (mingw32-make cannot handle them as
+         dependencies) and get their real name through the alias. -->
+    <qresource prefix="/beispiel">
+        <file>Klasse 10d (Beispiel)/Al-Halabi, Mariam Naya.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Becker, Elias.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Bruno, Davide.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Carvalho, Davi.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Donkor, Akua.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Erdmann, Ciara.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Fernandes-Sousa, Mariana.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Fischer-Lange, Timothy.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Hoffmann, Finn-Lucas.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Hosseini, Aras.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Huang, Hao.jpeg</file>
+        <file alias="Klasse 10d (Beispiel)/Jónsdóttir, Birta.jpeg">Klasse 10d (Beispiel)/Jonsdottir, Birta.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Lange, Mats-Ole.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Lange-Werner, Lilly.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Matsuura, Kenji.jpeg</file>
+        <file>Klasse 10d (Beispiel)/McCarthy, Maeve.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Meyer, Paul.jpeg</file>
+        <file alias="Klasse 10d (Beispiel)/Müller, Leon.jpeg">Klasse 10d (Beispiel)/Mueller, Leon.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Nguyen, Linh-Dan.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Osei-Tutu, Kofi.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Rodrigues, Mateus.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Sasaki, Kaito.jpeg</file>
+        <file alias="Klasse 10d (Beispiel)/Schäfer-Klein, Luisa.jpeg">Klasse 10d (Beispiel)/Schaefer-Klein, Luisa.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Schmid, Jakob-Elias.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Schmidt-Weber, Maximilian.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Schmitt, Leonie.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Schulz-Schneider, Benjamin.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Schwarz, Maya.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Shevchenko, Artem.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Shirazi, Amir-Ali.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Wagner, Jan-Luca.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Weber, Jonas.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Werner, Samuel.jpeg</file>
+        <file>Klasse 10d (Beispiel)/Wolf, Sarah-Michelle.jpeg</file>
+        <file alias="Klasse 10d (Beispiel)/Yıldırım, Aslıhan.jpeg">Klasse 10d (Beispiel)/Yildirim, Aslihan.jpeg</file>
+    </qresource>
+</RCC>

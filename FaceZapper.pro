@@ -23,7 +23,8 @@ SOURCES += \
         namederivationtable.cpp \
         persondata.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += qml.qrc \
+    beispiel.qrc
 
 TRANSLATIONS += \
     FaceZapper_de_DE.ts

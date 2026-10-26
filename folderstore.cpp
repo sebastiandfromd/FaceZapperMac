@@ -54,6 +54,12 @@ QJsonObject FolderStore::load(const QString &folder)
 bool FolderStore::save(const QString &folder, const QJsonObject &data)
 {
     if (folder.isEmpty()) return false;
+    if (isBuiltIn(folder)) {
+        // the example class inside the app can't be written to: its data lives with the app
+        const QString fallback = fallbackFile(folder);
+        QDir().mkpath(QFileInfo(fallback).absolutePath());
+        return writeJson(fallback, data);
+    }
     if (writeJson(folderFile(folder), data)) {
         QFile::remove(fallbackFile(folder)); // the folder has the current data now
         return true;

@@ -76,6 +76,10 @@ public:
     QString storageHint() const { return m_storageHint; }
     // the folder brought a .faceZapperData or was taken over ("Übernehmen") - only then data is saved
     bool folderKnown() const { return m_folderKnown; }
+    // the example class inside the app (beispiel.qrc): opened on the first start
+    static QString exampleFolder() { return QStringLiteral(":/beispiel/Klasse 10d (Beispiel)"); }
+    bool exampleOpen() const { return m_currentFolderData.path() == exampleFolder(); }
+    bool firstRun() const { return m_firstRun; } // no group had been used before this start
 
     bool saveAJsonFile(QString fileName, QString filePath, QJsonObject object);
     // fills the table with the folder's pictures; detectOrder: guess the name order from
@@ -88,7 +92,7 @@ public:
         dir.setSorting(QDir::Size | QDir::Reversed);
 
         QFileInfoList list = dir.entryInfoList();
-        QStringList imageTypes = { "png", "jpg", "gif", "bmp"};
+        QStringList imageTypes = { "png", "jpg", "jpeg", "webp", "gif", "bmp"};
         int imageCount = 0;
         int commaCount = 0;
         for (auto &f: list) {
@@ -227,6 +231,7 @@ private:
     QJsonObject m_folderData;   // what's in the current folder's .faceZapperData
     QString m_storageHint;      // set if the data couldn't be saved in the folder itself
     bool m_folderKnown = false; // .faceZapperData existed when the folder was opened
+    bool m_firstRun = false;
     QJsonObject m_defaultImportSettings; // to open a folder "as new" after resetting its data
 
     QString m_delimiter = " ";
@@ -273,6 +278,8 @@ private:
     Q_PROPERTY(QString storageHint READ storageHint NOTIFY storageHintChanged)
     Q_PROPERTY(bool folderKnown READ folderKnown NOTIFY folderKnownChanged)
     Q_PROPERTY(QVariantList recentFolders READ recentFolders NOTIFY recentFoldersChanged)
+    Q_PROPERTY(bool exampleOpen READ exampleOpen NOTIFY groupFolderChanged)
+    Q_PROPERTY(bool firstRun READ firstRun CONSTANT)
     Q_PROPERTY(int flashDuration READ flashDuration NOTIFY settingsChanged)
 };
 

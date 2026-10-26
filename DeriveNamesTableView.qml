@@ -41,7 +41,8 @@ Rectangle {
     // red arrow from bottom right up to the folder button (drawn: no font needed, works on Android)
     Canvas {
         id: folderHintArrow
-        visible: showFolderComponentRect.showFolderHint && controller && !controller.groupFolder
+        // until the user picks a folder of their own (none yet, or still the example class)
+        visible: showFolderComponentRect.showFolderHint && controller && (!controller.groupFolder || controller.exampleOpen)
         z: 10
         width: 3 * heightUnit
         height: 3 * heightUnit
