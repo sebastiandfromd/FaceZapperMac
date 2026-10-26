@@ -80,3 +80,6 @@ nameslist.csv
 
 # local material (icon sources etc.)
 Stuff(gitignored)/
+
+# learning data the app writes into picture folders (e.g. when the example folder is opened from disk)
+.faceZapperData
