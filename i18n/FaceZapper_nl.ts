@@ -99,12 +99,12 @@
     </message>
     <message>
         <source>außen</source>
-        <translation>randen</translation>
+        <translation>beide</translation>
     </message>
     <message>
         <source>%1 Z.</source>
         <comment>number of characters</comment>
-        <translation>%1 t</translation>
+        <translation>%1 tek.</translation>
     </message>
     <message>
         <source>und</source>
@@ -223,7 +223,7 @@ Tijd dat de app op de achtergrond stond, telt niet mee.</translation>
     </message>
     <message>
         <source>Lange angesehen: über … Sekunden</source>
-        <translation>Lang bekeken: meer dan … seconden</translation>
+        <translation>Lang nagedacht: meer dan … seconden</translation>
     </message>
     <message>
         <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
@@ -273,7 +273,7 @@ Moet kleiner zijn dan de factor voor 'Zeer snel'.</translation>
         <source>Nach so vielen anderen Karten kommt eine Person wieder, die zwar gewusst wurde, aber erst nach langem Überlegen (siehe „Lange angesehen“).
 
 Die Stufe bleibt dabei unverändert. Ein mit ← korrigierter Vertipper zählt nicht negativ.</source>
-        <translation>Na zoveel andere kaarten komt een persoon terug die wel gekend werd, maar pas na lang nadenken (zie 'Lang bekeken').
+        <translation>Na zoveel andere kaarten komt een persoon terug die wel gekend werd, maar pas na lang nadenken (zie 'Lang nagedacht').
 
 Het niveau blijft daarbij gelijk. Een met ← verbeterde tikfout telt niet negatief.</translation>
     </message>
@@ -305,7 +305,7 @@ Het niveau valt daarbij terug naar 0.</translation>
         <source>Solange es noch nie gezeigte Gesichter gibt, ist spätestens jede so vielte Karte ein neues Gesicht.
 
 So halten schwierige Karten, die immer wieder vorne landen, die neuen nicht ewig auf.</source>
-        <translation>Zolang er nog nooit getoonde gezichten zijn, is minstens elke zoveelste kaart een nieuw gezicht.
+        <translation>Zolang er nog nooit getoonde gezichten zijn, is minstens één op de N kaarten een nieuw gezicht (N = de hier ingestelde waarde).
 
 Zo houden moeilijke kaarten die steeds vooraan belanden de nieuwe niet eindeloos op.</translation>
     </message>
@@ -390,7 +390,7 @@ Bij het vegen wordt precies dat gecontroleerd en zo getoond, en de lettertoetsen
 Für deine eigene Gruppe wählst du mit dem Ordner-Knopf oben links einen Ordner mit Fotos.
 
 </source>
-        <translation>Om het uit te proberen is de voorbeeldgroep 'Klas 10d (voorbeeld)' geopend – de foto's zijn door AI gegenereerd, de namen verzonnen. Met 'Overnemen' begin je.
+        <translation>Om het uit te proberen is de voorbeeldgroep 'Klas 10d (voorbeeld)' geopend – de foto's zijn door AI gegenereerd, de namen verzonnen. Met 'Toepassen' begin je.
 
 Voor je eigen groep kies je met de mapknop linksboven een map met foto's.
 
@@ -461,7 +461,7 @@ De namen worden automatisch herkend. Toevoegingen zoals de klas '(09B)' of numme
     </message>
     <message>
         <source>Übernehmen</source>
-        <translation>Overnemen</translation>
+        <translation>Toepassen</translation>
     </message>
     <message>
         <source>Namen bearbeiten</source>

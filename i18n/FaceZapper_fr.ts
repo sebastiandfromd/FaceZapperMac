@@ -99,12 +99,12 @@
     </message>
     <message>
         <source>außen</source>
-        <translation>bords</translation>
+        <translation>bouts</translation>
     </message>
     <message>
         <source>%1 Z.</source>
         <comment>number of characters</comment>
-        <translation>%1 c</translation>
+        <translation>%1 car.</translation>
     </message>
     <message>
         <source>und</source>
@@ -291,11 +291,11 @@ Le niveau retombe alors à 0.</translation>
     </message>
     <message>
         <source>„Sicher“ nach … mal in Folge gewusst</source>
-        <translation>« Acquis » après … fois de suite</translation>
+        <translation>« Maîtrisée » après … fois de suite</translation>
     </message>
     <message>
         <source>Ab wie vielen Malen hintereinander gewusst eine Person im Zähler unten links als „sicher“ zählt.</source>
-        <translation>Après combien de réussites consécutives une personne compte comme « acquise » dans le compteur en bas à gauche.</translation>
+        <translation>Après combien de réussites consécutives une personne compte comme « maîtrisée » dans le compteur en bas à gauche.</translation>
     </message>
     <message>
         <source>Neues Gesicht spätestens jede … Karte</source>
@@ -305,7 +305,7 @@ Le niveau retombe alors à 0.</translation>
         <source>Solange es noch nie gezeigte Gesichter gibt, ist spätestens jede so vielte Karte ein neues Gesicht.
 
 So halten schwierige Karten, die immer wieder vorne landen, die neuen nicht ewig auf.</source>
-        <translation>Tant qu'il reste des visages jamais montrés, au moins une carte sur ce nombre est un nouveau visage.
+        <translation>Tant qu'il reste des visages jamais montrés, au moins une carte sur N est un nouveau visage (N = la valeur réglée ici).
 
 Ainsi, les cartes difficiles qui reviennent sans cesse en tête ne bloquent pas indéfiniment les nouvelles.</translation>
     </message>
@@ -390,7 +390,7 @@ Le balayage vérifie exactement cela et l'affiche de la même façon, et les tou
 Für deine eigene Gruppe wählst du mit dem Ordner-Knopf oben links einen Ordner mit Fotos.
 
 </source>
-        <translation>Pour essayer, le groupe d'exemple « Classe 10d (exemple) » est ouvert – les photos sont générées par IA, les noms inventés. Touchez « Valider » pour commencer.
+        <translation>Pour essayer, le groupe d'exemple « Classe 10d (exemple) » est ouvert – les photos sont générées par IA, les noms inventés. Touchez « Appliquer » pour commencer.
 
 Pour votre propre groupe, choisissez un dossier de photos avec le bouton dossier en haut à gauche.
 
@@ -444,15 +444,15 @@ Les noms sont reconnus automatiquement. Les ajouts comme la classe « (09B) » o
     <message numerus="yes">
         <source>%n gesehen</source>
         <translation>
-            <numerusform>%n vu</numerusform>
-            <numerusform>%n vus</numerusform>
+            <numerusform>%n vue</numerusform>
+            <numerusform>%n vues</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%n sicher</source>
         <translation>
-            <numerusform>%n acquis</numerusform>
-            <numerusform>%n acquis</numerusform>
+            <numerusform>%n maîtrisée</numerusform>
+            <numerusform>%n maîtrisées</numerusform>
         </translation>
     </message>
     <message>
@@ -461,7 +461,7 @@ Les noms sont reconnus automatiquement. Les ajouts comme la classe « (09B) » o
     </message>
     <message>
         <source>Übernehmen</source>
-        <translation>Valider</translation>
+        <translation>Appliquer</translation>
     </message>
     <message>
         <source>Namen bearbeiten</source>

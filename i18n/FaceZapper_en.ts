@@ -104,7 +104,7 @@
     <message>
         <source>%1 Z.</source>
         <comment>number of characters</comment>
-        <translation>%1 ch</translation>
+        <translation>%1 chars</translation>
     </message>
     <message>
         <source>und</source>
@@ -223,7 +223,7 @@ Time the app spent in the background does not count.</translation>
     </message>
     <message>
         <source>Lange angesehen: über … Sekunden</source>
-        <translation>Looked at long: over … seconds</translation>
+        <translation>Hesitated: over … seconds</translation>
     </message>
     <message>
         <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
@@ -273,7 +273,7 @@ Should be smaller than the factor for “Very fast”.</translation>
         <source>Nach so vielen anderen Karten kommt eine Person wieder, die zwar gewusst wurde, aber erst nach langem Überlegen (siehe „Lange angesehen“).
 
 Die Stufe bleibt dabei unverändert. Ein mit ← korrigierter Vertipper zählt nicht negativ.</source>
-        <translation>After this many other cards, a person comes back who was known, but only after thinking for a long time (see “Looked at long”).
+        <translation>After this many other cards, a person comes back who was known, but only after thinking for a long time (see “Hesitated”).
 
 The level stays unchanged. A typo corrected with ← does not count against you.</translation>
     </message>
@@ -291,11 +291,11 @@ The level drops back to 0.</translation>
     </message>
     <message>
         <source>„Sicher“ nach … mal in Folge gewusst</source>
-        <translation>“Sure” after … times in a row</translation>
+        <translation>“Known” after … times in a row</translation>
     </message>
     <message>
         <source>Ab wie vielen Malen hintereinander gewusst eine Person im Zähler unten links als „sicher“ zählt.</source>
-        <translation>After how many times in a row a person counts as “sure” in the counter at the bottom left.</translation>
+        <translation>After how many times in a row a person counts as “known” in the counter at the bottom left.</translation>
     </message>
     <message>
         <source>Neues Gesicht spätestens jede … Karte</source>
@@ -305,7 +305,7 @@ The level drops back to 0.</translation>
         <source>Solange es noch nie gezeigte Gesichter gibt, ist spätestens jede so vielte Karte ein neues Gesicht.
 
 So halten schwierige Karten, die immer wieder vorne landen, die neuen nicht ewig auf.</source>
-        <translation>As long as there are faces that have never been shown, at least every so-many-th card is a new face.
+        <translation>As long as there are faces that have never been shown, at least one card in every N is a new face (N = the value set here).
 
 That way, difficult cards that keep landing at the front don't hold up the new ones forever.</translation>
     </message>
@@ -451,8 +451,8 @@ The names are recognized automatically. Additions such as the class “(09B)” 
     <message numerus="yes">
         <source>%n sicher</source>
         <translation>
-            <numerusform>%n sure</numerusform>
-            <numerusform>%n sure</numerusform>
+            <numerusform>%n known</numerusform>
+            <numerusform>%n known</numerusform>
         </translation>
     </message>
     <message>

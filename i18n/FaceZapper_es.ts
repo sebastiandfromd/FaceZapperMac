@@ -99,12 +99,12 @@
     </message>
     <message>
         <source>außen</source>
-        <translation>lados</translation>
+        <translation>ambos</translation>
     </message>
     <message>
         <source>%1 Z.</source>
         <comment>number of characters</comment>
-        <translation>%1 c</translation>
+        <translation>%1 car.</translation>
     </message>
     <message>
         <source>und</source>
@@ -223,7 +223,7 @@ El tiempo que la app pasó en segundo plano no cuenta.</translation>
     </message>
     <message>
         <source>Lange angesehen: über … Sekunden</source>
-        <translation>Mirada larga: más de … segundos</translation>
+        <translation>Tardó mucho: más de … segundos</translation>
     </message>
     <message>
         <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
@@ -273,7 +273,7 @@ Debería ser menor que el factor de «Muy rápido».</translation>
         <source>Nach so vielen anderen Karten kommt eine Person wieder, die zwar gewusst wurde, aber erst nach langem Überlegen (siehe „Lange angesehen“).
 
 Die Stufe bleibt dabei unverändert. Ein mit ← korrigierter Vertipper zählt nicht negativ.</source>
-        <translation>Tras este número de tarjetas vuelve una persona que se sabía, pero solo después de pensarlo mucho (ver «Mirada larga»).
+        <translation>Tras este número de tarjetas vuelve una persona que se sabía, pero solo después de pensarlo mucho (ver «Tardó mucho»).
 
 El nivel no cambia. Un error corregido con ← no cuenta en contra.</translation>
     </message>
@@ -291,11 +291,11 @@ El nivel vuelve a 0.</translation>
     </message>
     <message>
         <source>„Sicher“ nach … mal in Folge gewusst</source>
-        <translation>«Seguro» tras … veces seguidas</translation>
+        <translation>«Segura» tras … veces seguidas</translation>
     </message>
     <message>
         <source>Ab wie vielen Malen hintereinander gewusst eine Person im Zähler unten links als „sicher“ zählt.</source>
-        <translation>Tras cuántas veces seguidas sabida cuenta una persona como «segura» en el contador de abajo a la izquierda.</translation>
+        <translation>Cuántas veces seguidas hay que acertar a una persona para que cuente como «segura» en el contador de abajo a la izquierda.</translation>
     </message>
     <message>
         <source>Neues Gesicht spätestens jede … Karte</source>
@@ -305,7 +305,7 @@ El nivel vuelve a 0.</translation>
         <source>Solange es noch nie gezeigte Gesichter gibt, ist spätestens jede so vielte Karte ein neues Gesicht.
 
 So halten schwierige Karten, die immer wieder vorne landen, die neuen nicht ewig auf.</source>
-        <translation>Mientras haya caras que nunca se han mostrado, al menos una de cada tantas tarjetas es una cara nueva.
+        <translation>Mientras haya caras que nunca se han mostrado, al menos una de cada N tarjetas es una cara nueva (N = el valor ajustado aquí).
 
 Así, las tarjetas difíciles que siempre vuelven al principio no frenan para siempre a las nuevas.</translation>
     </message>

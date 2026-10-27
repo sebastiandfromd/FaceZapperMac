@@ -104,7 +104,7 @@
     <message>
         <source>%1 Z.</source>
         <comment>number of characters</comment>
-        <translation>%1 c</translation>
+        <translation>%1 car.</translation>
     </message>
     <message>
         <source>und</source>
@@ -223,7 +223,7 @@ O tempo em que o app ficou em segundo plano não conta.</translation>
     </message>
     <message>
         <source>Lange angesehen: über … Sekunden</source>
-        <translation>Olhou muito: mais de … segundos</translation>
+        <translation>Demorou: mais de … segundos</translation>
     </message>
     <message>
         <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
@@ -273,7 +273,7 @@ Deve ser menor que o fator de “Muito rápido”.</translation>
         <source>Nach so vielen anderen Karten kommt eine Person wieder, die zwar gewusst wurde, aber erst nach langem Überlegen (siehe „Lange angesehen“).
 
 Die Stufe bleibt dabei unverändert. Ein mit ← korrigierter Vertipper zählt nicht negativ.</source>
-        <translation>Depois de tantos outros cartões volta uma pessoa que foi reconhecida, mas só depois de pensar muito (veja “Olhou muito”).
+        <translation>Depois de tantos outros cartões volta uma pessoa que foi reconhecida, mas só depois de pensar muito (veja “Demorou”).
 
 O nível não muda. Um erro de digitação corrigido com ← não conta contra.</translation>
     </message>
@@ -291,7 +291,7 @@ O nível volta a 0.</translation>
     </message>
     <message>
         <source>„Sicher“ nach … mal in Folge gewusst</source>
-        <translation>“Certo” após … vezes seguidas</translation>
+        <translation>“Certa” após … vezes seguidas</translation>
     </message>
     <message>
         <source>Ab wie vielen Malen hintereinander gewusst eine Person im Zähler unten links als „sicher“ zählt.</source>
@@ -305,7 +305,7 @@ O nível volta a 0.</translation>
         <source>Solange es noch nie gezeigte Gesichter gibt, ist spätestens jede so vielte Karte ein neues Gesicht.
 
 So halten schwierige Karten, die immer wieder vorne landen, die neuen nicht ewig auf.</source>
-        <translation>Enquanto houver rostos nunca mostrados, pelo menos um a cada tantos cartões é um rosto novo.
+        <translation>Enquanto houver rostos nunca mostrados, pelo menos um a cada N cartões é um rosto novo (N = o valor definido aqui).
 
 Assim, cartões difíceis que sempre voltam para a frente não seguram os novos para sempre.</translation>
     </message>

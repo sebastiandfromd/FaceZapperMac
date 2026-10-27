@@ -99,12 +99,12 @@
     </message>
     <message>
         <source>außen</source>
-        <translation>lati</translation>
+        <translation>estremi</translation>
     </message>
     <message>
         <source>%1 Z.</source>
         <comment>number of characters</comment>
-        <translation>%1 c</translation>
+        <translation>%1 car.</translation>
     </message>
     <message>
         <source>und</source>
@@ -223,7 +223,7 @@ Il tempo trascorso dall'app in background non conta.</translation>
     </message>
     <message>
         <source>Lange angesehen: über … Sekunden</source>
-        <translation>Guardato a lungo: oltre … secondi</translation>
+        <translation>Pensato a lungo: oltre … secondi</translation>
     </message>
     <message>
         <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
@@ -273,7 +273,7 @@ Dovrebbe essere minore del fattore «Molto veloce».</translation>
         <source>Nach so vielen anderen Karten kommt eine Person wieder, die zwar gewusst wurde, aber erst nach langem Überlegen (siehe „Lange angesehen“).
 
 Die Stufe bleibt dabei unverändert. Ein mit ← korrigierter Vertipper zählt nicht negativ.</source>
-        <translation>Dopo questo numero di altre schede torna una persona che è stata saputa, ma solo dopo una lunga riflessione (vedi «Guardato a lungo»).
+        <translation>Dopo questo numero di altre schede torna una persona che è stata saputa, ma solo dopo una lunga riflessione (vedi «Pensato a lungo»).
 
 Il livello resta invariato. Un errore di battitura corretto con ← non conta negativamente.</translation>
     </message>
@@ -291,7 +291,7 @@ Il livello torna a 0.</translation>
     </message>
     <message>
         <source>„Sicher“ nach … mal in Folge gewusst</source>
-        <translation>«Sicuro» dopo … volte di fila</translation>
+        <translation>«Sicura» dopo … volte di fila</translation>
     </message>
     <message>
         <source>Ab wie vielen Malen hintereinander gewusst eine Person im Zähler unten links als „sicher“ zählt.</source>
@@ -305,7 +305,7 @@ Il livello torna a 0.</translation>
         <source>Solange es noch nie gezeigte Gesichter gibt, ist spätestens jede so vielte Karte ein neues Gesicht.
 
 So halten schwierige Karten, die immer wieder vorne landen, die neuen nicht ewig auf.</source>
-        <translation>Finché ci sono volti mai mostrati, almeno una scheda ogni tante è un volto nuovo.
+        <translation>Finché ci sono volti mai mostrati, almeno una scheda su N è un volto nuovo (N = il valore impostato qui).
 
 Così le schede difficili che tornano sempre in testa non bloccano all'infinito quelle nuove.</translation>
     </message>
