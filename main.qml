@@ -147,9 +147,9 @@ ApplicationWindow {
             visible: mainWin.learning && controller !== null
             property var session: controller ? controller.session : null
             Repeater {
-                model: parent.session ? [qsTr("%1 Bilder").arg(parent.session.cardCount),
-                                         qsTr("%1 gesehen").arg(parent.session.seenCount),
-                                         qsTr("%1 sicher").arg(parent.session.learnedCount)] : []
+                model: parent.session ? [qsTr("%n Bilder", "", parent.session.cardCount),
+                                         qsTr("%n gesehen", "", parent.session.seenCount),
+                                         qsTr("%n sicher", "", parent.session.learnedCount)] : []
                 Text {
                     text: modelData
                     color: "black"
@@ -173,7 +173,7 @@ ApplicationWindow {
             id: footerButton
             anchors.centerIn: parent
             // import table: take the names over and start learning; learning: show the name
-            text: mainWin.learning ? "Lösung" : "Übernehmen"
+            text: mainWin.learning ? qsTr("Lösung") : qsTr("Übernehmen")
             enabled: !mainWin.learning || (controller && controller.session.currentPerson !== null
                                            && !controller.session.solutionVisible)
             onClicked: {

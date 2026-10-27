@@ -1,6 +1,6 @@
 ; Inno Setup 6 script for FaceZapper (built by tools\build-windows-release.ps1, which passes
 ; AppVersion, SourceDir = the deployed app folder and OutputDir).
-; Installs for the current user only (no administrator rights), German dialogs.
+; Installs for the current user only (no administrator rights), dialogs in the app's languages.
 ; Uninstalling leaves the user's data alone: .faceZapperData in the picture folders,
 ; %APPDATA%\FaceZapper and the settings in the registry - a reinstall keeps the learning progress.
 
@@ -39,7 +39,14 @@ SolidCompression=yes
 WizardStyle=modern
 
 [Languages]
+; the app's languages (i18n/); the setup picks the one matching Windows, otherwise the first (English)
+Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "german"; MessagesFile: "compiler:Languages\German.isl"
+Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
+Name: "french"; MessagesFile: "compiler:Languages\French.isl"
+Name: "italian"; MessagesFile: "compiler:Languages\Italian.isl"
+Name: "dutch"; MessagesFile: "compiler:Languages\Dutch.isl"
+Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked

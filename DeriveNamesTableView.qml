@@ -16,6 +16,12 @@ Rectangle {
     signal openFolderRequested()
     // first start: a red arrow points at the folder button until a folder is chosen
     property bool showFolderHint: false
+    // re-translated combo box texts reset their selection - bumped to re-read it from the controller
+    property int languageRevision: 0
+    Connections {
+        target: controller
+        function onLanguageChanged() { Qt.callLater(() => showFolderComponentRect.languageRevision++) }
+    }
 
     Rectangle {
         id: openFolderRect
@@ -188,13 +194,9 @@ Rectangle {
         border.width: borderwidth
         border.color: bordercolor
         ComboBox {
-            model: ListModel {
-                ListElement { text: "links" }
-                ListElement { text: "rechts" }
-                ListElement { text: "außen" }
-            }
+            model: [qsTr("links"), qsTr("rechts"), qsTr("außen")]
             popup.font.pointSize: font.pointSize
-            currentIndex: controller ? controller.deleteNumberLocationIndex : 0
+            currentIndex: { showFolderComponentRect.languageRevision; return controller ? controller.deleteNumberLocationIndex : 0 }
             anchors.fill: parent
             padding: 0
             anchors.topMargin: -1
@@ -204,7 +206,7 @@ Rectangle {
             bottomInset: 0
             rightInset: 0
             font.pointSize: delimiterInput.font.pointSize
-            onCurrentIndexChanged: if (controller) {
+            onActivated: if (controller) {
                                        controller.deleteNumberLocationIndex = currentIndex
                                        controller.runNameDerivation()
                                    }
@@ -222,23 +224,9 @@ Rectangle {
         border.width: borderwidth
         border.color: bordercolor
         ComboBox {
-            model: ListModel {
-                ListElement { text: " 0 Z." }
-                ListElement { text: " 1 Z." }
-                ListElement { text: " 2 Z." }
-                ListElement { text: " 3 Z." }
-                ListElement { text: " 4 Z." }
-                ListElement { text: " 5 Z." }
-                ListElement { text: " 6 Z." }
-                ListElement { text: " 7 Z." }
-                ListElement { text: " 8 Z." }
-                ListElement { text: " 9 Z." }
-                ListElement { text: "10 Z." }
-                ListElement { text: "11 Z." }
-                ListElement { text: "12 Z." }
-            }
+            model: Array.from({ length: 13 }, (_, i) => qsTr("%1 Z.", "number of characters").arg(i))
             popup.font.pointSize: font.pointSize
-            currentIndex: controller ? controller.deleteNumberCountIndex : 0
+            currentIndex: { showFolderComponentRect.languageRevision; return controller ? controller.deleteNumberCountIndex : 0 }
             anchors.fill: parent
             padding: 0
             anchors.topMargin: -1
@@ -248,7 +236,7 @@ Rectangle {
             bottomInset: 0
             rightInset: 0
             font.pointSize: delimiterInput.font.pointSize
-            onCurrentIndexChanged: if (controller) {
+            onActivated: if (controller) {
                                        controller.deleteNumberCountIndex = currentIndex
                                        controller.runNameDerivation()
                                    }
@@ -289,15 +277,9 @@ Rectangle {
         border.width: borderwidth
         border.color: bordercolor
         ComboBox {
-            model: ListModel {
-                ListElement { text: "links" }
-                ListElement { text: "rechts" }
-                ListElement { text: "außen" }
-                ListElement { text: "nicht" }
-                ListElement { text: "ganz" }
-            }
+            model: [qsTr("links"), qsTr("rechts"), qsTr("außen"), qsTr("nicht"), qsTr("ganz")]
             popup.font.pointSize: font.pointSize
-            currentIndex: controller ? controller.deleteCharsLocationIndex : 0
+            currentIndex: { showFolderComponentRect.languageRevision; return controller ? controller.deleteCharsLocationIndex : 0 }
             anchors.fill: parent
             padding: 0
             anchors.topMargin: -1
@@ -307,7 +289,7 @@ Rectangle {
             bottomInset: 0
             rightInset: 0
             font.pointSize: delimiterInput.font.pointSize
-            onCurrentIndexChanged: if (controller) {
+            onActivated: if (controller) {
                                        controller.deleteCharsLocationIndex = currentIndex
                                        controller.runNameDerivation()
                                    }
@@ -615,16 +597,10 @@ Rectangle {
         border.width: borderwidth
         border.color: bordercolor
         ComboBox {
-            model: ListModel {
-                ListElement { text: "1. v. Links" }
-                ListElement { text: "1. v. Rechts" }
-                ListElement { text: "2. v. Links" }
-                ListElement { text: "2. v. Rechts" }
-                ListElement { text: "Mitte/links" }
-                ListElement { text: "Mitte/rechts" }
-            }
+            model: [qsTr("1. v. links"), qsTr("1. v. rechts"), qsTr("2. v. links"), qsTr("2. v. rechts"),
+                    qsTr("Mitte/links"), qsTr("Mitte/rechts")]
             popup.font.pointSize: font.pointSize
-            currentIndex: controller ? controller.delimiterCounterIndex : 0
+            currentIndex: { showFolderComponentRect.languageRevision; return controller ? controller.delimiterCounterIndex : 0 }
             anchors.fill: parent
             padding: 0
             anchors.topMargin: -1
@@ -634,7 +610,7 @@ Rectangle {
             bottomInset: 0
             rightInset: 0
             font.pointSize: delimiterInput.font.pointSize
-            onCurrentIndexChanged: if (controller) {
+            onActivated: if (controller) {
                                        controller.delimiterCounterIndex = currentIndex
                                        controller.runNameDerivation()
                                    }
@@ -677,13 +653,9 @@ Rectangle {
         border.width: borderwidth
         border.color: bordercolor
         ComboBox {
-            model: ListModel {
-                id: nameOrderModel
-                ListElement { text: "Vor-/Nachname." }
-                ListElement { text: "Nach-/Vorname" }
-            }
+            model: [qsTr("Vor-/Nachname"), qsTr("Nach-/Vorname")]
             popup.font.pointSize: font.pointSize
-            currentIndex: controller ? (controller.firstNameFirst ? 0 : 1) : 0
+            currentIndex: { showFolderComponentRect.languageRevision; return controller ? (controller.firstNameFirst ? 0 : 1) : 0 }
             anchors.fill: parent
             padding: 0
             anchors.topMargin: -1
@@ -693,7 +665,7 @@ Rectangle {
             bottomInset: 0
             rightInset: 0
             font.pointSize: delimiterInput.font.pointSize
-            onCurrentIndexChanged: {
+            onActivated: {
                 if (controller) {
                     controller.firstNameFirst = (currentIndex == 0);
                     controller.runNameDerivation()
@@ -757,12 +729,13 @@ Rectangle {
             TextInput {
                 visible: !modeColumn
                 width: parent.width
-                text: (exclude && nameColumn) ? "" : tabledata
+                text: heading ? ["", qsTr("Vorname"), qsTr("Nachname"), qsTr("Datei")][column]
+                              : (exclude && nameColumn) ? "" : tabledata
                 font.pointSize: 10
                 anchors.centerIn: parent
                 enabled: overrideAutomatic && nameColumn
                 onTextChanged: {
-                    if (nameDerivationTable) nameDerivationTable.dataEdited(row, column, text)
+                    if (nameDerivationTable && !heading) nameDerivationTable.dataEdited(row, column, text)
                 }
                 padding: 1
                 leftPadding: height/4

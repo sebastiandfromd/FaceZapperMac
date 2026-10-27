@@ -3,7 +3,7 @@ QT += quick
 CONFIG += c++11
 
 # app version, shown on the "Über FaceZapper" page and used as the Android version name
-VERSION = 1.1
+VERSION = 1.2
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 win32 {
@@ -17,7 +17,7 @@ win32 {
 android {
     CONFIG += android
     # Google Play: ANDROID_VERSION_CODE must grow with every upload
-    ANDROID_VERSION_CODE = 2
+    ANDROID_VERSION_CODE = 3
     ANDROID_VERSION_NAME = $$VERSION
 }
 
@@ -40,8 +40,17 @@ RESOURCES += qml.qrc \
     beispiel.qrc \
     licenses.qrc
 
+# UI languages: German is the source (qsTr texts), the .qm files are built into the resources
+# as :/i18n/FaceZapper_<code>.qm - update with tools/update-translations.ps1
 TRANSLATIONS += \
-    FaceZapper_de_DE.ts
+    i18n/FaceZapper_de.ts \
+    i18n/FaceZapper_en.ts \
+    i18n/FaceZapper_es.ts \
+    i18n/FaceZapper_fr.ts \
+    i18n/FaceZapper_it.ts \
+    i18n/FaceZapper_nl.ts \
+    i18n/FaceZapper_pt_BR.ts
+CONFIG += lrelease embed_translations
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

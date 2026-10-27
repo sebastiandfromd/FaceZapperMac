@@ -202,16 +202,27 @@ void Controller::setIsCaseSensitive(bool newIsCaseSensitive)
     emit isCaseSensitiveChanged();
 }
 
+QString Controller::displayGroupName(const QString &path, const QString &name)
+{
+    // saved under its German name, shown in the app's language
+    if (path == exampleFolder() && name == folderDisplayName(exampleFolder()))
+        return tr("Klasse 10d (Beispiel)");
+    return name;
+}
+
 QString Controller::groupName() const
 {
-    return m_currentFolderData.name();
+    return displayGroupName(m_currentFolderData.path(), m_currentFolderData.name());
 }
 
 void Controller::setGroupName(const QString &newGroupName)
 {
-    if ( m_currentFolderData.name() == newGroupName)
+    QString name = newGroupName;
+    if (exampleOpen() && name == displayGroupName(exampleFolder(), folderDisplayName(exampleFolder())))
+        name = folderDisplayName(exampleFolder()); // the translated example name isn't a renaming
+    if ( m_currentFolderData.name() == name)
         return;
-    m_currentFolderData.setName(newGroupName);
+    m_currentFolderData.setName(name);
     emit groupNameChanged();
 }
 
@@ -285,7 +296,7 @@ void Controller::loadFolder(const QString &path)
     runNameDerivation();
     const QString savedName = m_folderData.value("groupName").toString();
     setGroupName(savedName.isEmpty() ? folderDisplayName(path) : savedName);
-    addRecentFolder(path, groupName());
+    addRecentFolder(path, m_currentFolderData.name());
     m_folderKnown = known;
     emit folderKnownChanged();
 }
@@ -293,6 +304,7 @@ void Controller::loadFolder(const QString &path)
 
 
 Controller::Controller(QObject *parent) : QObject(parent){
+    applyLanguage(); // before anything translated is made (group names, messages)
     m_session.setPersons(&m_personsVector);
     if (!m_letterModel.load(QStringLiteral(":/letterstats.json")))
         qWarning("Couldn't load letter statistics, the keyboard falls back to the folder's names.");
@@ -329,6 +341,7 @@ Controller::Controller(QObject *parent) : QObject(parent){
 }
 
 void Controller::init(QQmlApplicationEngine *engine) {
+    m_engine = engine; // re-translated when the language changes
     qmlRegisterType<Controller>("de.herrdiel.facezapper", 1, 0, "Controller");
     qmlRegisterType<PersonData>("de.herrdiel.facezapper", 1, 0, "PersonData");
     qmlRegisterType<NameDerivationTable>("de.herrdiel.facezapper", 1, 0, "NameDerivationTable");
@@ -364,6 +377,7 @@ QVariantMap Controller::defaultSettings()
         {"learning/targetMode", c.targetMode},
         {"learning/flashDuration", 500},
         {"ui/expertMode", false}, // import screen: show all options for deriving names from file names
+        {"ui/language", QString()}, // "" = the system's language
     };
 }
 
@@ -409,6 +423,54 @@ void Controller::resetSettings()
     s.sync();
     m_session.setCardBoxSettings(loadCardBoxSettings());
     emit settingsChanged();
+}
+
+// German is the source language (the texts in qsTr/tr); the others are translations in i18n/,
+// built into the resources as :/i18n/FaceZapper_<code>.qm. German has one too, for the plural forms.
+static const QStringList appLanguages = {"de", "en", "es", "fr", "it", "nl", "pt_BR"};
+static const QStringList appLanguageNames = {"Deutsch", "English", "Español", "Français", "Italiano",
+                                             "Nederlands", "Português (Brasil)"};
+
+QVariantList Controller::availableLanguages() const
+{
+    QVariantList list;
+    for (int i = 0; i < appLanguages.size(); ++i)
+        list << QVariantMap{{"code", appLanguages.at(i)}, {"name", appLanguageNames.at(i)}};
+    return list;
+}
+
+void Controller::setLanguage(const QString &code)
+{
+    QSettings s(settingsOrg, settingsApp);
+    s.setValue(QStringLiteral("ui/language"), appLanguages.contains(code) ? code : QString());
+    s.sync();
+    applyLanguage();
+}
+
+void Controller::applyLanguage()
+{
+    QString code = setting(QStringLiteral("ui/language")).toString();
+    if (!appLanguages.contains(code)) {
+        // the system's preferred languages in order ("de-AT", "pt-PT", "fr" ...), English if none fits
+        code = QStringLiteral("en");
+        for (const QString &ui : QLocale::system().uiLanguages()) {
+            const QString name = QLocale(ui).name();             // "de_AT"
+            const QString lang = name.section(u'_', 0, 0);       // "de"
+            if (appLanguages.contains(name)) { code = name; break; }
+            if (lang == QLatin1String("pt")) { code = QStringLiteral("pt_BR"); break; } // the only Portuguese
+            if (appLanguages.contains(lang)) { code = lang; break; }
+        }
+    }
+    qApp->removeTranslator(&m_translator);
+    if (m_translator.load(QStringLiteral(":/i18n/FaceZapper_") + code))
+        qApp->installTranslator(&m_translator);
+    else
+        qWarning("No translation for %ls.", qUtf16Printable(code));
+    m_language = code;
+    if (m_engine) m_engine->retranslate();
+    emit languageChanged();
+    emit groupNameChanged();     // the example class has a name per language
+    emit recentFoldersChanged();
 }
 
 QString Controller::licenseText(const QString &name) const
@@ -496,7 +558,7 @@ QVariantList Controller::recentFolders() const
     for (const FolderData &f : m_recentDirs) {
         // local folders that are gone are left out (Android content:// folders can't be checked cheaply)
         if (!f.path().contains(QLatin1String("://")) && !QDir(f.path()).exists()) continue;
-        list << QVariantMap{{"name", f.name()}, {"path", f.path()}};
+        list << QVariantMap{{"name", displayGroupName(f.path(), f.name())}, {"path", f.path()}};
     }
     return list;
 }

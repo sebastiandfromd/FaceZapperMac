@@ -37,6 +37,11 @@ Rectangle {
     ]
     // bumped to re-read all values (after "Standardwerte")
     property int revision: 0
+    // re-translated combo box texts reset their selection: re-read it after a language change
+    Connections {
+        target: controller
+        function onLanguageChanged() { Qt.callLater(() => settingsPage.revision++) }
+    }
 
     // header with the way back - always visible, not part of the scrolling list
     Rectangle {
@@ -108,6 +113,30 @@ Rectangle {
             spacing: 8
 
             // label with its ⓘ right behind the text, control on the right
+            RowLayout {
+                Layout.fillWidth: true
+                Label { text: qsTr("Sprache") }
+                InfoButton {
+                    info: qsTr("Die Sprache der App. „Systemsprache“ nimmt die Sprache des Geräts – oder Englisch, wenn es die App in dieser Sprache nicht gibt.\n\nNamen und Gruppen bleiben, wie sie sind.")
+                }
+                Item { Layout.fillWidth: true }
+                ComboBox {
+                    id: languageBox
+                    property var languages: controller ? controller.availableLanguages() : []
+                    // "" = the system's language, stored in "ui/language" (kept by "Standardwerte")
+                    model: [qsTr("Systemsprache")].concat(languages.map(l => l.name))
+                    currentIndex: {
+                        settingsPage.revision
+                        if (!controller) return 0
+                        controller.language // re-read after a change (the model is re-translated too)
+                        const code = controller.setting("ui/language")
+                        return 1 + languages.findIndex(l => l.code === code) // not found: 0
+                    }
+                    onActivated: (index) => controller.setLanguage(index > 0 ? languages[index - 1].code : "")
+                    Layout.preferredWidth: 200
+                }
+            }
+
             RowLayout {
                 Layout.fillWidth: true
                 Label { text: qsTr("Eintippen") }

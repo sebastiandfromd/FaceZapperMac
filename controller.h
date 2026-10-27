@@ -17,6 +17,7 @@
 #include <QQuickView>
 #include <QQmlContext>
 #include <QRandomGenerator>
+#include <QTranslator>
 
 
 
@@ -58,6 +59,11 @@ public:
     Q_INVOKABLE void resetSettings();
     int flashDuration() const { return setting(QStringLiteral("learning/flashDuration")).toInt(); }
 
+    // UI language: setting "ui/language" ("" = the system's), see applyLanguage()
+    Q_INVOKABLE QVariantList availableLanguages() const; // [{code, name}], names in their own language
+    QString language() const { return m_language; }       // the one in use, e.g. "de", "pt_BR"
+    Q_INVOKABLE void setLanguage(const QString &code);
+
     // about page: a licence text shipped with the app (licenses.qrc), e.g. "LGPL-3.0.txt"
     Q_INVOKABLE QString licenseText(const QString &name) const;
 
@@ -81,6 +87,8 @@ public:
     bool folderKnown() const { return m_folderKnown; }
     // the example class inside the app (beispiel.qrc): opened on the first start
     static QString exampleFolder() { return QStringLiteral(":/beispiel/Klasse 10d (Beispiel)"); }
+    // a group's name as shown: the example class is named in the app's language (unless renamed)
+    static QString displayGroupName(const QString &path, const QString &name);
     bool exampleOpen() const { return m_currentFolderData.path() == exampleFolder(); }
     bool firstRun() const { return m_firstRun; } // no group had been used before this start
 
@@ -218,10 +226,16 @@ signals:
     void folderKnownChanged();
     void recentFoldersChanged();
     void settingsChanged();
+    void languageChanged();
 
 public slots:
 
 private:
+    void applyLanguage();
+    QQmlApplicationEngine *m_engine = nullptr;
+    QTranslator m_translator;
+    QString m_language = QStringLiteral("de");
+
     QVector<PersonData*> m_personsVector;
     QMultiMap<qreal, PersonData*> m_valuePersonMap;
 
@@ -284,6 +298,7 @@ private:
     Q_PROPERTY(bool exampleOpen READ exampleOpen NOTIFY groupFolderChanged)
     Q_PROPERTY(bool firstRun READ firstRun CONSTANT)
     Q_PROPERTY(int flashDuration READ flashDuration NOTIFY settingsChanged)
+    Q_PROPERTY(QString language READ language NOTIFY languageChanged)
 };
 
 #endif // CONTROLLER_H
