@@ -5,8 +5,10 @@ set "BT=C:\AndroidSDK\build-tools\36.1.0"
 set "KEYSTORE=C:\Users\SeDi\KeystoreForQtApps\android_release.keystore"
 set "BUILD=C:\Users\SeDi\cpp\build-FaceZapper-Android_Qt_6_12_0_Clang_arm64_v8a-Release"
 set "UNSIGNED=%BUILD%\android-build\build\outputs\apk\release\android-build-release-unsigned.apk"
-set "ALIGNED=%BUILD%\FaceZapper-1.0-aligned.apk"
-set "SIGNED=%BUILD%\FaceZapper-1.0-signed.apk"
+rem version name from FaceZapper.pro ("VERSION = 1.2")
+for /f "tokens=3" %%v in ('findstr /b /c:"VERSION = " "%~dp0..\FaceZapper.pro"') do set "VER=%%v"
+set "ALIGNED=%BUILD%\FaceZapper-%VER%-aligned.apk"
+set "SIGNED=%BUILD%\FaceZapper-%VER%-signed.apk"
 set "JAVA_HOME=C:\Program Files\OpenLogic\jdk-17.0.16.8-hotspot"
 set "PATH=%JAVA_HOME%\bin;%PATH%"
 

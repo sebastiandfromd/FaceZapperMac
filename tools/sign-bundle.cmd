@@ -6,9 +6,11 @@ set "JARSIGNER=C:\Program Files\OpenLogic\jdk-17.0.16.8-hotspot\bin\jarsigner.ex
 set "KEYSTORE=C:\Users\SeDi\KeystoreForQtApps\android_release.keystore"
 set "BUILD=C:\Users\SeDi\cpp\build-FaceZapper-Android_Qt_6_12_0_Clang_arm64_v8a-Release"
 set "UNSIGNED=%BUILD%\android-build\build\outputs\bundle\release\android-build-release.aab"
-set "SIGNED=%BUILD%\FaceZapper-1.0-signed.aab"
+rem version name from FaceZapper.pro ("VERSION = 1.2")
+for /f "tokens=3" %%v in ('findstr /b /c:"VERSION = " "%~dp0..\FaceZapper.pro"') do set "VER=%%v"
+set "SIGNED=%BUILD%\FaceZapper-%VER%-signed.aab"
 
-echo Signiere FaceZapper 1.0 mit Schluessel "qtappskeystore".
+echo Signiere FaceZapper %VER% mit Schluessel "qtappskeystore".
 echo Bitte gleich das Keystore-Kennwort eingeben (wird nicht angezeigt):
 "%JARSIGNER%" -keystore "%KEYSTORE%" -sigalg SHA256withRSA -digestalg SHA-256 -signedjar "%SIGNED%" "%UNSIGNED%" qtappskeystore
 if errorlevel 1 (

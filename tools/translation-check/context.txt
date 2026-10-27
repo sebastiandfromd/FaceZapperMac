@@ -1,0 +1,94 @@
+About page: button back to the app
+About page: page title
+About page: version line (%1 = version number)
+About page: one-line app tagline
+About page: section heading
+About page: privacy statement
+About page: section heading about the example photos
+About page: note that example photos are AI-generated (%1 = tool name)
+About page: section heading
+About page: Qt / LGPL licence notice
+About page: link to the licence text
+About page: where to get the Qt source code (%1 = URL)
+About page: list of third-party libraries in Qt
+About page: link to licences and copyright notices
+Name of the built-in example group (school class)
+Error notice: progress could not be saved in the photo folder
+Name table: label in front of the editable group name
+Name table: button to show fewer options
+Name table: button to show more (expert) options
+Name table, expert: row "remove N characters from …"
+Name table, expert: dropdown option (position)
+Name table, expert: dropdown option (position)
+Name table, expert: dropdown option (both ends)
+Name table, expert: dropdown option, number of characters (%1)
+Name table, expert: "and" between two dropdowns
+Name table, expert: dropdown option (do not remove)
+Name table, expert: dropdown option (whole name)
+Name table, expert: row "replace text … with …"
+Name table, expert: info text with search wildcards
+Name table, expert: "with" in the replace row
+Name table, expert: info text, replacement wildcard
+Name table, expert: row "split the file name at …"
+Name table, expert: split position (1st from left)
+Name table, expert: split position (1st from right)
+Name table, expert: split position (2nd from left)
+Name table, expert: split position (2nd from right)
+Name table, expert: split position (middle, left part)
+Name table, expert: split position (middle, right part)
+Name table, expert: order in file name (first/last name)
+Name table, expert: order in file name (last/first name)
+Name table: column header
+Name table: column header
+Name table: column header (file name)
+Settings: label, how long the name is shown (ms)
+Settings: info text for "show name"
+Settings: label, "very fast" time threshold
+Settings: info text for "very fast"
+Settings: label, "looked at long" time threshold
+Settings: info text for "looked at long"
+Settings: label, factor for very fast cards
+Settings: info text for the "very fast" factor
+Settings: label, factor for known cards
+Settings: info text for the "known" factor
+Settings: label, when an unsure card comes back
+Settings: info text for "unsure"
+Settings: label, when an unknown card comes back
+Settings: info text for "not known"
+Settings: label, how many correct in a row count as "sure"
+Settings: info text for "sure"
+Settings: label, how often a new face is shown
+Settings: info text for "new face"
+Settings: button back to the app
+Settings: page title
+Settings: label for the language selector
+Settings: info text for the language selector
+Settings: language option "use device language"
+Settings: label, what you type while learning
+Settings: info text for "what you type"
+Settings: typing option, first name only
+Settings: typing option, last name only
+Settings: typing option, first + last name
+Settings: typing option, last + first name
+Settings: button to reset all values to defaults
+Window title / app name
+Welcome dialog: title
+Welcome dialog: text when the example group is open
+Welcome dialog: text when no folder is chosen yet
+Welcome dialog: how to name the photo files
+Confirmation dialog: title, reset learning progress
+Confirmation dialog: text, reset learning progress (%1 = group)
+Confirmation dialog: title, delete all group data
+Confirmation dialog: text, delete all group data (%1 = group)
+Learning screen: counter, number of pictures (plural)
+Learning screen: counter, faces seen (plural)
+Learning screen: counter, faces known for sure (plural)
+Learning screen: main button, reveal the name
+Name table: main button to accept the folder/name settings
+Menu: open name table
+Menu: choose another photo folder
+Menu: submenu with recently used groups
+Menu: reset learning progress
+Menu: delete all data for this group
+Menu: open settings
+Menu: open about page
