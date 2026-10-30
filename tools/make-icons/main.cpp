@@ -3,6 +3,7 @@
 //    legacy icons -> <repo>/android/res/mipmap-*/
 //  - 512x512 Play Store icon -> next to the SVG (uploaded by hand)
 //  - Windows icon with 16..256 px -> <repo>/windows/FaceZapper.ico
+//  - macOS icon with 16..1024 px -> <repo>/mac/FaceZapper.icns
 //
 // Build with Qt (needs QtSvg) and run:  make-icons <path to Icon.svg> <repo folder>
 #include <QBuffer>
@@ -57,6 +58,28 @@ static bool writeIco(const QString &fileName, const QList<QImage> &images)
     return f.open(QIODevice::WriteOnly) && f.write(ico) == ico.size();
 }
 
+// ICNS file with PNG entries (Mac OS X 10.7+): every size macOS asks for, plain and Retina (@2x)
+static bool writeIcns(const QString &fileName, QSvgRenderer &svg)
+{
+    const QList<QPair<QByteArray, int>> entries = {
+        {"icp4", 16}, {"icp5", 32}, {"ic07", 128}, {"ic08", 256}, {"ic09", 512},  // 1x
+        {"ic11", 32}, {"ic12", 64}, {"ic13", 256}, {"ic14", 512}, {"ic10", 1024}, // @2x of 16..512
+    };
+    QByteArray body;
+    for (const auto &e : entries) {
+        QByteArray png;
+        QBuffer buf(&png);
+        buf.open(QIODevice::WriteOnly);
+        render(svg, e.second, 1.0, false).convertToFormat(QImage::Format_ARGB32).save(&buf, "PNG");
+        const quint32 len = qToBigEndian(quint32(8 + png.size()));
+        body += e.first + QByteArray(reinterpret_cast<const char *>(&len), 4) + png;
+    }
+    const quint32 total = qToBigEndian(quint32(8 + body.size()));
+    const QByteArray icns = "icns" + QByteArray(reinterpret_cast<const char *>(&total), 4) + body;
+    QFile f(fileName);
+    return f.open(QIODevice::WriteOnly) && f.write(icns) == icns.size();
+}
+
 int main(int argc, char **argv)
 {
     QGuiApplication a(argc, argv);
@@ -91,6 +114,13 @@ int main(int argc, char **argv)
     QDir().mkpath(repo + "/windows");
     if (!writeIco(repo + "/windows/FaceZapper.ico", sizes)) {
         printf("cannot write the .ico\n");
+        return 1;
+    }
+
+    // macOS: transparent like Windows, 16..1024 px
+    QDir().mkpath(repo + "/mac");
+    if (!writeIcns(repo + "/mac/FaceZapper.icns", svg)) {
+        printf("cannot write the .icns\n");
         return 1;
     }
     printf("icons written\n");

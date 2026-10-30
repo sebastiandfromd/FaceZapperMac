@@ -1,0 +1,95 @@
+# macOS build: FaceZapper.app for Apple silicon and Intel, packed into a .dmg - unsigned (no Apple
+# developer account), mac/First-launch.txt tells how to open it the first time.
+#
+# Start: GitHub -> Actions -> "macOS build" -> "Run workflow" (the .dmg is then under the run's
+# "Artifacts"), or push a tag like v1.3 (the .dmg also becomes a GitHub release).
+# Version: VERSION in FaceZapper.pro
+name: macOS build
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write # for the release on tags
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.12.0'
+          host: mac
+          target: desktop
+          arch: clang_64
+          modules: qtimageformats
+          cache: true
+
+      - name: Build
+        run: |
+          VERSION=$(sed -n 's/^VERSION = //p' FaceZapper.pro | tr -d '\r')
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          mkdir build && cd build
+          qmake ../FaceZapper.pro CONFIG+=release CONFIG-=qml_debug QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64"
+          make -j3
+          lipo -info FaceZapper.app/Contents/MacOS/FaceZapper
+
+      - name: Bundle Qt
+        run: |
+          cd build
+          macdeployqt FaceZapper.app -qmldir=..
+          # only what the app needs, as on Windows and Android: no QML debugging (one of its plugins
+          # pulls in Qt Quick 3D, which is GPLv3 only), no network/TLS, positioning, sensors, multimedia
+          for d in qmltooling tls networkinformation position sensors multimedia generic; do
+            rm -rf "FaceZapper.app/Contents/PlugIns/$d"
+          done
+          ls FaceZapper.app/Contents/Frameworks
+          if ls FaceZapper.app/Contents/Frameworks | grep -q Quick3D; then
+            echo "Qt Quick 3D must not be in the app (GPLv3)"; exit 1
+          fi
+          # ad-hoc signature: no developer account needed, but Apple silicon runs nothing without one
+          codesign --force --deep -s - FaceZapper.app
+          codesign --verify --deep --verbose FaceZapper.app
+
+      - name: Smoke test
+        run: |
+          cd build
+          QT_QPA_PLATFORM=offscreen QT_FORCE_STDERR_LOGGING=1 \
+            ./FaceZapper.app/Contents/MacOS/FaceZapper > run.log 2>&1 &
+          PID=$!
+          sleep 10
+          if ! kill -0 $PID 2>/dev/null; then cat run.log; echo "the app ended early"; exit 1; fi
+          kill $PID
+          cat run.log
+          if grep -E "qrc:/|failed to load|is not installed" run.log; then
+            echo "QML errors"; exit 1
+          fi
+
+      - name: Disk image
+        run: |
+          cd build
+          MINMACOS=$(/usr/libexec/PlistBuddy -c "Print :LSMinimumSystemVersion" FaceZapper.app/Contents/Info.plist)
+          echo "minimum macOS: $MINMACOS"
+          mkdir dmg
+          cp -R FaceZapper.app dmg/
+          ln -s /Applications dmg/Applications
+          sed -e "s/@VERSION@/$VERSION/g" -e "s/@MINMACOS@/$MINMACOS/g" \
+            ../mac/First-launch.txt > "dmg/Erstes Öffnen – First launch.txt"
+          hdiutil create -volname "FaceZapper $VERSION" -srcfolder dmg -ov -format UDZO \
+            "FaceZapper-$VERSION-macOS.dmg"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FaceZapper-${{ env.VERSION }}-macOS
+          path: build/FaceZapper-*-macOS.dmg
+
+      - name: Release (tags only)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/FaceZapper-*-macOS.dmg

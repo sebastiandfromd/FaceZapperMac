@@ -14,6 +14,14 @@ win32 {
     QMAKE_TARGET_COPYRIGHT = "(c) 2026 Sebastian Diel"
 }
 
+macx {
+    # app bundle (built by .github/workflows/macos.yml; icon from tools/make-icons)
+    ICON = mac/FaceZapper.icns
+    QMAKE_INFO_PLIST = mac/Info.plist
+    QMAKE_TARGET_BUNDLE_PREFIX = de.herrdiel
+    QMAKE_BUNDLE = facezapper
+}
+
 android {
     CONFIG += android
     # Google Play: ANDROID_VERSION_CODE must grow with every upload

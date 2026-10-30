@@ -1,0 +1,41 @@
+FaceZapper @VERSION@ für macOS – erstes Öffnen
+==============================================
+
+Installieren: FaceZapper in den Ordner „Programme“ ziehen.
+
+FaceZapper ist nicht bei Apple registriert (kein kostenpflichtiges Entwicklerkonto).
+macOS blockiert die App deshalb beim ersten Öffnen. So geht es trotzdem – nur einmal nötig:
+
+1. FaceZapper in „Programme“ doppelklicken. macOS meldet, dass die App nicht geöffnet
+   werden kann. Auf „Fertig“ (bzw. „OK“) klicken.
+2. Systemeinstellungen → Datenschutz & Sicherheit öffnen und nach unten scrollen.
+   Bei „FaceZapper wurde blockiert …“ auf „Trotzdem öffnen“ klicken und bestätigen
+   (Passwort oder Touch ID).
+3. Danach startet FaceZapper ganz normal.
+
+Falls das nicht klappt: Terminal öffnen und eingeben
+    xattr -dr com.apple.quarantine /Applications/FaceZapper.app
+
+Benötigt macOS @MINMACOS@ oder neuer, auf Apple-Silicon- und Intel-Macs.
+FaceZapper hat keinen Internetzugang und sammelt keine Daten.
+
+
+FaceZapper @VERSION@ for macOS – first launch
+=============================================
+
+Install: drag FaceZapper into the “Applications” folder.
+
+FaceZapper is not registered with Apple (no paid developer account), so macOS blocks it the
+first time. To open it anyway – needed only once:
+
+1. Double-click FaceZapper in “Applications”. macOS says it can't be opened. Click “Done”
+   (or “OK”).
+2. Open System Settings → Privacy & Security and scroll down. Next to “FaceZapper was
+   blocked …” click “Open Anyway” and confirm (password or Touch ID).
+3. From then on FaceZapper starts normally.
+
+If that doesn't work: open Terminal and enter
+    xattr -dr com.apple.quarantine /Applications/FaceZapper.app
+
+Requires macOS @MINMACOS@ or later, on Apple silicon and Intel Macs.
+FaceZapper has no internet access and collects no data.
