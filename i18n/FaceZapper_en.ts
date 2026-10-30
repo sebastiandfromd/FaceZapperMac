@@ -148,7 +148,7 @@
 /&amp; &apos;Ersetze&apos;-Suchtext</source>
         <translation>Special replacement character:
 
-/&amp; the 'Replace' search text</translation>
+/&amp; the &apos;Replace&apos; search text</translation>
     </message>
     <message>
         <source>Trenne bei</source>
@@ -229,7 +229,7 @@ Time the app spent in the background does not count.</translation>
         <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
 
 Die Zeit fürs Tippen selbst zählt nicht mit, ebenso wenig Zeit, in der die App im Hintergrund war.</source>
-        <translation>If you think longer than this before typing the first letter (or swiping without typing), you probably weren't quite sure. The card counts as known but comes back soon (see “Unsure”).
+        <translation>If you think longer than this before typing the first letter (or swiping without typing), you probably weren&apos;t quite sure. The card counts as known but comes back soon (see “Unsure”).
 
 The time spent typing does not count, nor does time the app spent in the background.</translation>
     </message>
@@ -282,10 +282,10 @@ The level stays unchanged. A typo corrected with ← does not count against you.
         <translation>Not known: comes back after … cards</translation>
     </message>
     <message>
-        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Lösung“ gedrückt oder einen falschen Buchstaben stehen gelassen.
+        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
-        <translation>After this many other cards, a person comes back who was not known: “Solution” was pressed or a wrong letter was left standing.
+        <translation>After this many other cards, a person comes back who was not known: “Unknown” was pressed or a wrong letter was left standing.
 
 The level drops back to 0.</translation>
     </message>
@@ -307,7 +307,7 @@ The level drops back to 0.</translation>
 So halten schwierige Karten, die immer wieder vorne landen, die neuen nicht ewig auf.</source>
         <translation>As long as there are faces that have never been shown, at least one card in every N is a new face (N = the value set here).
 
-That way, difficult cards that keep landing at the front don't hold up the new ones forever.</translation>
+That way, difficult cards that keep landing at the front don&apos;t hold up the new ones forever.</translation>
     </message>
     <message>
         <source>‹ Zurück</source>
@@ -325,7 +325,7 @@ That way, difficult cards that keep landing at the front don't hold up the new o
         <source>Die Sprache der App. „Systemsprache“ nimmt die Sprache des Geräts – oder Englisch, wenn es die App in dieser Sprache nicht gibt.
 
 Namen und Gruppen bleiben, wie sie sind.</source>
-        <translation>The language of the app. “System language” uses the language of the device – or English if the app isn't available in that language.
+        <translation>The language of the app. “System language” uses the language of the device – or English if the app isn&apos;t available in that language.
 
 Names and groups stay as they are.</translation>
     </message>
@@ -456,12 +456,16 @@ The names are recognized automatically. Additions such as the class “(09B)” 
         </translation>
     </message>
     <message>
-        <source>Lösung</source>
-        <translation>Solution</translation>
-    </message>
-    <message>
         <source>Übernehmen</source>
         <translation>Apply</translation>
+    </message>
+    <message>
+        <source>Bekannt</source>
+        <translation>Known</translation>
+    </message>
+    <message>
+        <source>Unbekannt</source>
+        <translation>Unknown</translation>
     </message>
     <message>
         <source>Namen bearbeiten</source>

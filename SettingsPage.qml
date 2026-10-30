@@ -1,12 +1,14 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material
 import QtQuick.Layouts 1.15
+import "."
 
 // Settings: what to type, flash duration and the card box values, each with an explanation (ⓘ).
 // Every change is stored right away (controller.setSetting -> QSettings).
 Rectangle {
     id: settingsPage
-    color: "white"
+    color: Theme.background
     signal done()
 
     // Esc on the desktop, the back button on Android
@@ -29,7 +31,7 @@ Rectangle {
         { key: "cardBox/unsureOffset", label: qsTr("Unsicher: kommt nach … Karten wieder"), from: 1, to: 50, step: 1,
           info: qsTr("Nach so vielen anderen Karten kommt eine Person wieder, die zwar gewusst wurde, aber erst nach langem Überlegen (siehe „Lange angesehen“).\n\nDie Stufe bleibt dabei unverändert. Ein mit ← korrigierter Vertipper zählt nicht negativ.") },
         { key: "cardBox/againOffset", label: qsTr("Nicht gewusst: kommt nach … Karten wieder"), from: 1, to: 50, step: 1,
-          info: qsTr("Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Lösung“ gedrückt oder einen falschen Buchstaben stehen gelassen.\n\nDie Stufe fällt dabei auf 0 zurück.") },
+          info: qsTr("Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.\n\nDie Stufe fällt dabei auf 0 zurück.") },
         { key: "cardBox/learnedStreak", label: qsTr("„Sicher“ nach … mal in Folge gewusst"), from: 1, to: 10, step: 1,
           info: qsTr("Ab wie vielen Malen hintereinander gewusst eine Person im Zähler unten links als „sicher“ zählt.") },
         { key: "cardBox/newCardInterval", label: qsTr("Neues Gesicht spätestens jede … Karte"), from: 2, to: 20, step: 1,
@@ -50,21 +52,23 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         height: 48
-        color: "teal"
+        color: Theme.accent
         Button {
             id: backButton
             anchors.left: parent.left
-            anchors.leftMargin: 8
+            anchors.leftMargin: 4
             anchors.verticalCenter: parent.verticalCenter
+            flat: true
+            Material.foreground: Theme.textOnAccent
             text: qsTr("‹ Zurück")
             onClicked: settingsPage.done()
         }
         Label {
             anchors.left: backButton.right
-            anchors.leftMargin: 16
+            anchors.leftMargin: 12
             anchors.verticalCenter: parent.verticalCenter
             text: qsTr("Einstellungen")
-            color: "white"
+            color: Theme.textOnAccent
             font.bold: true
             font.pixelSize: 20
         }
@@ -91,6 +95,17 @@ Rectangle {
         font.bold: true
         implicitWidth: 32
         implicitHeight: 32
+        flat: true
+        Material.foreground: Theme.accentDark
+        background: Rectangle {
+            implicitWidth: 26
+            implicitHeight: 26
+            anchors.centerIn: parent
+            width: 26
+            height: 26
+            radius: 13
+            color: parent.pressed ? Theme.accentMid : Theme.accentLight
+        }
         onClicked: {
             infoPopup.text = info
             infoPopup.open()
@@ -107,9 +122,20 @@ Rectangle {
         contentWidth: availableWidth
         clip: true
 
+        // the settings on a white card
+        Rectangle {
+            width: settingsColumn.width + 24
+            height: settingsColumn.implicitHeight + 24
+            color: Theme.surface
+            radius: Theme.radius
+            border.color: Theme.divider
+
         ColumnLayout {
+            id: settingsColumn
+            x: 12
+            y: 12
             // leave room for the scroll bar, so it doesn't cover the controls on the right
-            width: scroll.availableWidth - (scroll.ScrollBar.vertical ? scroll.ScrollBar.vertical.width : 0) - 4
+            width: scroll.availableWidth - (scroll.ScrollBar.vertical ? scroll.ScrollBar.vertical.width : 0) - 4 - 24
             spacing: 8
 
             // label with its ⓘ right behind the text, control on the right
@@ -159,9 +185,9 @@ Rectangle {
                     Label {
                         text: modelData.label
                         wrapMode: Text.WordWrap
-                        // fixed room for ⓘ (32) and spin box (160) plus spacing - not taken from the
-                        // row itself, which would make the layout recalculate itself in a loop
-                        Layout.maximumWidth: Math.max(80, scroll.availableWidth - 240)
+                        // fixed room for ⓘ (32), spin box (160), spacing and the card's padding - not
+                        // taken from the row itself, which would make the layout recalculate itself in a loop
+                        Layout.maximumWidth: Math.max(80, scroll.availableWidth - 264)
                     }
                     InfoButton { info: modelData.info }
                     Item { Layout.fillWidth: true }
@@ -179,11 +205,14 @@ Rectangle {
 
             Button {
                 text: qsTr("Standardwerte")
+                flat: true
+                Material.foreground: Theme.accent
                 onClicked: {
                     controller.resetSettings()
                     settingsPage.revision++
                 }
             }
+        }
         }
     }
 }

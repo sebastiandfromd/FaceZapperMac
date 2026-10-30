@@ -25,7 +25,7 @@
     </message>
     <message>
         <source>FaceZapper sammelt und sendet keine Daten – die App hat keinen Internetzugang. Fotos, Namen und Lernstand bleiben auf dem Gerät und im gewählten Ordner.</source>
-        <translation>FaceZapper verzamelt en verstuurt geen gegevens – de app heeft geen internettoegang. Foto's, namen en leervoortgang blijven op het apparaat en in de gekozen map.</translation>
+        <translation>FaceZapper verzamelt en verstuurt geen gegevens – de app heeft geen internettoegang. Foto&apos;s, namen en leervoortgang blijven op het apparaat en in de gekozen map.</translation>
     </message>
     <message>
         <source>Beispielgruppe</source>
@@ -33,7 +33,7 @@
     </message>
     <message>
         <source>Die Beispielfotos und Namen wurden mit %1 KI-generiert und stellen keine realen Personen dar.</source>
-        <translation>De voorbeeldfoto's en -namen zijn met %1 door AI gegenereerd en tonen geen echte personen.</translation>
+        <translation>De voorbeeldfoto&apos;s en -namen zijn met %1 door AI gegenereerd en tonen geen echte personen.</translation>
     </message>
     <message>
         <source>Open-Source-Software</source>
@@ -148,7 +148,7 @@
 /&amp; &apos;Ersetze&apos;-Suchtext</source>
         <translation>Speciaal vervangteken:
 
-/&amp; de zoektekst van 'Vervang'</translation>
+/&amp; de zoektekst van &apos;Vervang&apos;</translation>
     </message>
     <message>
         <source>Trenne bei</source>
@@ -217,7 +217,7 @@
         <source>Wer ein Gesicht schneller als in dieser Zeit ohne Tippen nach links wischt, kannte die Person offensichtlich sicher. Die Karte rutscht dann besonders weit nach hinten (siehe „Sehr schnell: Faktor“).
 
 Zeit, in der die App im Hintergrund war, zählt nicht mit.</source>
-        <translation>Wie een gezicht sneller dan deze tijd zonder te typen naar links veegt, kende de persoon duidelijk goed. De kaart schuift dan extra ver naar achteren (zie 'Zeer snel: factor').
+        <translation>Wie een gezicht sneller dan deze tijd zonder te typen naar links veegt, kende de persoon duidelijk goed. De kaart schuift dan extra ver naar achteren (zie &apos;Zeer snel: factor&apos;).
 
 Tijd dat de app op de achtergrond stond, telt niet mee.</translation>
     </message>
@@ -229,7 +229,7 @@ Tijd dat de app op de achtergrond stond, telt niet mee.</translation>
         <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
 
 Die Zeit fürs Tippen selbst zählt nicht mit, ebenso wenig Zeit, in der die App im Hintergrund war.</source>
-        <translation>Wie langer dan deze tijd nadenkt voordat de eerste letter wordt getypt (of zonder typen wordt geveegd), was waarschijnlijk niet helemaal zeker. De kaart telt als gekend, maar komt snel terug (zie 'Onzeker').
+        <translation>Wie langer dan deze tijd nadenkt voordat de eerste letter wordt getypt (of zonder typen wordt geveegd), was waarschijnlijk niet helemaal zeker. De kaart telt als gekend, maar komt snel terug (zie &apos;Onzeker&apos;).
 
 De tijd voor het typen zelf telt niet mee, net als tijd dat de app op de achtergrond stond.</translation>
     </message>
@@ -263,7 +263,7 @@ Sollte kleiner sein als der Faktor für „Sehr schnell“.</source>
 
 Voorbeeld met factor 2: de kaart komt terug na 4, dan 8, dan 16 … andere kaarten.
 
-Moet kleiner zijn dan de factor voor 'Zeer snel'.</translation>
+Moet kleiner zijn dan de factor voor &apos;Zeer snel&apos;.</translation>
     </message>
     <message>
         <source>Unsicher: kommt nach … Karten wieder</source>
@@ -273,7 +273,7 @@ Moet kleiner zijn dan de factor voor 'Zeer snel'.</translation>
         <source>Nach so vielen anderen Karten kommt eine Person wieder, die zwar gewusst wurde, aber erst nach langem Überlegen (siehe „Lange angesehen“).
 
 Die Stufe bleibt dabei unverändert. Ein mit ← korrigierter Vertipper zählt nicht negativ.</source>
-        <translation>Na zoveel andere kaarten komt een persoon terug die wel gekend werd, maar pas na lang nadenken (zie 'Lang nagedacht').
+        <translation>Na zoveel andere kaarten komt een persoon terug die wel gekend werd, maar pas na lang nadenken (zie &apos;Lang nagedacht&apos;).
 
 Het niveau blijft daarbij gelijk. Een met ← verbeterde tikfout telt niet negatief.</translation>
     </message>
@@ -282,20 +282,20 @@ Het niveau blijft daarbij gelijk. Een met ← verbeterde tikfout telt niet negat
         <translation>Niet gekend: komt terug na … kaarten</translation>
     </message>
     <message>
-        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Lösung“ gedrückt oder einen falschen Buchstaben stehen gelassen.
+        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
-        <translation>Na zoveel andere kaarten komt een persoon terug die niet gekend werd: 'Oplossing' ingedrukt of een verkeerde letter laten staan.
+        <translation>Na zoveel andere kaarten komt een persoon terug die niet gekend werd: 'Onbekend' ingedrukt of een verkeerde letter laten staan.
 
 Het niveau valt daarbij terug naar 0.</translation>
     </message>
     <message>
         <source>„Sicher“ nach … mal in Folge gewusst</source>
-        <translation>'Zeker' na … keer op rij</translation>
+        <translation>&apos;Zeker&apos; na … keer op rij</translation>
     </message>
     <message>
         <source>Ab wie vielen Malen hintereinander gewusst eine Person im Zähler unten links als „sicher“ zählt.</source>
-        <translation>Na hoeveel keer op rij gekend een persoon in de teller linksonder als 'zeker' telt.</translation>
+        <translation>Na hoeveel keer op rij gekend een persoon in de teller linksonder als &apos;zeker&apos; telt.</translation>
     </message>
     <message>
         <source>Neues Gesicht spätestens jede … Karte</source>
@@ -325,7 +325,7 @@ Zo houden moeilijke kaarten die steeds vooraan belanden de nieuwe niet eindeloos
         <source>Die Sprache der App. „Systemsprache“ nimmt die Sprache des Geräts – oder Englisch, wenn es die App in dieser Sprache nicht gibt.
 
 Namen und Gruppen bleiben, wie sie sind.</source>
-        <translation>De taal van de app. 'Systeemtaal' gebruikt de taal van het apparaat – of Engels als de app niet in die taal bestaat.
+        <translation>De taal van de app. &apos;Systeemtaal&apos; gebruikt de taal van het apparaat – of Engels als de app niet in die taal bestaat.
 
 Namen en groepen blijven zoals ze zijn.</translation>
     </message>
@@ -347,9 +347,9 @@ Bei „Vorname Nachname“ dürfen weitere Vornamen weggelassen werden, wenn sie
 Beim Wischen wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
         <translation>Wat er tijdens het leren wordt getypt: alleen de voornaam, alleen de achternaam of beide, in de gekozen volgorde.
 
-Bij 'Achternaam, voornaam' is de komma een eigen toets, gevolgd door de spatie.
+Bij &apos;Achternaam, voornaam&apos; is de komma een eigen toets, gevolgd door de spatie.
 
-Bij 'Voornaam achternaam' mogen extra voornamen worden weggelaten als ze met spaties gescheiden zijn ('Anna de Vries' in plaats van 'Anna Lena de Vries'), maar niet met een koppelteken ('Anna-Lena').
+Bij &apos;Voornaam achternaam&apos; mogen extra voornamen worden weggelaten als ze met spaties gescheiden zijn (&apos;Anna de Vries&apos; in plaats van &apos;Anna Lena de Vries&apos;), maar niet met een koppelteken (&apos;Anna-Lena&apos;).
 
 Bij het vegen wordt precies dat gecontroleerd en zo getoond, en de lettertoetsen bieden daarvoor de juiste volgende letter aan.</translation>
     </message>
@@ -390,9 +390,9 @@ Bij het vegen wordt precies dat gecontroleerd en zo getoond, en de lettertoetsen
 Für deine eigene Gruppe wählst du mit dem Ordner-Knopf oben links einen Ordner mit Fotos.
 
 </source>
-        <translation>Om het uit te proberen is de voorbeeldgroep 'Klas 10d (voorbeeld)' geopend – de foto's zijn door AI gegenereerd, de namen verzonnen. Met 'Toepassen' begin je.
+        <translation>Om het uit te proberen is de voorbeeldgroep &apos;Klas 10d (voorbeeld)&apos; geopend – de foto&apos;s zijn door AI gegenereerd, de namen verzonnen. Met &apos;Toepassen&apos; begin je.
 
-Voor je eigen groep kies je met de mapknop linksboven een map met foto's.
+Voor je eigen groep kies je met de mapknop linksboven een map met foto&apos;s.
 
 </translation>
     </message>
@@ -400,7 +400,7 @@ Voor je eigen groep kies je met de mapknop linksboven een map met foto's.
         <source>Wähle zuerst einen Ordner mit Fotos der Personen, die du lernen möchtest – mit dem Ordner-Knopf oben links.
 
 </source>
-        <translation>Kies eerst een map met foto's van de personen die je wilt leren – met de mapknop linksboven.
+        <translation>Kies eerst een map met foto&apos;s van de personen die je wilt leren – met de mapknop linksboven.
 
 </translation>
     </message>
@@ -412,11 +412,11 @@ oder so:
 
 Die Namen werden automatisch erkannt. Zusätze wie die Klasse „(09B)“ oder Nummern lassen sich mit „Komplexer“ entfernen.</source>
         <translation>De bestandsnamen moeten de namen bevatten, het liefst zo:
-    'Achternaam, Voornaam.jpg'  (bijv. 'Jansen, Anna.jpg')
+    &apos;Achternaam, Voornaam.jpg&apos;  (bijv. &apos;Jansen, Anna.jpg&apos;)
 of zo:
-    'Voornaam Achternaam.jpg'  (bijv. 'Anna Jansen.jpg')
+    &apos;Voornaam Achternaam.jpg&apos;  (bijv. &apos;Anna Jansen.jpg&apos;)
 
-De namen worden automatisch herkend. Toevoegingen zoals de klas '(09B)' of nummers kun je met 'Uitgebreider' verwijderen.</translation>
+De namen worden automatisch herkend. Toevoegingen zoals de klas &apos;(09B)&apos; of nummers kun je met &apos;Uitgebreider&apos; verwijderen.</translation>
     </message>
     <message>
         <source>Trainingsdaten zurücksetzen?</source>
@@ -424,7 +424,7 @@ De namen worden automatisch herkend. Toevoegingen zoals de klas '(09B)' of numme
     </message>
     <message>
         <source>Alles Gelernte für „%1“ wird gelöscht. Namen und Einlese-Einstellungen bleiben erhalten.</source>
-        <translation>Alles wat voor '%1' is geleerd, wordt gewist. Namen en inleesinstellingen blijven behouden.</translation>
+        <translation>Alles wat voor &apos;%1&apos; is geleerd, wordt gewist. Namen en inleesinstellingen blijven behouden.</translation>
     </message>
     <message>
         <source>Alle Gruppendaten löschen?</source>
@@ -432,13 +432,13 @@ De namen worden automatisch herkend. Toevoegingen zoals de klas '(09B)' of numme
     </message>
     <message>
         <source>Gelerntes, Namenskorrekturen, Einlese-Einstellungen und Gruppenname von „%1“ werden gelöscht. Die Gruppe wird danach neu eingelesen, wie beim ersten Öffnen.</source>
-        <translation>Geleerde gegevens, naamcorrecties, inleesinstellingen en de groepsnaam van '%1' worden verwijderd. De groep wordt daarna opnieuw ingelezen, zoals bij de eerste keer openen.</translation>
+        <translation>Geleerde gegevens, naamcorrecties, inleesinstellingen en de groepsnaam van &apos;%1&apos; worden verwijderd. De groep wordt daarna opnieuw ingelezen, zoals bij de eerste keer openen.</translation>
     </message>
     <message numerus="yes">
         <source>%n Bilder</source>
         <translation>
             <numerusform>%n foto</numerusform>
-            <numerusform>%n foto's</numerusform>
+            <numerusform>%n foto&apos;s</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -456,12 +456,16 @@ De namen worden automatisch herkend. Toevoegingen zoals de klas '(09B)' of numme
         </translation>
     </message>
     <message>
-        <source>Lösung</source>
-        <translation>Oplossing</translation>
-    </message>
-    <message>
         <source>Übernehmen</source>
         <translation>Toepassen</translation>
+    </message>
+    <message>
+        <source>Bekannt</source>
+        <translation>Bekend</translation>
+    </message>
+    <message>
+        <source>Unbekannt</source>
+        <translation>Onbekend</translation>
     </message>
     <message>
         <source>Namen bearbeiten</source>

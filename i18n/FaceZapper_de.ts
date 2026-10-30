@@ -260,7 +260,7 @@ Die Stufe bleibt dabei unverändert. Ein mit ← korrigierter Vertipper zählt n
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Lösung“ gedrückt oder einen falschen Buchstaben stehen gelassen.
+        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
         <translation type="unfinished"></translation>
@@ -411,11 +411,15 @@ Die Namen werden automatisch erkannt. Zusätze wie die Klasse „(09B)“ oder N
         </translation>
     </message>
     <message>
-        <source>Lösung</source>
+        <source>Übernehmen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Übernehmen</source>
+        <source>Bekannt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unbekannt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -282,10 +282,10 @@ O nível não muda. Um erro de digitação corrigido com ← não conta contra.<
         <translation>Não sabido: volta após … cartões</translation>
     </message>
     <message>
-        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Lösung“ gedrückt oder einen falschen Buchstaben stehen gelassen.
+        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
-        <translation>Depois de tantos outros cartões volta uma pessoa que não foi reconhecida: “Solução” foi tocado ou uma letra errada ficou.
+        <translation>Depois de tantos outros cartões volta uma pessoa que não foi reconhecida: “Desconhecido” foi tocado ou uma letra errada ficou.
 
 O nível volta a 0.</translation>
     </message>
@@ -456,12 +456,16 @@ Os nomes são reconhecidos automaticamente. Acréscimos como a turma “(09B)”
         </translation>
     </message>
     <message>
-        <source>Lösung</source>
-        <translation>Solução</translation>
-    </message>
-    <message>
         <source>Übernehmen</source>
         <translation>Aplicar</translation>
+    </message>
+    <message>
+        <source>Bekannt</source>
+        <translation>Conhecido</translation>
+    </message>
+    <message>
+        <source>Unbekannt</source>
+        <translation>Desconhecido</translation>
     </message>
     <message>
         <source>Namen bearbeiten</source>

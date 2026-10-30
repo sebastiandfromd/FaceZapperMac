@@ -37,7 +37,7 @@ public:
         VERY_EASY = 1,  // swiped quickly without typing
         GOOD = 2,       // typed correctly, or swiped after a normal time
         UNSURE = 3,     // known, but after long looking or with a self-corrected slip
-        AGAIN = 4       // not known: "Lösung" was shown or a wrong letter remained
+        AGAIN = 4       // not known: "Unbekannt" was pressed or a wrong letter remained
     };
     Q_ENUM(Rating)
 
@@ -76,7 +76,7 @@ public:
 
     PersonData *currentPerson() const;
     QString typed() const;
-    bool solutionShown() const;   // "Lösung" was used for this card -> not known
+    bool solutionShown() const;   // "Unbekannt" was pressed for this card -> not known
     bool solutionVisible() const; // the name is on screen right now
     bool canGoBack() const { return m_index > 0; }
     QString targetName() const; // the full name in the chosen order, as shown after the swipe

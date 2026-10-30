@@ -25,15 +25,15 @@
     </message>
     <message>
         <source>FaceZapper sammelt und sendet keine Daten – die App hat keinen Internetzugang. Fotos, Namen und Lernstand bleiben auf dem Gerät und im gewählten Ordner.</source>
-        <translation>FaceZapper ne collecte ni n'envoie aucune donnée – l'application n'a pas accès à Internet. Les photos, les noms et la progression restent sur l'appareil et dans le dossier choisi.</translation>
+        <translation>FaceZapper ne collecte ni n&apos;envoie aucune donnée – l&apos;application n&apos;a pas accès à Internet. Les photos, les noms et la progression restent sur l&apos;appareil et dans le dossier choisi.</translation>
     </message>
     <message>
         <source>Beispielgruppe</source>
-        <translation>Groupe d'exemple</translation>
+        <translation>Groupe d&apos;exemple</translation>
     </message>
     <message>
         <source>Die Beispielfotos und Namen wurden mit %1 KI-generiert und stellen keine realen Personen dar.</source>
-        <translation>Les photos et les noms d'exemple ont été générés par IA avec %1 et ne représentent pas de personnes réelles.</translation>
+        <translation>Les photos et les noms d&apos;exemple ont été générés par IA avec %1 et ne représentent pas de personnes réelles.</translation>
     </message>
     <message>
         <source>Open-Source-Software</source>
@@ -49,11 +49,11 @@
     </message>
     <message>
         <source>Der Quellcode von Qt 6.12 ist unter %1 erhältlich. Die Qt-Bibliotheken sind als eigene Dateien in der App enthalten und können ausgetauscht werden.</source>
-        <translation>Le code source de Qt 6.12 est disponible sur %1. Les bibliothèques Qt sont incluses dans l'application sous forme de fichiers séparés et peuvent être remplacées.</translation>
+        <translation>Le code source de Qt 6.12 est disponible sur %1. Les bibliothèques Qt sont incluses dans l&apos;application sous forme de fichiers séparés et peuvent être remplacées.</translation>
     </message>
     <message>
         <source>Qt enthält Bibliotheken anderer Autoren: FreeType, HarfBuzz, libpng, libjpeg-turbo, PCRE2, double-conversion, SHA-3 (Keccak), TinyCBOR, MD4C, libwebp, libtiff, den JavaScriptCore Macro Assembler und unter Windows zlib; dazu kommen die C++-Laufzeitbibliotheken (LLVM libc++ unter Android, GCC/MinGW-w64 unter Windows). %1</source>
-        <translation>Qt contient des bibliothèques d'autres auteurs : FreeType, HarfBuzz, libpng, libjpeg-turbo, PCRE2, double-conversion, SHA-3 (Keccak), TinyCBOR, MD4C, libwebp, libtiff, le JavaScriptCore Macro Assembler et, sous Windows, zlib ; s'y ajoutent les bibliothèques d'exécution C++ (LLVM libc++ sous Android, GCC/MinGW-w64 sous Windows). %1</translation>
+        <translation>Qt contient des bibliothèques d&apos;autres auteurs : FreeType, HarfBuzz, libpng, libjpeg-turbo, PCRE2, double-conversion, SHA-3 (Keccak), TinyCBOR, MD4C, libwebp, libtiff, le JavaScriptCore Macro Assembler et, sous Windows, zlib ; s&apos;y ajoutent les bibliothèques d&apos;exécution C++ (LLVM libc++ sous Android, GCC/MinGW-w64 sous Windows). %1</translation>
     </message>
     <message>
         <source>Lizenzen und Copyright-Hinweise</source>
@@ -68,7 +68,7 @@
     </message>
     <message>
         <source>Daten konnten nicht im Bilderordner gespeichert werden, sie liegen in der App.</source>
-        <translation>Les données n'ont pas pu être enregistrées dans le dossier des photos, elles sont conservées dans l'application.</translation>
+        <translation>Les données n&apos;ont pas pu être enregistrées dans le dossier des photos, elles sont conservées dans l&apos;application.</translation>
     </message>
 </context>
 <context>
@@ -207,7 +207,7 @@
     </message>
     <message>
         <source>Wie lange der Name nach dem Wischen groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).</source>
-        <translation>Durée d'affichage du nom en grand après le balayage, en millisecondes (1000 ms = 1 seconde).</translation>
+        <translation>Durée d&apos;affichage du nom en grand après le balayage, en millisecondes (1000 ms = 1 seconde).</translation>
     </message>
     <message>
         <source>Sehr schnell: unter … Sekunden</source>
@@ -219,7 +219,7 @@
 Zeit, in der die App im Hintergrund war, zählt nicht mit.</source>
         <translation>Si vous balayez un visage vers la gauche plus vite que cela sans taper, vous connaissiez manifestement bien la personne. La carte recule alors particulièrement loin (voir « Très rapide : facteur »).
 
-Le temps passé par l'application en arrière-plan ne compte pas.</translation>
+Le temps passé par l&apos;application en arrière-plan ne compte pas.</translation>
     </message>
     <message>
         <source>Lange angesehen: über … Sekunden</source>
@@ -229,9 +229,9 @@ Le temps passé par l'application en arrière-plan ne compte pas.</translation>
         <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
 
 Die Zeit fürs Tippen selbst zählt nicht mit, ebenso wenig Zeit, in der die App im Hintergrund war.</source>
-        <translation>Si vous réfléchissez plus longtemps que cela avant de taper la première lettre (ou de balayer sans taper), vous n'étiez sans doute pas tout à fait sûr. La carte compte comme connue, mais revient bientôt (voir « Hésitant »).
+        <translation>Si vous réfléchissez plus longtemps que cela avant de taper la première lettre (ou de balayer sans taper), vous n&apos;étiez sans doute pas tout à fait sûr. La carte compte comme connue, mais revient bientôt (voir « Hésitant »).
 
-Le temps de frappe lui-même ne compte pas, pas plus que le temps passé par l'application en arrière-plan.</translation>
+Le temps de frappe lui-même ne compte pas, pas plus que le temps passé par l&apos;application en arrière-plan.</translation>
     </message>
     <message>
         <source>Sehr schnell: Faktor</source>
@@ -243,7 +243,7 @@ Le temps de frappe lui-même ne compte pas, pas plus que le temps passé par l'a
 Die Stufe steigt jedes Mal um 1, wenn die Person gewusst wird, und fällt auf 0, wenn nicht.
 
 Beispiel mit Faktor 4: Die Karte kommt nach 8, dann 16, dann 32 … anderen Karten wieder.</source>
-        <translation>Jusqu'où recule une carte connue très rapidement : facteur × 2^niveau cartes.
+        <translation>Jusqu&apos;où recule une carte connue très rapidement : facteur × 2^niveau cartes.
 
 Le niveau augmente de 1 chaque fois que la personne est connue et retombe à 0 sinon.
 
@@ -273,7 +273,7 @@ Doit être inférieur au facteur « Très rapide ».</translation>
         <source>Nach so vielen anderen Karten kommt eine Person wieder, die zwar gewusst wurde, aber erst nach langem Überlegen (siehe „Lange angesehen“).
 
 Die Stufe bleibt dabei unverändert. Ein mit ← korrigierter Vertipper zählt nicht negativ.</source>
-        <translation>Après ce nombre d'autres cartes revient une personne qui a été reconnue, mais seulement après une longue réflexion (voir « Longue réflexion »).
+        <translation>Après ce nombre d&apos;autres cartes revient une personne qui a été reconnue, mais seulement après une longue réflexion (voir « Longue réflexion »).
 
 Le niveau reste inchangé. Une faute de frappe corrigée avec ← ne compte pas négativement.</translation>
     </message>
@@ -282,10 +282,10 @@ Le niveau reste inchangé. Une faute de frappe corrigée avec ← ne compte pas 
         <translation>Pas connu : revient après … cartes</translation>
     </message>
     <message>
-        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Lösung“ gedrückt oder einen falschen Buchstaben stehen gelassen.
+        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
-        <translation>Après ce nombre d'autres cartes revient une personne qui n'a pas été reconnue : « Solution » a été touché ou une mauvaise lettre est restée.
+        <translation>Après ce nombre d'autres cartes revient une personne qui n'a pas été reconnue : « Inconnu » a été touché ou une mauvaise lettre est restée.
 
 Le niveau retombe alors à 0.</translation>
     </message>
@@ -305,7 +305,7 @@ Le niveau retombe alors à 0.</translation>
         <source>Solange es noch nie gezeigte Gesichter gibt, ist spätestens jede so vielte Karte ein neues Gesicht.
 
 So halten schwierige Karten, die immer wieder vorne landen, die neuen nicht ewig auf.</source>
-        <translation>Tant qu'il reste des visages jamais montrés, au moins une carte sur N est un nouveau visage (N = la valeur réglée ici).
+        <translation>Tant qu&apos;il reste des visages jamais montrés, au moins une carte sur N est un nouveau visage (N = la valeur réglée ici).
 
 Ainsi, les cartes difficiles qui reviennent sans cesse en tête ne bloquent pas indéfiniment les nouvelles.</translation>
     </message>
@@ -325,7 +325,7 @@ Ainsi, les cartes difficiles qui reviennent sans cesse en tête ne bloquent pas 
         <source>Die Sprache der App. „Systemsprache“ nimmt die Sprache des Geräts – oder Englisch, wenn es die App in dieser Sprache nicht gibt.
 
 Namen und Gruppen bleiben, wie sie sind.</source>
-        <translation>La langue de l'application. « Langue du système » utilise la langue de l'appareil – ou l'anglais si l'application n'existe pas dans cette langue.
+        <translation>La langue de l&apos;application. « Langue du système » utilise la langue de l&apos;appareil – ou l&apos;anglais si l&apos;application n&apos;existe pas dans cette langue.
 
 Les noms et les groupes restent inchangés.</translation>
     </message>
@@ -345,13 +345,13 @@ Bei „Nachname, Vorname“ ist das Komma eine eigene Taste, danach kommt das Le
 Bei „Vorname Nachname“ dürfen weitere Vornamen weggelassen werden, wenn sie mit Leerzeichen getrennt sind („Anna Groß“ statt „Anna Lena Groß“), nicht aber mit Bindestrich („Anna-Lena“).
 
 Beim Wischen wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
-        <translation>Ce qui est tapé pendant l'apprentissage : seulement le prénom, seulement le nom ou les deux, dans l'ordre choisi.
+        <translation>Ce qui est tapé pendant l&apos;apprentissage : seulement le prénom, seulement le nom ou les deux, dans l&apos;ordre choisi.
 
-Avec « Nom, prénom », la virgule est une touche à part, suivie de l'espace.
+Avec « Nom, prénom », la virgule est une touche à part, suivie de l&apos;espace.
 
-Avec « Prénom nom », les prénoms supplémentaires peuvent être omis s'ils sont séparés par des espaces (« Anne Martin » au lieu de « Anne Marie Martin »), mais pas avec un trait d'union (« Anne-Marie »).
+Avec « Prénom nom », les prénoms supplémentaires peuvent être omis s&apos;ils sont séparés par des espaces (« Anne Martin » au lieu de « Anne Marie Martin »), mais pas avec un trait d&apos;union (« Anne-Marie »).
 
-Le balayage vérifie exactement cela et l'affiche de la même façon, et les touches proposent la bonne lettre suivante.</translation>
+Le balayage vérifie exactement cela et l&apos;affiche de la même façon, et les touches proposent la bonne lettre suivante.</translation>
     </message>
     <message>
         <source>Vorname</source>
@@ -390,7 +390,7 @@ Le balayage vérifie exactement cela et l'affiche de la même façon, et les tou
 Für deine eigene Gruppe wählst du mit dem Ordner-Knopf oben links einen Ordner mit Fotos.
 
 </source>
-        <translation>Pour essayer, le groupe d'exemple « Classe 10d (exemple) » est ouvert – les photos sont générées par IA, les noms inventés. Touchez « Appliquer » pour commencer.
+        <translation>Pour essayer, le groupe d&apos;exemple « Classe 10d (exemple) » est ouvert – les photos sont générées par IA, les noms inventés. Touchez « Appliquer » pour commencer.
 
 Pour votre propre groupe, choisissez un dossier de photos avec le bouton dossier en haut à gauche.
 
@@ -400,7 +400,7 @@ Pour votre propre groupe, choisissez un dossier de photos avec le bouton dossier
         <source>Wähle zuerst einen Ordner mit Fotos der Personen, die du lernen möchtest – mit dem Ordner-Knopf oben links.
 
 </source>
-        <translation>Choisissez d'abord un dossier contenant les photos des personnes que vous voulez apprendre – avec le bouton dossier en haut à gauche.
+        <translation>Choisissez d&apos;abord un dossier contenant les photos des personnes que vous voulez apprendre – avec le bouton dossier en haut à gauche.
 
 </translation>
     </message>
@@ -420,11 +420,11 @@ Les noms sont reconnus automatiquement. Les ajouts comme la classe « (09B) » o
     </message>
     <message>
         <source>Trainingsdaten zurücksetzen?</source>
-        <translation>Réinitialiser l'apprentissage ?</translation>
+        <translation>Réinitialiser l&apos;apprentissage ?</translation>
     </message>
     <message>
         <source>Alles Gelernte für „%1“ wird gelöscht. Namen und Einlese-Einstellungen bleiben erhalten.</source>
-        <translation>Tout ce qui a été appris pour « %1 » sera supprimé. Les noms et les réglages d'importation sont conservés.</translation>
+        <translation>Tout ce qui a été appris pour « %1 » sera supprimé. Les noms et les réglages d&apos;importation sont conservés.</translation>
     </message>
     <message>
         <source>Alle Gruppendaten löschen?</source>
@@ -432,7 +432,7 @@ Les noms sont reconnus automatiquement. Les ajouts comme la classe « (09B) » o
     </message>
     <message>
         <source>Gelerntes, Namenskorrekturen, Einlese-Einstellungen und Gruppenname von „%1“ werden gelöscht. Die Gruppe wird danach neu eingelesen, wie beim ersten Öffnen.</source>
-        <translation>Ce qui a été appris, les corrections de noms, les réglages d'importation et le nom du groupe « %1 » seront supprimés. Le groupe sera ensuite relu, comme à la première ouverture.</translation>
+        <translation>Ce qui a été appris, les corrections de noms, les réglages d&apos;importation et le nom du groupe « %1 » seront supprimés. Le groupe sera ensuite relu, comme à la première ouverture.</translation>
     </message>
     <message numerus="yes">
         <source>%n Bilder</source>
@@ -456,12 +456,16 @@ Les noms sont reconnus automatiquement. Les ajouts comme la classe « (09B) » o
         </translation>
     </message>
     <message>
-        <source>Lösung</source>
-        <translation>Solution</translation>
-    </message>
-    <message>
         <source>Übernehmen</source>
         <translation>Appliquer</translation>
+    </message>
+    <message>
+        <source>Bekannt</source>
+        <translation>Connu</translation>
+    </message>
+    <message>
+        <source>Unbekannt</source>
+        <translation>Inconnu</translation>
     </message>
     <message>
         <source>Namen bearbeiten</source>
@@ -477,7 +481,7 @@ Les noms sont reconnus automatiquement. Les ajouts comme la classe « (09B) » o
     </message>
     <message>
         <source>Trainingsdaten zurücksetzen</source>
-        <translation>Réinitialiser l'apprentissage</translation>
+        <translation>Réinitialiser l&apos;apprentissage</translation>
     </message>
     <message>
         <source>Alle Gruppendaten löschen</source>

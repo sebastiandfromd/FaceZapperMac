@@ -8,6 +8,8 @@
         <file>SettingsPage.qml</file>
         <file>TextDialog.qml</file>
         <file>AboutPage.qml</file>
+        <file>Theme.qml</file>
+        <file>qmldir</file>
         <file>letterstats.json</file>
     </qresource>
 </RCC>

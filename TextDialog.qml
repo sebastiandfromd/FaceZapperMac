@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import "."
 
 // Dialog with a bold heading and a wrapping text.
 // The heading is part of the content on purpose: Dialog's own `title` together with a wrapping
@@ -19,12 +20,14 @@ Dialog {
             width: parent.width
             wrapMode: Text.WordWrap
             text: textDialog.heading
+            color: Theme.text
             font.bold: true
             font.pixelSize: 20
         }
         Label {
             width: parent.width
             wrapMode: Text.WordWrap
+            color: Theme.text
             text: textDialog.message
         }
     }

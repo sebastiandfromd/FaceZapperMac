@@ -1,9 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import "."
 
 Rectangle {
+    color: Theme.background
     property int borderwidth: 1
-    property color bordercolor: "darkgray"
+    property color bordercolor: Theme.border
     property real widthEighth: ((11/12)*width) / 8
     property real widthMargin: width/24
     property real heightMargin: widthMargin/2
@@ -25,7 +27,7 @@ Rectangle {
 
     Rectangle {
         id: openFolderRect
-        color: openFolderMouseArea.pressed ? "red" : "lightgray"
+        color: openFolderMouseArea.pressed ? Theme.accentLight : Theme.background
         width: heightUnit
         height: heightUnit
         anchors.top: parent.top
@@ -65,8 +67,8 @@ Rectangle {
             var ctx = getContext("2d")
             ctx.reset()
             var w = width, h = height, head = width / 4
-            ctx.strokeStyle = "red"
-            ctx.fillStyle = "red"
+            ctx.strokeStyle = Theme.unknown
+            ctx.fillStyle = Theme.unknown
             ctx.lineWidth = Math.max(4, width / 14)
             ctx.lineCap = "round"
             ctx.beginPath()          // shaft: from bottom right towards the tip at top left
@@ -84,7 +86,7 @@ Rectangle {
     }
     Rectangle {
         id: groupNameTitleRect
-        color: "white";
+        color: Theme.surface
         width: 2 * widthEighth - widthMargin
         height: heightUnit
         anchors.top: parent.top
@@ -106,7 +108,7 @@ Rectangle {
     }
     Rectangle {
         id: expertModeRect
-        color: expertModeMouseArea.pressed ? "red" : "lightgray"
+        color: expertModeMouseArea.pressed ? Theme.accentLight : Theme.background
         width: 1.2 * widthEighth
         height: heightUnit
         anchors.top: parent.top
@@ -134,7 +136,7 @@ Rectangle {
     }
     Rectangle {
         id: groupNameTextRect
-        color: "wheat"
+        color: Theme.accentLight
         height: heightUnit
         anchors.top: parent.top
         anchors.left: groupNameTitleRect.right
@@ -156,12 +158,13 @@ Rectangle {
             clip: true
             font.bold: true
             font.letterSpacing: 1.3
+            color: Theme.accentDark
         }
     }
     Rectangle {
         id: deleteNumberTitleRect
         visible: expertMode
-        color: "white";
+        color: Theme.surface
         width: 1 * widthEighth
         height: expertRowHeight
         anchors.top: groupNameTitleRect.bottom
@@ -185,7 +188,7 @@ Rectangle {
     Rectangle {
         id: deleteNumberLocationRect
         visible: expertMode
-        color: "lightgray";
+        color: Theme.background
         width: 1.2 * widthEighth
         height: expertRowHeight
         anchors.top: groupNameTitleRect.bottom
@@ -215,7 +218,7 @@ Rectangle {
     Rectangle {
         id: deleteNumberCountRect
         visible: expertMode
-        color: "lightgray";
+        color: Theme.background
         width: 1 * widthEighth
         height: expertRowHeight
         anchors.top: groupNameTitleRect.bottom
@@ -245,7 +248,7 @@ Rectangle {
     Rectangle {
         id: deleteAndTitleRect
         visible: expertMode
-        color: "white";
+        color: Theme.surface
         width: 0.6 * widthEighth
         height: expertRowHeight
         anchors.top: groupNameTitleRect.bottom
@@ -268,7 +271,7 @@ Rectangle {
     Rectangle {
         id: deleteCharsLocationRect
         visible: expertMode
-        color: "lightgray";
+        color: Theme.background
         width: 1.2 * widthEighth
         height: expertRowHeight
         anchors.top: groupNameTitleRect.bottom
@@ -298,7 +301,7 @@ Rectangle {
     Rectangle {
         id: deleteCharsTextRect
         visible: expertMode
-        color: "wheat"
+        color: Theme.surface
         width: 3 * widthEighth
         height: expertRowHeight
         anchors.top: groupNameTitleRect.bottom
@@ -306,7 +309,7 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: widthMargin
         border.width: borderwidth
-        border.color: bordercolor
+        border.color: deleteCharsTextInput.activeFocus ? Theme.accent : bordercolor
         TextInput {
             id: deleteCharsTextInput
             anchors.centerIn: parent
@@ -324,7 +327,7 @@ Rectangle {
     Rectangle {
         id: replaceFromTitleRect
         visible: expertMode
-        color: "white";
+        color: Theme.surface
         width: 1 * widthEighth
         height: expertRowHeight
         anchors.top: deleteNumberTitleRect.bottom
@@ -347,13 +350,13 @@ Rectangle {
     Rectangle {
         id: replaceFromTextRect
         visible: expertMode
-        color: "wheat"
+        color: Theme.surface
         width: 2.8 * widthEighth - heightUnit
         height: expertRowHeight
         anchors.top: deleteNumberTitleRect.bottom
         anchors.left: replaceFromTitleRect.right
         border.width: borderwidth
-        border.color: bordercolor
+        border.color: replaceFromInput.activeFocus ? Theme.accent : bordercolor
         TextInput {
             id: replaceFromInput
             anchors.centerIn: parent
@@ -370,7 +373,7 @@ Rectangle {
     Rectangle {
         id: infoReplaceFromRect
         visible: expertMode
-        color: "blue"
+        color: "transparent"
         height: expertRowHeight
         width: height
         anchors.top: deleteNumberTitleRect.bottom
@@ -378,12 +381,12 @@ Rectangle {
         Rectangle {
             anchors.fill: parent
             radius: width / 2
-            color: "white"
+            color: Theme.accent
         }
         Text {
             anchors.fill: parent
             text: "i"
-            color: "blue"
+            color: Theme.textOnAccent
             font.bold: true
             font.italic: true
             verticalAlignment: Text.AlignVCenter
@@ -401,8 +404,8 @@ Rectangle {
             Rectangle {
                 anchors.fill: parent
                 border.width: 1
-                border.color: "darkgray"
-                color: "lightblue"
+                border.color: Theme.border
+                color: Theme.accentLight
                 Text {
                     id: infoReplaceFromText
                     text: qsTr("Spezielle Suchzeichen: \n\n/? Beliebiges Zeichen\n/# Beliebige Ziffer\n/$ Beliebiger Buchstabe\n/% Beliebige Ziffernfolge\n/W Beliebige Buchstabenfolge")
@@ -421,7 +424,7 @@ Rectangle {
     Rectangle {
         id: replaceWithTitleRect
         visible: expertMode
-        color: "white";
+        color: Theme.surface
         width: 0.8 * widthEighth
         height: expertRowHeight
         anchors.top: deleteNumberTitleRect.bottom
@@ -443,13 +446,13 @@ Rectangle {
     Rectangle {
         id: replaceWithTextRect
         visible: expertMode
-        color: "wheat"
+        color: Theme.surface
         width: 2.8 * widthEighth-heightUnit
         height: expertRowHeight
         anchors.top: deleteNumberTitleRect.bottom
         anchors.right: infoReplaceToRect.left
         border.width: borderwidth
-        border.color: bordercolor
+        border.color: replaceWithInput.activeFocus ? Theme.accent : bordercolor
         TextInput {
             id: replaceWithInput
             anchors.centerIn: parent
@@ -466,7 +469,7 @@ Rectangle {
     Rectangle {
         id: infoReplaceToRect
         visible: expertMode
-        color: "blue"
+        color: "transparent"
         height: expertRowHeight
         width: height
         anchors.top: deleteNumberTitleRect.bottom
@@ -474,12 +477,12 @@ Rectangle {
         Rectangle {
             anchors.fill: parent
             radius: width / 2
-            color: "white"
+            color: Theme.accent
         }
         Text {
             anchors.fill: parent
             text: "i"
-            color: "blue"
+            color: Theme.textOnAccent
             font.bold: true
             font.italic: true
             verticalAlignment: Text.AlignVCenter
@@ -496,8 +499,8 @@ Rectangle {
             Rectangle {
                 anchors.fill: parent
                 border.width: 1
-                border.color: "darkgray"
-                color: "lightblue"
+                border.color: Theme.border
+                color: Theme.accentLight
                 Text {
                     id: infoReplaceToText
                     text: qsTr("Spezielles Ersetzungszeichen: \n\n/& 'Ersetze'-Suchtext")
@@ -516,7 +519,7 @@ Rectangle {
     Rectangle {
         id: caseSensitivityRect
         visible: expertMode
-        color: caseSensitivityMouseArea.pressed ? "red":"lightgray";
+        color: caseSensitivityMouseArea.pressed ? Theme.accentLight : Theme.background
         width: 0.6 * widthEighth
         height: expertRowHeight
         anchors.top: deleteNumberTitleRect.bottom
@@ -542,7 +545,7 @@ Rectangle {
     Rectangle {
         id: delimiterTitleRect
         visible: expertMode
-        color: "white";
+        color: Theme.surface
         width: 1.1 * widthEighth
         height: expertRowHeight
         anchors.top: replaceFromTitleRect.bottom
@@ -566,13 +569,13 @@ Rectangle {
     Rectangle {
         id: delimiterTextRect
         visible: expertMode
-        color: "wheat"
+        color: Theme.surface
         width: 2.3 * widthEighth
         height: expertRowHeight
         anchors.top: replaceFromTitleRect.bottom
         anchors.left: delimiterTitleRect.right
         border.width: borderwidth
-        border.color: bordercolor
+        border.color: delimiterInput.activeFocus ? Theme.accent : bordercolor
         TextInput {
             id: delimiterInput
             anchors.centerIn: parent
@@ -589,7 +592,7 @@ Rectangle {
     Rectangle {
         id: delimiterCounterRect
         visible: expertMode
-        color: "lightgray";
+        color: Theme.background
         width: 2 * widthEighth
         height: expertRowHeight
         anchors.top: replaceFromTitleRect.bottom
@@ -619,7 +622,7 @@ Rectangle {
     Rectangle {
         id: caseCorrectionRect
         visible: expertMode
-        color: caseCorrectionMouseArea.pressed ? "red":"lightgray";
+        color: caseCorrectionMouseArea.pressed ? Theme.accentLight : Theme.background
         width: 0.6 * widthEighth
         height: expertRowHeight
         anchors.top: replaceFromTitleRect.bottom
@@ -644,7 +647,7 @@ Rectangle {
     Rectangle {
         id: nameOrderRect
         visible: expertMode
-        color: "lightgray"
+        color: Theme.background
         width: 2 * widthEighth
         height: expertRowHeight
         anchors.top: replaceFromTitleRect.bottom
@@ -720,11 +723,11 @@ Rectangle {
             property bool nameColumn: column === 1 || column === 2
             implicitWidth: 100
             implicitHeight: nameTable.rowHeight
-            border.color: "black"
+            border.color: Theme.divider
             border.width: borderwidth
-            color: heading ? 'teal'
-                           : modeColumn ? (exclude ? "tomato" : (overrideAutomatic ? "wheat" : "white"))
-                                        : (exclude && column === 3 ? "tomato" : (overrideAutomatic && nameColumn ? "wheat" : "white"))
+            color: heading ? Theme.accent
+                           : modeColumn ? (exclude ? Theme.unknownLight : (overrideAutomatic ? Theme.almostLight : Theme.surface))
+                                        : (exclude && column === 3 ? Theme.unknownLight : (overrideAutomatic && nameColumn ? Theme.almostLight : Theme.surface))
             clip: true
             TextInput {
                 visible: !modeColumn
@@ -734,6 +737,7 @@ Rectangle {
                 font.pointSize: 10
                 anchors.centerIn: parent
                 enabled: overrideAutomatic && nameColumn
+                color: heading ? Theme.textOnAccent : Theme.text
                 onTextChanged: {
                     if (nameDerivationTable && !heading) nameDerivationTable.dataEdited(row, column, text)
                 }

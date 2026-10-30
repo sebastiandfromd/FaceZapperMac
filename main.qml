@@ -1,7 +1,9 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material
 import QtQuick.Dialogs
 //import QtCore
+import "."
 
 ApplicationWindow {
     id: mainWin
@@ -9,6 +11,7 @@ ApplicationWindow {
     height: 480
     visible: true
     title: qsTr("FaceZapper")
+    color: Theme.background
     property bool learning: !deriveNamesTableView.visible
 
     function showImportTable() {
@@ -106,8 +109,10 @@ ApplicationWindow {
         z: 20
         width: 36
         height: 36
+        flat: true
         text: "×" // not "✕": Android's default font doesn't have that one
-        font.pixelSize: 16
+        font.pixelSize: 18
+        Material.foreground: Theme.textMuted
         onClicked: Qt.quit()
     }
 
@@ -137,49 +142,98 @@ ApplicationWindow {
         height: 50
         implicitHeight: 50
         // no explicit width: ApplicationWindow stretches the footer over the whole window
-        color: "red"
-        // learning progress: all pictures / rated at least once / known several times in a row
+        color: Theme.surface
+        Rectangle {
+            anchors.top: parent.top
+            width: parent.width
+            height: 1
+            color: Theme.divider
+        }
+        // learning progress: a bar (green = known several times in a row, light teal = rated at
+        // least once, the rest = all pictures) and the three numbers in one line below it
         Column {
+            id: progress
             anchors.left: parent.left
             // on phones the rounded screen corner would cover the start of the lines
-            anchors.leftMargin: 8 + (Qt.platform.os === "android" ? width / 3 : 0)
+            anchors.leftMargin: 8 + (Qt.platform.os === "android" ? 40 : 0)
             anchors.verticalCenter: parent.verticalCenter
+            width: Math.max(90, Math.min(200, footerButtons.x - x - 12))
+            spacing: 3
             visible: mainWin.learning && controller !== null
             property var session: controller ? controller.session : null
-            Repeater {
-                model: parent.session ? [qsTr("%n Bilder", "", parent.session.cardCount),
-                                         qsTr("%n gesehen", "", parent.session.seenCount),
-                                         qsTr("%n sicher", "", parent.session.learnedCount)] : []
-                Text {
-                    text: modelData
-                    color: "black"
-                    font.bold: true
-                    font.pixelSize: 11
+            property int cards: session ? session.cardCount : 0
+            property int seen: session ? session.seenCount : 0
+            property int learned: session ? session.learnedCount : 0
+            Rectangle {
+                width: parent.width
+                height: 6
+                radius: 3
+                color: Theme.divider
+                clip: true
+                Rectangle {
+                    height: parent.height
+                    color: Theme.accentMid
+                    width: progress.cards > 0 ? parent.width * progress.seen / progress.cards : 0
+                    Behavior on width { NumberAnimation { duration: 250 } }
                 }
+                Rectangle {
+                    height: parent.height
+                    color: Theme.known
+                    width: progress.cards > 0 ? parent.width * progress.learned / progress.cards : 0
+                    Behavior on width { NumberAnimation { duration: 250 } }
+                }
+            }
+            Text {
+                width: parent.width
+                wrapMode: Text.WordWrap
+                font.pixelSize: 11
+                color: Theme.textMuted
+                textFormat: Text.StyledText
+                text: "<font color=\"" + Theme.known + "\">" + qsTr("%n sicher", "", progress.learned) + "</font>"
+                      + " · " + qsTr("%n gesehen", "", progress.seen)
+                      + " · " + qsTr("%n Bilder", "", progress.cards)
             }
         }
         // shown when the data couldn't be saved in the picture folder itself
         Text {
-            anchors.left: footerButton.right
+            anchors.left: footerButtons.right
             anchors.right: menuButton.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.margins: 8
             text: controller ? controller.storageHint : ""
-            color: "white"
+            color: Theme.textMuted
             wrapMode: Text.WordWrap
             font.pixelSize: 11
         }
-        Button {
-            id: footerButton
+        // import table: take the names over and start learning;
+        // learning: "Bekannt" (= swipe left) and "Unbekannt" (shows the name)
+        Row {
+            id: footerButtons
             anchors.centerIn: parent
-            // import table: take the names over and start learning; learning: show the name
-            text: mainWin.learning ? qsTr("Lösung") : qsTr("Übernehmen")
-            enabled: !mainWin.learning || (controller && controller.session.currentPerson !== null
-                                           && !controller.session.solutionVisible)
-            onClicked: {
-                if (!controller) return
-                if (mainWin.learning) controller.session.showSolution()
-                else mainWin.startLearning()
+            spacing: 10
+            Button {
+                visible: !mainWin.learning
+                text: qsTr("Übernehmen")
+                highlighted: true
+                Material.accent: Theme.accent
+                onClicked: if (controller) mainWin.startLearning()
+            }
+            Button {
+                visible: mainWin.learning
+                text: qsTr("Bekannt")
+                highlighted: true
+                Material.accent: Theme.known
+                enabled: controller !== null && controller.session.currentPerson !== null && !learnView.busy
+                onClicked: learnView.markKnown()
+            }
+            Button {
+                visible: mainWin.learning
+                text: qsTr("Unbekannt")
+                highlighted: true
+                Material.accent: Theme.unknown
+                enabled: controller !== null && controller.session.currentPerson !== null
+                         && !controller.session.solutionVisible && !learnView.busy
+                onClicked: controller.session.showSolution()
             }
         }
         Button {
@@ -187,8 +241,10 @@ ApplicationWindow {
             anchors.right: parent.right
             anchors.rightMargin: 8
             anchors.verticalCenter: parent.verticalCenter
+            flat: true
             text: "≡" // not "☰": Android's default font doesn't have that one
-            font.pixelSize: 18
+            font.pixelSize: 22
+            Material.foreground: Theme.text
             onClicked: menu.open()
             Menu {
                 id: menu

@@ -25,7 +25,7 @@
     </message>
     <message>
         <source>FaceZapper sammelt und sendet keine Daten – die App hat keinen Internetzugang. Fotos, Namen und Lernstand bleiben auf dem Gerät und im gewählten Ordner.</source>
-        <translation>FaceZapper non raccoglie né invia alcun dato: l'app non ha accesso a Internet. Foto, nomi e progressi restano sul dispositivo e nella cartella scelta.</translation>
+        <translation>FaceZapper non raccoglie né invia alcun dato: l&apos;app non ha accesso a Internet. Foto, nomi e progressi restano sul dispositivo e nella cartella scelta.</translation>
     </message>
     <message>
         <source>Beispielgruppe</source>
@@ -49,7 +49,7 @@
     </message>
     <message>
         <source>Der Quellcode von Qt 6.12 ist unter %1 erhältlich. Die Qt-Bibliotheken sind als eigene Dateien in der App enthalten und können ausgetauscht werden.</source>
-        <translation>Il codice sorgente di Qt 6.12 è disponibile su %1. Le librerie Qt sono incluse nell'app come file separati e possono essere sostituite.</translation>
+        <translation>Il codice sorgente di Qt 6.12 è disponibile su %1. Le librerie Qt sono incluse nell&apos;app come file separati e possono essere sostituite.</translation>
     </message>
     <message>
         <source>Qt enthält Bibliotheken anderer Autoren: FreeType, HarfBuzz, libpng, libjpeg-turbo, PCRE2, double-conversion, SHA-3 (Keccak), TinyCBOR, MD4C, libwebp, libtiff, den JavaScriptCore Macro Assembler und unter Windows zlib; dazu kommen die C++-Laufzeitbibliotheken (LLVM libc++ unter Android, GCC/MinGW-w64 unter Windows). %1</source>
@@ -68,7 +68,7 @@
     </message>
     <message>
         <source>Daten konnten nicht im Bilderordner gespeichert werden, sie liegen in der App.</source>
-        <translation>Non è stato possibile salvare i dati nella cartella delle foto, sono conservati nell'app.</translation>
+        <translation>Non è stato possibile salvare i dati nella cartella delle foto, sono conservati nell&apos;app.</translation>
     </message>
 </context>
 <context>
@@ -219,7 +219,7 @@
 Zeit, in der die App im Hintergrund war, zählt nicht mit.</source>
         <translation>Se scorri un volto verso sinistra più velocemente di così senza digitare, conoscevi evidentemente bene la persona. La scheda va allora particolarmente indietro (vedi «Molto veloce: fattore»).
 
-Il tempo trascorso dall'app in background non conta.</translation>
+Il tempo trascorso dall&apos;app in background non conta.</translation>
     </message>
     <message>
         <source>Lange angesehen: über … Sekunden</source>
@@ -231,7 +231,7 @@ Il tempo trascorso dall'app in background non conta.</translation>
 Die Zeit fürs Tippen selbst zählt nicht mit, ebenso wenig Zeit, in der die App im Hintergrund war.</source>
         <translation>Se rifletti più a lungo di così prima di digitare la prima lettera (o di scorrere senza digitare), probabilmente non eri del tutto sicuro. La scheda conta come saputa, ma torna presto (vedi «Incerto»).
 
-Il tempo di digitazione non conta, e nemmeno il tempo trascorso dall'app in background.</translation>
+Il tempo di digitazione non conta, e nemmeno il tempo trascorso dall&apos;app in background.</translation>
     </message>
     <message>
         <source>Sehr schnell: Faktor</source>
@@ -282,10 +282,10 @@ Il livello resta invariato. Un errore di battitura corretto con ← non conta ne
         <translation>Non saputo: torna dopo … schede</translation>
     </message>
     <message>
-        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Lösung“ gedrückt oder einen falschen Buchstaben stehen gelassen.
+        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
-        <translation>Dopo questo numero di altre schede torna una persona che non è stata saputa: è stato premuto «Soluzione» o è rimasta una lettera sbagliata.
+        <translation>Dopo questo numero di altre schede torna una persona che non è stata saputa: è stato premuto «Sconosciuto» o è rimasta una lettera sbagliata.
 
 Il livello torna a 0.</translation>
     </message>
@@ -307,7 +307,7 @@ Il livello torna a 0.</translation>
 So halten schwierige Karten, die immer wieder vorne landen, die neuen nicht ewig auf.</source>
         <translation>Finché ci sono volti mai mostrati, almeno una scheda su N è un volto nuovo (N = il valore impostato qui).
 
-Così le schede difficili che tornano sempre in testa non bloccano all'infinito quelle nuove.</translation>
+Così le schede difficili che tornano sempre in testa non bloccano all&apos;infinito quelle nuove.</translation>
     </message>
     <message>
         <source>‹ Zurück</source>
@@ -325,7 +325,7 @@ Così le schede difficili che tornano sempre in testa non bloccano all'infinito 
         <source>Die Sprache der App. „Systemsprache“ nimmt die Sprache des Geräts – oder Englisch, wenn es die App in dieser Sprache nicht gibt.
 
 Namen und Gruppen bleiben, wie sie sind.</source>
-        <translation>La lingua dell'app. «Lingua di sistema» usa la lingua del dispositivo, oppure l'inglese se l'app non è disponibile in quella lingua.
+        <translation>La lingua dell&apos;app. «Lingua di sistema» usa la lingua del dispositivo, oppure l&apos;inglese se l&apos;app non è disponibile in quella lingua.
 
 I nomi e i gruppi restano invariati.</translation>
     </message>
@@ -345,7 +345,7 @@ Bei „Nachname, Vorname“ ist das Komma eine eigene Taste, danach kommt das Le
 Bei „Vorname Nachname“ dürfen weitere Vornamen weggelassen werden, wenn sie mit Leerzeichen getrennt sind („Anna Groß“ statt „Anna Lena Groß“), nicht aber mit Bindestrich („Anna-Lena“).
 
 Beim Wischen wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
-        <translation>Cosa si digita durante l'apprendimento: solo il nome, solo il cognome o entrambi, nell'ordine scelto.
+        <translation>Cosa si digita durante l&apos;apprendimento: solo il nome, solo il cognome o entrambi, nell&apos;ordine scelto.
 
 Con «Cognome, nome» la virgola è un tasto a sé, seguito dallo spazio.
 
@@ -420,7 +420,7 @@ I nomi vengono riconosciuti automaticamente. Aggiunte come la classe «(09B)» o
     </message>
     <message>
         <source>Trainingsdaten zurücksetzen?</source>
-        <translation>Azzerare l'apprendimento?</translation>
+        <translation>Azzerare l&apos;apprendimento?</translation>
     </message>
     <message>
         <source>Alles Gelernte für „%1“ wird gelöscht. Namen und Einlese-Einstellungen bleiben erhalten.</source>
@@ -456,12 +456,16 @@ I nomi vengono riconosciuti automaticamente. Aggiunte come la classe «(09B)» o
         </translation>
     </message>
     <message>
-        <source>Lösung</source>
-        <translation>Soluzione</translation>
-    </message>
-    <message>
         <source>Übernehmen</source>
         <translation>Conferma</translation>
+    </message>
+    <message>
+        <source>Bekannt</source>
+        <translation>Conosciuto</translation>
+    </message>
+    <message>
+        <source>Unbekannt</source>
+        <translation>Sconosciuto</translation>
     </message>
     <message>
         <source>Namen bearbeiten</source>
@@ -477,7 +481,7 @@ I nomi vengono riconosciuti automaticamente. Aggiunte come la classe «(09B)» o
     </message>
     <message>
         <source>Trainingsdaten zurücksetzen</source>
-        <translation>Azzera l'apprendimento</translation>
+        <translation>Azzera l&apos;apprendimento</translation>
     </message>
     <message>
         <source>Alle Gruppendaten löschen</source>

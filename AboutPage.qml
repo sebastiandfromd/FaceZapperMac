@@ -1,12 +1,14 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material
+import "."
 
 // "Über FaceZapper": version, privacy in short, the example class and the open source notices
 // (Qt under LGPLv3 with its source, the bundled third-party libraries with their licences).
 // Links "license:<file>" show a licence text from licenses.qrc in the app, others open the browser.
 Rectangle {
     id: aboutPage
-    color: "white"
+    color: Theme.surface
     signal done()
     property string shownLicense: "" // file name of the licence text on display, "" = the page itself
 
@@ -31,21 +33,23 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         height: 48
-        color: "teal"
+        color: Theme.accent
         Button {
             id: backButton
             anchors.left: parent.left
-            anchors.leftMargin: 8
+            anchors.leftMargin: 4
             anchors.verticalCenter: parent.verticalCenter
+            flat: true
+            Material.foreground: Theme.textOnAccent
             text: qsTr("‹ Zurück")
             onClicked: aboutPage.goBack()
         }
         Label {
             anchors.left: backButton.right
-            anchors.leftMargin: 16
+            anchors.leftMargin: 12
             anchors.verticalCenter: parent.verticalCenter
             text: aboutPage.shownLicense !== "" ? aboutPage.shownLicense : qsTr("Über FaceZapper")
-            color: "white"
+            color: Theme.textOnAccent
             font.bold: true
             font.pixelSize: 20
         }
@@ -67,7 +71,8 @@ Rectangle {
             width: scroll.availableWidth - 8
             wrapMode: Text.WordWrap
             textFormat: Text.StyledText
-            linkColor: "teal"
+            linkColor: Theme.accent
+            color: Theme.text
             font.pixelSize: 15
             onLinkActivated: (link) => aboutPage.openLink(link)
             text: "<h2>FaceZapper</h2>"
@@ -117,6 +122,7 @@ Rectangle {
             textFormat: Text.PlainText
             font.family: "monospace"
             font.pixelSize: 12
+            color: Theme.text
             text: aboutPage.shownLicense !== "" && controller ? controller.licenseText(aboutPage.shownLicense) : ""
         }
     }

@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import "."
 
 // Big name in the middle of its parent, colored by LearningSession.Outcome:
 // 0 = red (not known), 1 = green (known), 2 = yellow (typed correctly after the name was shown).
@@ -13,8 +14,10 @@ Rectangle {
     anchors.centerIn: parent
     width: parent.width * 0.9
     height: parent.height / 4
-    radius: height / 8
-    color: outcome === 1 ? "#dd2e7d32" : outcome === 2 ? "#eef9c825" : "#ddc62828"
+    radius: height / 6
+    // the answer colors, slightly see-through so the face stays visible behind the name
+    property color answerColor: outcome === 1 ? Theme.known : outcome === 2 ? Theme.almost : Theme.unknown
+    color: Qt.rgba(answerColor.r, answerColor.g, answerColor.b, outcome === 2 ? 0.93 : 0.87)
 
     function flash(newText, newOutcome, duration) {
         text = newText
@@ -40,7 +43,7 @@ Rectangle {
         anchors.margins: parent.height / 10
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        color: overlay.outcome === 2 ? "black" : "white"
+        color: overlay.outcome === 2 ? Theme.text : Theme.textOnAccent
         font.bold: true
         font.pixelSize: height * 0.8
         fontSizeMode: Text.Fit

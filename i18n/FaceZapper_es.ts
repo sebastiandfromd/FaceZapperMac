@@ -282,10 +282,10 @@ El nivel no cambia. Un error corregido con ← no cuenta en contra.</translation
         <translation>No sabido: vuelve tras … tarjetas</translation>
     </message>
     <message>
-        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Lösung“ gedrückt oder einen falschen Buchstaben stehen gelassen.
+        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
-        <translation>Tras este número de tarjetas vuelve una persona que no se sabía: se pulsó «Solución» o se dejó una letra incorrecta.
+        <translation>Tras este número de tarjetas vuelve una persona que no se sabía: se pulsó «Desconocido» o se dejó una letra incorrecta.
 
 El nivel vuelve a 0.</translation>
     </message>
@@ -456,12 +456,16 @@ Los nombres se reconocen automáticamente. Añadidos como la clase «(09B)» o n
         </translation>
     </message>
     <message>
-        <source>Lösung</source>
-        <translation>Solución</translation>
-    </message>
-    <message>
         <source>Übernehmen</source>
         <translation>Aceptar</translation>
+    </message>
+    <message>
+        <source>Bekannt</source>
+        <translation>Conocido</translation>
+    </message>
+    <message>
+        <source>Unbekannt</source>
+        <translation>Desconocido</translation>
     </message>
     <message>
         <source>Namen bearbeiten</source>
