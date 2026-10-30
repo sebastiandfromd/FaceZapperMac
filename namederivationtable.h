@@ -1,7 +1,7 @@
 #ifndef NAMEDERIVATIONTABLE_H
 #define NAMEDERIVATIONTABLE_H
 
-#include <QAbstractTableModel >
+#include <QAbstractTableModel>
 #include <QObject>
 #include <QRandomGenerator>
 #include <QString>
