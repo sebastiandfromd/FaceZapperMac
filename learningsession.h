@@ -43,10 +43,13 @@ public:
 
     // what the user sees after a swipe
     enum class Outcome {
-        NOT_KNOWN = 0,  // red: the face stays, with its name, for another look (retry())
+        NOT_KNOWN = 0,  // red: a wrong letter was left - the face stays, with its name, for another look (retry())
         KNOWN = 1,      // green
-        PRACTICED = 2,  // yellow: typed correctly, but after the name had been shown
-        SKIPPED = 3     // no flash: swiped on in a retry without typing
+        PRACTICED = 2,  // yellow: typed correctly after the name had been shown - next face
+        SKIPPED = 3,    // no flash: swiped on in a retry without typing
+        SEEN = 4        // red, but the name had been shown and nothing typed since: the user has
+                        // had the look the retry would give - next face
+        // all but KNOWN count as not known
     };
     Q_ENUM(Outcome)
 
@@ -62,6 +65,8 @@ public:
     Q_INVOKABLE void clear();
     // rates the current card (in a retry: only says what the user did, nothing is counted)
     Q_INVOKABLE int finishCurrent(); // returns an Outcome
+    // the Outcome finishCurrent() gives, without rating anything (not for QML: no peeking)
+    int currentOutcome() const;
     // after a red answer: same face again, name visible, input empty - the next swipe isn't counted
     Q_INVOKABLE void retry();
     Q_INVOKABLE void next();          // shows the next card (from history or the front of the box)

@@ -58,6 +58,7 @@ public:
     Q_INVOKABLE void setSetting(const QString &key, const QVariant &value);
     Q_INVOKABLE void resetSettings();
     int flashDuration() const { return setting(QStringLiteral("learning/flashDuration")).toInt(); }
+    int slideOutDuration() const { return setting(QStringLiteral("learning/slideOutDuration")).toInt(); }
 
     // UI language: setting "ui/language" ("" = the system's), see applyLanguage()
     Q_INVOKABLE QVariantList availableLanguages() const; // [{code, name}], names in their own language
@@ -298,6 +299,7 @@ private:
     Q_PROPERTY(bool exampleOpen READ exampleOpen NOTIFY groupFolderChanged)
     Q_PROPERTY(bool firstRun READ firstRun CONSTANT)
     Q_PROPERTY(int flashDuration READ flashDuration NOTIFY settingsChanged)
+    Q_PROPERTY(int slideOutDuration READ slideOutDuration NOTIFY settingsChanged)
     Q_PROPERTY(QString language READ language NOTIFY languageChanged)
 };
 

@@ -72,20 +72,26 @@ int LearningSession::learnedCount() const
 int LearningSession::finishCurrent()
 {
     if (m_index < 0) return int(Outcome::NOT_KNOWN);
+    const int outcome = currentOutcome();
     Entry &e = m_history[m_index];
-    // typed correctly after the name had been shown: not wrong, but not known either
-    const bool practiced = e.solutionShown && !e.typed.isEmpty() && typedIsCorrect();
-    if (e.inRetry) {
-        // second look after a red answer: nothing is counted
-        if (e.typed.isEmpty()) return int(Outcome::SKIPPED);
-        return int(practiced ? Outcome::PRACTICED : Outcome::NOT_KNOWN);
-    }
-    const Rating r = rate(e);
-    applyRating(e, r);
+    if (e.inRetry) return outcome; // second look after a red answer: nothing is counted
+    applyRating(e, rate(e));
     emit rated();
     emit statsChanged();
-    if (r != Rating::AGAIN) return int(Outcome::KNOWN);
-    return int(practiced ? Outcome::PRACTICED : Outcome::NOT_KNOWN);
+    return outcome;
+}
+
+int LearningSession::currentOutcome() const
+{
+    if (m_index < 0) return int(Outcome::NOT_KNOWN);
+    const Entry &e = m_history.at(m_index);
+    // the same condition as Rating::AGAIN in rate() - only the time decides between the other ratings
+    if (!e.solutionShown && typedIsCorrect()) return int(Outcome::KNOWN);
+    if (!typedIsCorrect()) return int(Outcome::NOT_KNOWN); // a wrong letter left: another look
+    if (e.inRetry && e.typed.isEmpty()) return int(Outcome::SKIPPED);
+    // the name had been shown: typing it correctly since earns yellow (a slip taken back with ←
+    // doesn't matter), nothing typed is red
+    return int(e.typed.isEmpty() ? Outcome::SEEN : Outcome::PRACTICED);
 }
 
 void LearningSession::retry()

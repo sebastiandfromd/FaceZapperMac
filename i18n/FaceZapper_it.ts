@@ -210,6 +210,18 @@
         <translation>Per quanto tempo il nome viene mostrato in grande dopo lo scorrimento, in millisecondi (1000 ms = 1 secondo).</translation>
     </message>
     <message>
+        <source>Hinausgleiten nach „Bekannt“ (ms)</source>
+        <translation>Uscita dopo «Conosciuto» (ms)</translation>
+    </message>
+    <message>
+        <source>Wie lange das Gesicht nach dem Knopf „Bekannt“ braucht, um nach links hinauszugleiten, in Millisekunden. Bei 0 verschwindet es sofort.
+
+Der Name ist dabei schon zu sehen. Beim Wischen schiebt der Finger das Gesicht selbst hinaus.</source>
+        <translation>Quanto impiega il volto a scivolare fuori a sinistra dopo il tasto «Conosciuto», in millisecondi. Con 0 sparisce subito.
+
+Il nome è già visibile nel frattempo. Scorrendo, è il dito stesso a spingere fuori il volto.</translation>
+    </message>
+    <message>
         <source>Sehr schnell: unter … Sekunden</source>
         <translation>Molto veloce: meno di … secondi</translation>
     </message>

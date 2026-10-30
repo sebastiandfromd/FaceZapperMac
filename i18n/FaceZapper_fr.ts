@@ -210,6 +210,18 @@
         <translation>Durée d&apos;affichage du nom en grand après le balayage, en millisecondes (1000 ms = 1 seconde).</translation>
     </message>
     <message>
+        <source>Hinausgleiten nach „Bekannt“ (ms)</source>
+        <translation>Sortie après « Connu » (ms)</translation>
+    </message>
+    <message>
+        <source>Wie lange das Gesicht nach dem Knopf „Bekannt“ braucht, um nach links hinauszugleiten, in Millisekunden. Bei 0 verschwindet es sofort.
+
+Der Name ist dabei schon zu sehen. Beim Wischen schiebt der Finger das Gesicht selbst hinaus.</source>
+        <translation>Durée que met le visage à glisser vers la gauche après le bouton « Connu », en millisecondes. À 0, il disparaît aussitôt.
+
+Le nom est déjà affiché pendant ce temps. Lors d'un balayage, c'est votre doigt qui pousse le visage.</translation>
+    </message>
+    <message>
         <source>Sehr schnell: unter … Sekunden</source>
         <translation>Très rapide : moins de … secondes</translation>
     </message>
@@ -285,7 +297,7 @@ Le niveau reste inchangé. Une faute de frappe corrigée avec ← ne compte pas 
         <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
-        <translation>Après ce nombre d'autres cartes revient une personne qui n'a pas été reconnue : « Inconnu » a été touché ou une mauvaise lettre est restée.
+        <translation>Après ce nombre d&apos;autres cartes revient une personne qui n&apos;a pas été reconnue : « Inconnu » a été touché ou une mauvaise lettre est restée.
 
 Le niveau retombe alors à 0.</translation>
     </message>

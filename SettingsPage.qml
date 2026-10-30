@@ -20,6 +20,8 @@ Rectangle {
     property var numberSettings: [
         { key: "learning/flashDuration", label: qsTr("Name einblenden (ms)"), from: 100, to: 3000, step: 100,
           info: qsTr("Wie lange der Name nach dem Wischen groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).") },
+        { key: "learning/slideOutDuration", label: qsTr("Hinausgleiten nach „Bekannt“ (ms)"), from: 0, to: 3000, step: 50,
+          info: qsTr("Wie lange das Gesicht nach dem Knopf „Bekannt“ braucht, um nach links hinauszugleiten, in Millisekunden. Bei 0 verschwindet es sofort.\n\nDer Name ist dabei schon zu sehen. Beim Wischen schiebt der Finger das Gesicht selbst hinaus.") },
         { key: "cardBox/easySeconds", label: qsTr("Sehr schnell: unter … Sekunden"), from: 1, to: 10, step: 1,
           info: qsTr("Wer ein Gesicht schneller als in dieser Zeit ohne Tippen nach links wischt, kannte die Person offensichtlich sicher. Die Karte rutscht dann besonders weit nach hinten (siehe „Sehr schnell: Faktor“).\n\nZeit, in der die App im Hintergrund war, zählt nicht mit.") },
         { key: "cardBox/unsureSeconds", label: qsTr("Lange angesehen: über … Sekunden"), from: 2, to: 60, step: 1,

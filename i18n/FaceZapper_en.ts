@@ -210,6 +210,18 @@
         <translation>How long the name is shown in large letters after swiping, in milliseconds (1000 ms = 1 second).</translation>
     </message>
     <message>
+        <source>Hinausgleiten nach „Bekannt“ (ms)</source>
+        <translation>Slide out after “Known” (ms)</translation>
+    </message>
+    <message>
+        <source>Wie lange das Gesicht nach dem Knopf „Bekannt“ braucht, um nach links hinauszugleiten, in Millisekunden. Bei 0 verschwindet es sofort.
+
+Der Name ist dabei schon zu sehen. Beim Wischen schiebt der Finger das Gesicht selbst hinaus.</source>
+        <translation>How long the face takes to slide out to the left after the “Known” button, in milliseconds. At 0 it disappears at once.
+
+The name is already shown meanwhile. When swiping, your finger pushes the face out itself.</translation>
+    </message>
+    <message>
         <source>Sehr schnell: unter … Sekunden</source>
         <translation>Very fast: under … seconds</translation>
     </message>

@@ -376,6 +376,7 @@ QVariantMap Controller::defaultSettings()
         {"cardBox/newCardInterval", c.newCardInterval},
         {"learning/targetMode", c.targetMode},
         {"learning/flashDuration", 500},
+        {"learning/slideOutDuration", 300}, // ms the face takes to leave after "Bekannt", 0 = at once
         {"ui/expertMode", false}, // import screen: show all options for deriving names from file names
         {"ui/language", QString()}, // "" = the system's language
     };

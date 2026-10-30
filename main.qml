@@ -223,7 +223,7 @@ ApplicationWindow {
                 text: qsTr("Bekannt")
                 highlighted: true
                 Material.accent: Theme.known
-                enabled: controller !== null && controller.session.currentPerson !== null && !learnView.busy
+                enabled: controller !== null && controller.session.currentPerson !== null && !learnView.busy && !learnView.decided
                 onClicked: learnView.markKnown()
             }
             Button {
@@ -232,7 +232,7 @@ ApplicationWindow {
                 highlighted: true
                 Material.accent: Theme.unknown
                 enabled: controller !== null && controller.session.currentPerson !== null
-                         && !controller.session.solutionVisible && !learnView.busy
+                         && !controller.session.solutionVisible && !learnView.busy && !learnView.decided
                 onClicked: controller.session.showSolution()
             }
         }

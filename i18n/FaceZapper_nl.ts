@@ -210,6 +210,18 @@
         <translation>Hoe lang de naam na het vegen groot wordt getoond, in milliseconden (1000 ms = 1 seconde).</translation>
     </message>
     <message>
+        <source>Hinausgleiten nach „Bekannt“ (ms)</source>
+        <translation>Wegschuiven na 'Bekend' (ms)</translation>
+    </message>
+    <message>
+        <source>Wie lange das Gesicht nach dem Knopf „Bekannt“ braucht, um nach links hinauszugleiten, in Millisekunden. Bei 0 verschwindet es sofort.
+
+Der Name ist dabei schon zu sehen. Beim Wischen schiebt der Finger das Gesicht selbst hinaus.</source>
+        <translation>Hoe lang het gezicht na de knop 'Bekend' nodig heeft om naar links weg te schuiven, in milliseconden. Bij 0 verdwijnt het meteen.
+
+De naam is dan al te zien. Bij vegen duwt je vinger het gezicht zelf weg.</translation>
+    </message>
+    <message>
         <source>Sehr schnell: unter … Sekunden</source>
         <translation>Zeer snel: onder … seconden</translation>
     </message>
@@ -285,7 +297,7 @@ Het niveau blijft daarbij gelijk. Een met ← verbeterde tikfout telt niet negat
         <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
-        <translation>Na zoveel andere kaarten komt een persoon terug die niet gekend werd: 'Onbekend' ingedrukt of een verkeerde letter laten staan.
+        <translation>Na zoveel andere kaarten komt een persoon terug die niet gekend werd: &apos;Onbekend&apos; ingedrukt of een verkeerde letter laten staan.
 
 Het niveau valt daarbij terug naar 0.</translation>
     </message>

@@ -202,6 +202,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Hinausgleiten nach „Bekannt“ (ms)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wie lange das Gesicht nach dem Knopf „Bekannt“ braucht, um nach links hinauszugleiten, in Millisekunden. Bei 0 verschwindet es sofort.
+
+Der Name ist dabei schon zu sehen. Beim Wischen schiebt der Finger das Gesicht selbst hinaus.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Sehr schnell: unter … Sekunden</source>
         <translation type="unfinished"></translation>
     </message>
