@@ -3,7 +3,7 @@ QT += quick
 CONFIG += c++11
 
 # app version, shown on the "Über FaceZapper" page and used as the Android version name
-VERSION = 1.2
+VERSION = 1.3
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 win32 {
@@ -17,7 +17,7 @@ win32 {
 android {
     CONFIG += android
     # Google Play: ANDROID_VERSION_CODE must grow with every upload
-    ANDROID_VERSION_CODE = 3
+    ANDROID_VERSION_CODE = 4
     ANDROID_VERSION_NAME = $$VERSION
 }
 
