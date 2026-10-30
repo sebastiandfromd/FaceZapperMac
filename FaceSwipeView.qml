@@ -233,7 +233,9 @@ Rectangle {
                     width: typedText.font.pixelSize * 0.55
                     height: typedText.font.pixelSize * 0.8
                     color: Theme.text
-                    visible: on && learnView.person !== null && !learnView.busy && !learnView.decided
+                    // opacity, not visible: an invisible item takes no room in the Row, so the
+                    // centered name would jump sideways with every blink
+                    opacity: on && learnView.person !== null && !learnView.busy && !learnView.decided ? 1 : 0
                     Timer {
                         id: cursorTimer
                         interval: 530
