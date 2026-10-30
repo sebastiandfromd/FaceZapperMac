@@ -124,10 +124,10 @@ Rectangle {
         contentWidth: availableWidth
         clip: true
 
-        // the settings on a white card
+        // the settings on a white card - implicit size: that's what the ScrollView scrolls by
         Rectangle {
-            width: settingsColumn.width + 24
-            height: settingsColumn.implicitHeight + 24
+            implicitWidth: settingsColumn.width + 24
+            implicitHeight: settingsColumn.implicitHeight + 24
             color: Theme.surface
             radius: Theme.radius
             border.color: Theme.divider
