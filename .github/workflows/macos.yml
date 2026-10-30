@@ -2,7 +2,8 @@
 # developer account), mac/First-launch.txt tells how to open it the first time.
 #
 # Start: GitHub -> Actions -> "macOS build" -> "Run workflow" (the .dmg is then under the run's
-# "Artifacts"), or push a tag like v1.3 (the .dmg also becomes a GitHub release).
+# "Artifacts"), or push a tag like v1.3 (the .dmg also becomes a GitHub release). It also runs by
+# itself when this file or mac/ changes on master.
 # Version: VERSION in FaceZapper.pro
 name: macOS build
 
@@ -10,6 +11,8 @@ on:
   workflow_dispatch:
   push:
     tags: ['v*']
+    branches: [master]
+    paths: ['.github/workflows/macos.yml', 'mac/**']
 
 permissions:
   contents: write # for the release on tags
