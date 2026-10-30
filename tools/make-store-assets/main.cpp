@@ -32,12 +32,14 @@ int main(int argc, char **argv)
         QImage raw(shots + "/" + e.first + ".png");
         if (raw.isNull()) { fprintf(stderr, "missing %s\n", qPrintable(e.first)); continue; }
         raw = raw.convertToFormat(QImage::Format_RGB32);
-        // the camera cutout leaves a white strip on the left: continue the app's first column into it
-        // (rows where the strip isn't white, like the red footer, already belong to the app)
+        // the camera cutout leaves a plain strip on the left (white up to 1.2, the window background
+        // since 1.3): continue the app's first column into it (rows where the strip isn't plain,
+        // like the footer, already belong to the app)
         const int strip = 131;
         for (int y = 0; y < raw.height(); ++y) {
-            const QColor c0 = raw.pixelColor(5, y);
-            if (c0.red() < 248 || c0.green() < 248 || c0.blue() < 248) continue;
+            bool plain = true;
+            for (int x = 1; x < strip && plain; ++x) plain = raw.pixel(x, y) == raw.pixel(0, y);
+            if (!plain) continue;
             const QRgb fill = raw.pixel(strip, y);
             for (int x = 0; x < strip; ++x) raw.setPixel(x, y, fill);
         }
