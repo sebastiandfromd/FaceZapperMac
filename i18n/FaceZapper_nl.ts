@@ -206,18 +206,18 @@
         <translation>Naam tonen (ms)</translation>
     </message>
     <message>
-        <source>Wie lange der Name nach dem Wischen groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).</source>
-        <translation>Hoe lang de naam na het vegen groot wordt getoond, in milliseconden (1000 ms = 1 seconde).</translation>
+        <source>Wie lange der Name nach dem Wischen nach links groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).</source>
+        <translation>Hoe lang de naam na het naar links vegen groot wordt getoond, in milliseconden (1000 ms = 1 seconde).</translation>
     </message>
     <message>
         <source>Hinausgleiten nach „Bekannt“ (ms)</source>
-        <translation>Wegschuiven na 'Bekend' (ms)</translation>
+        <translation>Wegschuiven na &apos;Bekend&apos; (ms)</translation>
     </message>
     <message>
         <source>Wie lange das Gesicht nach dem Knopf „Bekannt“ braucht, um nach links hinauszugleiten, in Millisekunden. Bei 0 verschwindet es sofort.
 
 Der Name ist dabei schon zu sehen. Beim Wischen schiebt der Finger das Gesicht selbst hinaus.</source>
-        <translation>Hoe lang het gezicht na de knop 'Bekend' nodig heeft om naar links weg te schuiven, in milliseconden. Bij 0 verdwijnt het meteen.
+        <translation>Hoe lang het gezicht na de knop &apos;Bekend&apos; nodig heeft om naar links weg te schuiven, in milliseconden. Bij 0 verdwijnt het meteen.
 
 De naam is dan al te zien. Bij vegen duwt je vinger het gezicht zelf weg.</translation>
     </message>
@@ -238,10 +238,10 @@ Tijd dat de app op de achtergrond stond, telt niet mee.</translation>
         <translation>Lang nagedacht: meer dan … seconden</translation>
     </message>
     <message>
-        <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
+        <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen nach links wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
 
 Die Zeit fürs Tippen selbst zählt nicht mit, ebenso wenig Zeit, in der die App im Hintergrund war.</source>
-        <translation>Wie langer dan deze tijd nadenkt voordat de eerste letter wordt getypt (of zonder typen wordt geveegd), was waarschijnlijk niet helemaal zeker. De kaart telt als gekend, maar komt snel terug (zie &apos;Onzeker&apos;).
+        <translation>Wie langer dan deze tijd nadenkt voordat de eerste letter wordt getypt (of zonder typen naar links wordt geveegd), was waarschijnlijk niet helemaal zeker. De kaart telt als gekend, maar komt snel terug (zie &apos;Onzeker&apos;).
 
 De tijd voor het typen zelf telt niet mee, net als tijd dat de app op de achtergrond stond.</translation>
     </message>
@@ -294,10 +294,10 @@ Het niveau blijft daarbij gelijk. Een met ← verbeterde tikfout telt niet negat
         <translation>Niet gekend: komt terug na … kaarten</translation>
     </message>
     <message>
-        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
+        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt, nach rechts gewischt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
-        <translation>Na zoveel andere kaarten komt een persoon terug die niet gekend werd: &apos;Onbekend&apos; ingedrukt of een verkeerde letter laten staan.
+        <translation>Na zoveel andere kaarten komt een persoon terug die niet gekend werd: &apos;Onbekend&apos; ingedrukt, naar rechts geveegd of een verkeerde letter laten staan.
 
 Het niveau valt daarbij terug naar 0.</translation>
     </message>
@@ -356,14 +356,14 @@ Bei „Nachname, Vorname“ ist das Komma eine eigene Taste, danach kommt das Le
 
 Bei „Vorname Nachname“ dürfen weitere Vornamen weggelassen werden, wenn sie mit Leerzeichen getrennt sind („Anna Groß“ statt „Anna Lena Groß“), nicht aber mit Bindestrich („Anna-Lena“).
 
-Beim Wischen wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
+Beim Wischen nach links wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
         <translation>Wat er tijdens het leren wordt getypt: alleen de voornaam, alleen de achternaam of beide, in de gekozen volgorde.
 
 Bij &apos;Achternaam, voornaam&apos; is de komma een eigen toets, gevolgd door de spatie.
 
 Bij &apos;Voornaam achternaam&apos; mogen extra voornamen worden weggelaten als ze met spaties gescheiden zijn (&apos;Anna de Vries&apos; in plaats van &apos;Anna Lena de Vries&apos;), maar niet met een koppelteken (&apos;Anna-Lena&apos;).
 
-Bij het vegen wordt precies dat gecontroleerd en zo getoond, en de lettertoetsen bieden daarvoor de juiste volgende letter aan.</translation>
+Bij het naar links vegen wordt precies dat gecontroleerd en zo getoond, en de lettertoetsen bieden daarvoor de juiste volgende letter aan.</translation>
     </message>
     <message>
         <source>Vorname</source>
@@ -472,8 +472,16 @@ De namen worden automatisch herkend. Toevoegingen zoals de klas &apos;(09B)&apos
         <translation>Toepassen</translation>
     </message>
     <message>
+        <source>Ok</source>
+        <translation>OK</translation>
+    </message>
+    <message>
         <source>Bekannt</source>
         <translation>Bekend</translation>
+    </message>
+    <message>
+        <source>Rückgängig</source>
+        <translation>Ongedaan maken</translation>
     </message>
     <message>
         <source>Unbekannt</source>

@@ -12,7 +12,9 @@ import "."
 //               Red with a wrong letter left (Outcome 0): the face springs back and stays, with
 //               its name, for another look. The "Bekannt" button does the same (markKnown), with the face
 //               leaving at the speed set in the settings.
-// Swipe right = back to the previous face, its answer can be redone.
+// Swipe right = "I don't know this person", the same as the "Unbekannt" button (markUnknown): the face
+//               springs back and its name is shown.
+// The "Rückgängig" button (undo) goes back to the previous face, its answer can be redone.
 Rectangle {
     id: learnView
     property var session: controller ? controller.session : null
@@ -73,9 +75,15 @@ Rectangle {
         busy = false
         syncSolutionOverlay()
     }
-    function swipedRight() {
-        if (!session || !session.canGoBack) return
-        session.back()
+    // "Unbekannt" button and swiping right: shows the name, the card counts as not known
+    readonly property bool canMarkUnknown: !busy && !decided && person !== null && !session.solutionVisible
+    function markUnknown() {
+        if (canMarkUnknown) session.showSolution()
+    }
+    // "Rückgängig" button: back to the previous face (e.g. swiped to the left by mistake)
+    readonly property bool canUndo: !busy && !decided && session !== null && session.canGoBack
+    function undo() {
+        if (canUndo) session.back()
     }
     function pressKey(key) {
         if (busy || decided || !session) return
@@ -171,7 +179,7 @@ Rectangle {
                 }
                 var dx = photoCard.x
                 photoCard.x = 0
-                if (dx > photoArea.width / 4) learnView.swipedRight()
+                if (dx > photoArea.width / 4) learnView.markUnknown()
             }
         }
         // a drag to the left is noticed as soon as the face has moved a little that way

@@ -136,11 +136,33 @@ ApplicationWindow {
         }
     }
 
+    // learning buttons in the footer: three of the same width, long texts get smaller
+    component AnswerButton: Button {
+        id: answerButton
+        property color textColor: Theme.text
+        visible: mainWin.learning
+        width: footerButtons.answerWidth
+        leftPadding: 8
+        rightPadding: 8
+        contentItem: Text {
+            text: answerButton.text
+            font: answerButton.font
+            fontSizeMode: Text.HorizontalFit
+            minimumPixelSize: 8
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            color: answerButton.enabled ? answerButton.textColor : answerButton.Material.hintTextColor
+        }
+    }
+
     footer: Rectangle {
         id: footer
         visible: !settingsPage.visible && !aboutPage.visible
-        height: 50
-        implicitHeight: 50
+        // narrow windows: the buttons get a row of their own above the progress and the menu
+        readonly property bool stacked: mainWin.learning && width < 600
+        readonly property int rowHeight: 50
+        height: stacked ? 2 * rowHeight : rowHeight
+        implicitHeight: height
         // no explicit width: ApplicationWindow stretches the footer over the whole window
         color: Theme.surface
         Rectangle {
@@ -156,8 +178,9 @@ ApplicationWindow {
             anchors.left: parent.left
             // on phones the rounded screen corner would cover the start of the lines
             anchors.leftMargin: 8 + (Qt.platform.os === "android" ? 40 : 0)
-            anchors.verticalCenter: parent.verticalCenter
-            width: Math.max(90, Math.min(200, footerButtons.x - x - 12))
+            anchors.verticalCenter: parent.bottom
+            anchors.verticalCenterOffset: -footer.rowHeight / 2
+            width: Math.max(110, Math.min(200, (footer.stacked ? menuButton.x : footerButtons.x) - x - 12))
             spacing: 3
             visible: mainWin.learning && controller !== null
             property var session: controller ? controller.session : null
@@ -196,9 +219,9 @@ ApplicationWindow {
         }
         // shown when the data couldn't be saved in the picture folder itself
         Text {
-            anchors.left: footerButtons.right
+            anchors.left: footer.stacked ? progress.right : footerButtons.right
             anchors.right: menuButton.left
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: menuButton.verticalCenter
             anchors.margins: 8
             text: controller ? controller.storageHint : ""
             color: Theme.textMuted
@@ -206,11 +229,17 @@ ApplicationWindow {
             font.pixelSize: 11
         }
         // import table: take the names over and start learning;
-        // learning: "Bekannt" (= swipe left) and "Unbekannt" (shows the name)
+        // learning: "Bekannt" (= swipe left), "Rückgängig" (back to the previous face) and
+        // "Unbekannt" (= swipe right, shows the name)
         Row {
             id: footerButtons
-            anchors.centerIn: parent
-            spacing: 10
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.top
+            anchors.verticalCenterOffset: footer.rowHeight / 2
+            spacing: footer.stacked ? 6 : 10
+            // in one row: the progress (at least 110 wide) has to fit at the left
+            readonly property real available: footer.width - 2 * (footer.stacked ? 8 : progress.anchors.leftMargin + 110 + 12)
+            readonly property real answerWidth: Math.min(120, (available - 2 * spacing) / 3)
             Button {
                 visible: !mainWin.learning
                 text: qsTr("Übernehmen")
@@ -218,29 +247,36 @@ ApplicationWindow {
                 Material.accent: Theme.accent
                 onClicked: if (controller) mainWin.startLearning()
             }
-            Button {
-                visible: mainWin.learning
-                text: qsTr("Bekannt")
+            AnswerButton {
+                // the name had to be shown: it can't be known any more, the button just goes on
+                readonly property bool failed: controller !== null && controller.session.solutionShown
+                text: "← " + (failed ? qsTr("Ok") : qsTr("Bekannt"))
                 highlighted: true
-                Material.accent: Theme.known
+                Material.accent: failed ? Theme.moveOn : Theme.known
+                textColor: failed ? Theme.text : Theme.textOnAccent
                 enabled: controller !== null && controller.session.currentPerson !== null && !learnView.busy && !learnView.decided
                 onClicked: learnView.markKnown()
             }
-            Button {
-                visible: mainWin.learning
-                text: qsTr("Unbekannt")
+            AnswerButton {
+                text: qsTr("Rückgängig")
+                enabled: learnView.canUndo
+                onClicked: learnView.undo()
+            }
+            AnswerButton {
+                text: qsTr("Unbekannt") + " →"
                 highlighted: true
                 Material.accent: Theme.unknown
-                enabled: controller !== null && controller.session.currentPerson !== null
-                         && !controller.session.solutionVisible && !learnView.busy && !learnView.decided
-                onClicked: controller.session.showSolution()
+                textColor: Theme.textOnAccent
+                enabled: learnView.canMarkUnknown
+                onClicked: learnView.markUnknown()
             }
         }
         Button {
             id: menuButton
             anchors.right: parent.right
             anchors.rightMargin: 8
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: parent.bottom
+            anchors.verticalCenterOffset: -footer.rowHeight / 2
             flat: true
             text: "≡" // not "☰": Android's default font doesn't have that one
             font.pixelSize: 22

@@ -198,7 +198,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Wie lange der Name nach dem Wischen groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).</source>
+        <source>Wie lange der Name nach dem Wischen nach links groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -226,7 +226,7 @@ Zeit, in der die App im Hintergrund war, zählt nicht mit.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
+        <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen nach links wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
 
 Die Zeit fürs Tippen selbst zählt nicht mit, ebenso wenig Zeit, in der die App im Hintergrund war.</source>
         <translation type="unfinished"></translation>
@@ -270,7 +270,7 @@ Die Stufe bleibt dabei unverändert. Ein mit ← korrigierter Vertipper zählt n
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
+        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt, nach rechts gewischt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
         <translation type="unfinished"></translation>
@@ -326,7 +326,7 @@ Bei „Nachname, Vorname“ ist das Komma eine eigene Taste, danach kommt das Le
 
 Bei „Vorname Nachname“ dürfen weitere Vornamen weggelassen werden, wenn sie mit Leerzeichen getrennt sind („Anna Groß“ statt „Anna Lena Groß“), nicht aber mit Bindestrich („Anna-Lena“).
 
-Beim Wischen wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
+Beim Wischen nach links wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -425,7 +425,15 @@ Die Namen werden automatisch erkannt. Zusätze wie die Klasse „(09B)“ oder N
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Bekannt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rückgängig</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

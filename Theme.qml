@@ -26,6 +26,7 @@ QtObject {
     readonly property color known: "#008f39"
     readonly property color almost: "#f9c825"
     readonly property color unknown: "#e2001a"
+    readonly property color moveOn: "#d8a24a"       // ochre: the "Ok" button after the name had been shown
     // light tints of them for table rows: excluded / names edited by hand
     readonly property color unknownLight: "#fbe1e4"
     readonly property color almostLight: "#fdf3cf"

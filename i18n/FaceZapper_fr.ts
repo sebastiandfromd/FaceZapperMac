@@ -206,8 +206,8 @@
         <translation>Afficher le nom (ms)</translation>
     </message>
     <message>
-        <source>Wie lange der Name nach dem Wischen groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).</source>
-        <translation>Durée d&apos;affichage du nom en grand après le balayage, en millisecondes (1000 ms = 1 seconde).</translation>
+        <source>Wie lange der Name nach dem Wischen nach links groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).</source>
+        <translation>Durée d&apos;affichage du nom en grand après le balayage vers la gauche, en millisecondes (1000 ms = 1 seconde).</translation>
     </message>
     <message>
         <source>Hinausgleiten nach „Bekannt“ (ms)</source>
@@ -219,7 +219,7 @@
 Der Name ist dabei schon zu sehen. Beim Wischen schiebt der Finger das Gesicht selbst hinaus.</source>
         <translation>Durée que met le visage à glisser vers la gauche après le bouton « Connu », en millisecondes. À 0, il disparaît aussitôt.
 
-Le nom est déjà affiché pendant ce temps. Lors d'un balayage, c'est votre doigt qui pousse le visage.</translation>
+Le nom est déjà affiché pendant ce temps. Lors d&apos;un balayage, c&apos;est votre doigt qui pousse le visage.</translation>
     </message>
     <message>
         <source>Sehr schnell: unter … Sekunden</source>
@@ -238,10 +238,10 @@ Le temps passé par l&apos;application en arrière-plan ne compte pas.</translat
         <translation>Longue réflexion : plus de … secondes</translation>
     </message>
     <message>
-        <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
+        <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen nach links wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
 
 Die Zeit fürs Tippen selbst zählt nicht mit, ebenso wenig Zeit, in der die App im Hintergrund war.</source>
-        <translation>Si vous réfléchissez plus longtemps que cela avant de taper la première lettre (ou de balayer sans taper), vous n&apos;étiez sans doute pas tout à fait sûr. La carte compte comme connue, mais revient bientôt (voir « Hésitant »).
+        <translation>Si vous réfléchissez plus longtemps que cela avant de taper la première lettre (ou de balayer vers la gauche sans taper), vous n&apos;étiez sans doute pas tout à fait sûr. La carte compte comme connue, mais revient bientôt (voir « Hésitant »).
 
 Le temps de frappe lui-même ne compte pas, pas plus que le temps passé par l&apos;application en arrière-plan.</translation>
     </message>
@@ -294,10 +294,10 @@ Le niveau reste inchangé. Une faute de frappe corrigée avec ← ne compte pas 
         <translation>Pas connu : revient après … cartes</translation>
     </message>
     <message>
-        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
+        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt, nach rechts gewischt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
-        <translation>Après ce nombre d&apos;autres cartes revient une personne qui n&apos;a pas été reconnue : « Inconnu » a été touché ou une mauvaise lettre est restée.
+        <translation>Après ce nombre d&apos;autres cartes revient une personne qui n&apos;a pas été reconnue : « Inconnu » a été touché, le visage a été balayé vers la droite ou une mauvaise lettre est restée.
 
 Le niveau retombe alors à 0.</translation>
     </message>
@@ -356,14 +356,14 @@ Bei „Nachname, Vorname“ ist das Komma eine eigene Taste, danach kommt das Le
 
 Bei „Vorname Nachname“ dürfen weitere Vornamen weggelassen werden, wenn sie mit Leerzeichen getrennt sind („Anna Groß“ statt „Anna Lena Groß“), nicht aber mit Bindestrich („Anna-Lena“).
 
-Beim Wischen wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
+Beim Wischen nach links wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
         <translation>Ce qui est tapé pendant l&apos;apprentissage : seulement le prénom, seulement le nom ou les deux, dans l&apos;ordre choisi.
 
 Avec « Nom, prénom », la virgule est une touche à part, suivie de l&apos;espace.
 
 Avec « Prénom nom », les prénoms supplémentaires peuvent être omis s&apos;ils sont séparés par des espaces (« Anne Martin » au lieu de « Anne Marie Martin »), mais pas avec un trait d&apos;union (« Anne-Marie »).
 
-Le balayage vérifie exactement cela et l&apos;affiche de la même façon, et les touches proposent la bonne lettre suivante.</translation>
+Le balayage vers la gauche vérifie exactement cela et l&apos;affiche de la même façon, et les touches proposent la bonne lettre suivante.</translation>
     </message>
     <message>
         <source>Vorname</source>
@@ -472,8 +472,16 @@ Les noms sont reconnus automatiquement. Les ajouts comme la classe « (09B) » o
         <translation>Appliquer</translation>
     </message>
     <message>
+        <source>Ok</source>
+        <translation>OK</translation>
+    </message>
+    <message>
         <source>Bekannt</source>
         <translation>Connu</translation>
+    </message>
+    <message>
+        <source>Rückgängig</source>
+        <translation>Annuler</translation>
     </message>
     <message>
         <source>Unbekannt</source>

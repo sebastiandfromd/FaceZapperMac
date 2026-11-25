@@ -19,13 +19,13 @@ Rectangle {
     // key, label, range, step and explanation of every number setting (defaults: Controller::defaultSettings)
     property var numberSettings: [
         { key: "learning/flashDuration", label: qsTr("Name einblenden (ms)"), from: 100, to: 3000, step: 100,
-          info: qsTr("Wie lange der Name nach dem Wischen groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).") },
+          info: qsTr("Wie lange der Name nach dem Wischen nach links groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).") },
         { key: "learning/slideOutDuration", label: qsTr("Hinausgleiten nach „Bekannt“ (ms)"), from: 0, to: 3000, step: 50,
           info: qsTr("Wie lange das Gesicht nach dem Knopf „Bekannt“ braucht, um nach links hinauszugleiten, in Millisekunden. Bei 0 verschwindet es sofort.\n\nDer Name ist dabei schon zu sehen. Beim Wischen schiebt der Finger das Gesicht selbst hinaus.") },
         { key: "cardBox/easySeconds", label: qsTr("Sehr schnell: unter … Sekunden"), from: 1, to: 10, step: 1,
           info: qsTr("Wer ein Gesicht schneller als in dieser Zeit ohne Tippen nach links wischt, kannte die Person offensichtlich sicher. Die Karte rutscht dann besonders weit nach hinten (siehe „Sehr schnell: Faktor“).\n\nZeit, in der die App im Hintergrund war, zählt nicht mit.") },
         { key: "cardBox/unsureSeconds", label: qsTr("Lange angesehen: über … Sekunden"), from: 2, to: 60, step: 1,
-          info: qsTr("Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).\n\nDie Zeit fürs Tippen selbst zählt nicht mit, ebenso wenig Zeit, in der die App im Hintergrund war.") },
+          info: qsTr("Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen nach links wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).\n\nDie Zeit fürs Tippen selbst zählt nicht mit, ebenso wenig Zeit, in der die App im Hintergrund war.") },
         { key: "cardBox/easyFactor", label: qsTr("Sehr schnell: Faktor"), from: 1, to: 10, step: 1,
           info: qsTr("Wie weit eine sehr schnell gewusste Karte nach hinten rutscht: Faktor × 2^Stufe Karten.\n\nDie Stufe steigt jedes Mal um 1, wenn die Person gewusst wird, und fällt auf 0, wenn nicht.\n\nBeispiel mit Faktor 4: Die Karte kommt nach 8, dann 16, dann 32 … anderen Karten wieder.") },
         { key: "cardBox/goodFactor", label: qsTr("Gewusst: Faktor"), from: 1, to: 10, step: 1,
@@ -33,7 +33,7 @@ Rectangle {
         { key: "cardBox/unsureOffset", label: qsTr("Unsicher: kommt nach … Karten wieder"), from: 1, to: 50, step: 1,
           info: qsTr("Nach so vielen anderen Karten kommt eine Person wieder, die zwar gewusst wurde, aber erst nach langem Überlegen (siehe „Lange angesehen“).\n\nDie Stufe bleibt dabei unverändert. Ein mit ← korrigierter Vertipper zählt nicht negativ.") },
         { key: "cardBox/againOffset", label: qsTr("Nicht gewusst: kommt nach … Karten wieder"), from: 1, to: 50, step: 1,
-          info: qsTr("Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.\n\nDie Stufe fällt dabei auf 0 zurück.") },
+          info: qsTr("Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt, nach rechts gewischt oder einen falschen Buchstaben stehen gelassen.\n\nDie Stufe fällt dabei auf 0 zurück.") },
         { key: "cardBox/learnedStreak", label: qsTr("„Sicher“ nach … mal in Folge gewusst"), from: 1, to: 10, step: 1,
           info: qsTr("Ab wie vielen Malen hintereinander gewusst eine Person im Zähler unten links als „sicher“ zählt.") },
         { key: "cardBox/newCardInterval", label: qsTr("Neues Gesicht spätestens jede … Karte"), from: 2, to: 20, step: 1,
@@ -169,7 +169,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Label { text: qsTr("Eintippen") }
                 InfoButton {
-                    info: qsTr("Was beim Lernen eingetippt wird: nur der Vorname, nur der Nachname oder beides, in der gewählten Reihenfolge.\n\nBei „Nachname, Vorname“ ist das Komma eine eigene Taste, danach kommt das Leerzeichen.\n\nBei „Vorname Nachname“ dürfen weitere Vornamen weggelassen werden, wenn sie mit Leerzeichen getrennt sind („Anna Groß“ statt „Anna Lena Groß“), nicht aber mit Bindestrich („Anna-Lena“).\n\nBeim Wischen wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.")
+                    info: qsTr("Was beim Lernen eingetippt wird: nur der Vorname, nur der Nachname oder beides, in der gewählten Reihenfolge.\n\nBei „Nachname, Vorname“ ist das Komma eine eigene Taste, danach kommt das Leerzeichen.\n\nBei „Vorname Nachname“ dürfen weitere Vornamen weggelassen werden, wenn sie mit Leerzeichen getrennt sind („Anna Groß“ statt „Anna Lena Groß“), nicht aber mit Bindestrich („Anna-Lena“).\n\nBeim Wischen nach links wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.")
                 }
                 Item { Layout.fillWidth: true }
                 ComboBox {

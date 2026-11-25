@@ -206,8 +206,8 @@
         <translation>Mostrar nombre (ms)</translation>
     </message>
     <message>
-        <source>Wie lange der Name nach dem Wischen groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).</source>
-        <translation>Cuánto tiempo se muestra el nombre en grande después de deslizar, en milisegundos (1000 ms = 1 segundo).</translation>
+        <source>Wie lange der Name nach dem Wischen nach links groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).</source>
+        <translation>Cuánto tiempo se muestra el nombre en grande después de deslizar a la izquierda, en milisegundos (1000 ms = 1 segundo).</translation>
     </message>
     <message>
         <source>Hinausgleiten nach „Bekannt“ (ms)</source>
@@ -238,10 +238,10 @@ El tiempo que la app pasó en segundo plano no cuenta.</translation>
         <translation>Tardó mucho: más de … segundos</translation>
     </message>
     <message>
-        <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
+        <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen nach links wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
 
 Die Zeit fürs Tippen selbst zählt nicht mit, ebenso wenig Zeit, in der die App im Hintergrund war.</source>
-        <translation>Si piensas más que esto antes de escribir la primera letra (o de deslizar sin escribir), probablemente no estabas del todo seguro. La tarjeta cuenta como sabida, pero vuelve pronto (ver «Inseguro»).
+        <translation>Si piensas más que esto antes de escribir la primera letra (o de deslizar a la izquierda sin escribir), probablemente no estabas del todo seguro. La tarjeta cuenta como sabida, pero vuelve pronto (ver «Inseguro»).
 
 El tiempo de escritura no cuenta, ni tampoco el tiempo que la app pasó en segundo plano.</translation>
     </message>
@@ -294,10 +294,10 @@ El nivel no cambia. Un error corregido con ← no cuenta en contra.</translation
         <translation>No sabido: vuelve tras … tarjetas</translation>
     </message>
     <message>
-        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
+        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt, nach rechts gewischt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
-        <translation>Tras este número de tarjetas vuelve una persona que no se sabía: se pulsó «Desconocido» o se dejó una letra incorrecta.
+        <translation>Tras este número de tarjetas vuelve una persona que no se sabía: se pulsó «Desconocido», se deslizó a la derecha o se dejó una letra incorrecta.
 
 El nivel vuelve a 0.</translation>
     </message>
@@ -356,14 +356,14 @@ Bei „Nachname, Vorname“ ist das Komma eine eigene Taste, danach kommt das Le
 
 Bei „Vorname Nachname“ dürfen weitere Vornamen weggelassen werden, wenn sie mit Leerzeichen getrennt sind („Anna Groß“ statt „Anna Lena Groß“), nicht aber mit Bindestrich („Anna-Lena“).
 
-Beim Wischen wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
+Beim Wischen nach links wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
         <translation>Lo que se escribe al aprender: solo el nombre, solo el apellido o ambos, en el orden elegido.
 
 Con «Apellido, nombre» la coma es una tecla propia, seguida del espacio.
 
 Con «Nombre apellido» se pueden omitir otros nombres si están separados por espacios («Ana García» en lugar de «Ana María García»), pero no con guion («Ana-María»).
 
-Al deslizar se comprueba exactamente eso y se muestra igual, y las teclas ofrecen la letra siguiente correcta.</translation>
+Al deslizar a la izquierda se comprueba exactamente eso y se muestra igual, y las teclas ofrecen la letra siguiente correcta.</translation>
     </message>
     <message>
         <source>Vorname</source>
@@ -472,8 +472,16 @@ Los nombres se reconocen automáticamente. Añadidos como la clase «(09B)» o n
         <translation>Aceptar</translation>
     </message>
     <message>
+        <source>Ok</source>
+        <translation>OK</translation>
+    </message>
+    <message>
         <source>Bekannt</source>
         <translation>Conocido</translation>
+    </message>
+    <message>
+        <source>Rückgängig</source>
+        <translation>Deshacer</translation>
     </message>
     <message>
         <source>Unbekannt</source>

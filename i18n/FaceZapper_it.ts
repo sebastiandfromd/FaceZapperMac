@@ -206,8 +206,8 @@
         <translation>Mostra il nome (ms)</translation>
     </message>
     <message>
-        <source>Wie lange der Name nach dem Wischen groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).</source>
-        <translation>Per quanto tempo il nome viene mostrato in grande dopo lo scorrimento, in millisecondi (1000 ms = 1 secondo).</translation>
+        <source>Wie lange der Name nach dem Wischen nach links groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).</source>
+        <translation>Per quanto tempo il nome viene mostrato in grande dopo lo scorrimento verso sinistra, in millisecondi (1000 ms = 1 secondo).</translation>
     </message>
     <message>
         <source>Hinausgleiten nach „Bekannt“ (ms)</source>
@@ -238,10 +238,10 @@ Il tempo trascorso dall&apos;app in background non conta.</translation>
         <translation>Pensato a lungo: oltre … secondi</translation>
     </message>
     <message>
-        <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
+        <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen nach links wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
 
 Die Zeit fürs Tippen selbst zählt nicht mit, ebenso wenig Zeit, in der die App im Hintergrund war.</source>
-        <translation>Se rifletti più a lungo di così prima di digitare la prima lettera (o di scorrere senza digitare), probabilmente non eri del tutto sicuro. La scheda conta come saputa, ma torna presto (vedi «Incerto»).
+        <translation>Se rifletti più a lungo di così prima di digitare la prima lettera (o di scorrere verso sinistra senza digitare), probabilmente non eri del tutto sicuro. La scheda conta come saputa, ma torna presto (vedi «Incerto»).
 
 Il tempo di digitazione non conta, e nemmeno il tempo trascorso dall&apos;app in background.</translation>
     </message>
@@ -294,10 +294,10 @@ Il livello resta invariato. Un errore di battitura corretto con ← non conta ne
         <translation>Non saputo: torna dopo … schede</translation>
     </message>
     <message>
-        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
+        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt, nach rechts gewischt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
-        <translation>Dopo questo numero di altre schede torna una persona che non è stata saputa: è stato premuto «Sconosciuto» o è rimasta una lettera sbagliata.
+        <translation>Dopo questo numero di altre schede torna una persona che non è stata saputa: è stato premuto «Sconosciuto», si è scorso verso destra o è rimasta una lettera sbagliata.
 
 Il livello torna a 0.</translation>
     </message>
@@ -356,14 +356,14 @@ Bei „Nachname, Vorname“ ist das Komma eine eigene Taste, danach kommt das Le
 
 Bei „Vorname Nachname“ dürfen weitere Vornamen weggelassen werden, wenn sie mit Leerzeichen getrennt sind („Anna Groß“ statt „Anna Lena Groß“), nicht aber mit Bindestrich („Anna-Lena“).
 
-Beim Wischen wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
+Beim Wischen nach links wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
         <translation>Cosa si digita durante l&apos;apprendimento: solo il nome, solo il cognome o entrambi, nell&apos;ordine scelto.
 
 Con «Cognome, nome» la virgola è un tasto a sé, seguito dallo spazio.
 
 Con «Nome cognome» gli altri nomi possono essere omessi se separati da spazi («Anna Rossi» invece di «Anna Maria Rossi»), ma non con il trattino («Anna-Maria»).
 
-Lo scorrimento controlla esattamente questo e lo mostra allo stesso modo, e i tasti propongono la lettera successiva corretta.</translation>
+Lo scorrimento verso sinistra controlla esattamente questo e lo mostra allo stesso modo, e i tasti propongono la lettera successiva corretta.</translation>
     </message>
     <message>
         <source>Vorname</source>
@@ -472,8 +472,16 @@ I nomi vengono riconosciuti automaticamente. Aggiunte come la classe «(09B)» o
         <translation>Conferma</translation>
     </message>
     <message>
+        <source>Ok</source>
+        <translation>OK</translation>
+    </message>
+    <message>
         <source>Bekannt</source>
         <translation>Conosciuto</translation>
+    </message>
+    <message>
+        <source>Rückgängig</source>
+        <translation>Annulla</translation>
     </message>
     <message>
         <source>Unbekannt</source>

@@ -206,8 +206,8 @@
         <translation>Show name (ms)</translation>
     </message>
     <message>
-        <source>Wie lange der Name nach dem Wischen groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).</source>
-        <translation>How long the name is shown in large letters after swiping, in milliseconds (1000 ms = 1 second).</translation>
+        <source>Wie lange der Name nach dem Wischen nach links groß eingeblendet wird, in Millisekunden (1000 ms = 1 Sekunde).</source>
+        <translation>How long the name is shown in large letters after swiping left, in milliseconds (1000 ms = 1 second).</translation>
     </message>
     <message>
         <source>Hinausgleiten nach „Bekannt“ (ms)</source>
@@ -238,10 +238,10 @@ Time the app spent in the background does not count.</translation>
         <translation>Hesitated: over … seconds</translation>
     </message>
     <message>
-        <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
+        <source>Wer länger als diese Zeit überlegt, bevor er den ersten Buchstaben tippt (oder ohne Tippen nach links wischt), war sich wohl nicht ganz sicher. Die Karte zählt als gewusst, kommt aber bald wieder (siehe „Unsicher“).
 
 Die Zeit fürs Tippen selbst zählt nicht mit, ebenso wenig Zeit, in der die App im Hintergrund war.</source>
-        <translation>If you think longer than this before typing the first letter (or swiping without typing), you probably weren&apos;t quite sure. The card counts as known but comes back soon (see “Unsure”).
+        <translation>If you think longer than this before typing the first letter (or swiping left without typing), you probably weren&apos;t quite sure. The card counts as known but comes back soon (see “Unsure”).
 
 The time spent typing does not count, nor does time the app spent in the background.</translation>
     </message>
@@ -294,10 +294,10 @@ The level stays unchanged. A typo corrected with ← does not count against you.
         <translation>Not known: comes back after … cards</translation>
     </message>
     <message>
-        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt oder einen falschen Buchstaben stehen gelassen.
+        <source>Nach so vielen anderen Karten kommt eine Person wieder, die nicht gewusst wurde: „Unbekannt“ gedrückt, nach rechts gewischt oder einen falschen Buchstaben stehen gelassen.
 
 Die Stufe fällt dabei auf 0 zurück.</source>
-        <translation>After this many other cards, a person comes back who was not known: “Unknown” was pressed or a wrong letter was left standing.
+        <translation>After this many other cards, a person comes back who was not known: “Unknown” was pressed, the face was swiped to the right or a wrong letter was left standing.
 
 The level drops back to 0.</translation>
     </message>
@@ -356,14 +356,14 @@ Bei „Nachname, Vorname“ ist das Komma eine eigene Taste, danach kommt das Le
 
 Bei „Vorname Nachname“ dürfen weitere Vornamen weggelassen werden, wenn sie mit Leerzeichen getrennt sind („Anna Groß“ statt „Anna Lena Groß“), nicht aber mit Bindestrich („Anna-Lena“).
 
-Beim Wischen wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
+Beim Wischen nach links wird genau das geprüft und auch so eingeblendet, und die Buchstabenknöpfe bieten dafür den richtigen nächsten Buchstaben an.</source>
         <translation>What is typed while learning: only the first name, only the last name or both, in the chosen order.
 
 With “Last name, first name” the comma is a key of its own, followed by the space.
 
 With “First name last name”, further first names may be left out if they are separated by spaces (“Anna Groß” instead of “Anna Lena Groß”), but not with a hyphen (“Anna-Lena”).
 
-Swiping checks exactly that and shows it the same way, and the letter keys offer the correct next letter for it.</translation>
+Swiping left checks exactly that and shows it the same way, and the letter keys offer the correct next letter for it.</translation>
     </message>
     <message>
         <source>Vorname</source>
@@ -472,8 +472,16 @@ The names are recognized automatically. Additions such as the class “(09B)” 
         <translation>Apply</translation>
     </message>
     <message>
+        <source>Ok</source>
+        <translation>OK</translation>
+    </message>
+    <message>
         <source>Bekannt</source>
         <translation>Known</translation>
+    </message>
+    <message>
+        <source>Rückgängig</source>
+        <translation>Undo</translation>
     </message>
     <message>
         <source>Unbekannt</source>
